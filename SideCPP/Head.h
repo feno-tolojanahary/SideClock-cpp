@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 #define DATA_SEPARATOR ";"
 
 struct TimeClock {
@@ -7,6 +8,7 @@ struct TimeClock {
 };
 
 std::string stringifyTimeclock(const TimeClock & timeclock) {
-
-	return timeclock.startDate.str();
+	std::stringstream sstr;
+	sstr << timeclock.startDate << DATA_SEPARATOR << timeclock.endDate << endl;
+	return sstr.str();
 }
