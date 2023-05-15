@@ -1,4 +1,5 @@
 #include "Storage.h"
+#include "Head.h"	
 
 class ShiftManager {
 public:
@@ -6,6 +7,5 @@ public:
 	void stopTime();
 
 private:
-
-	Storage* storage;
+	Storage<TimeClock>* storage;
 };

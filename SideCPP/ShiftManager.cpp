@@ -1,11 +1,10 @@
 #include "ShiftManager.h"
-#include "Head.h"
 
 void ShiftManager::startTime()
 {
-	TimeClock* timeclock;
+	TimeClock* timeclock = nullptr;
 	timeclock->startDate = std::time(0);
-	storage->saveData(stringifyTimeclock(*timeclock));
+	storage->saveData(*timeclock, &stringifyTimeclock);
 }
 
 void ShiftManager::stopTime()
