@@ -7,5 +7,5 @@ public:
 	void stopTime();
 
 private:
-	Storage<TimeClock>* storage;
+	Storage<TimeClock, TimeClockOpt>* storage;
 };
