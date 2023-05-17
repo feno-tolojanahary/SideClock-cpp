@@ -145,6 +145,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Head.h" />
+    <ClInclude Include="Helper.h" />
     <ClInclude Include="ShiftManager.h" />
     <ClInclude Include="Storage.h" />
     <ClInclude Include="TimeClock.h" />

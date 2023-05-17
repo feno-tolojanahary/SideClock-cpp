@@ -1,5 +1,6 @@
 #include <fstream>
 #include <vector>
+#include <functional>
 
 using namespace std;
 
@@ -8,11 +9,11 @@ class Storage {
 
 public: 
 
-	Storage(char * fileName): filename(fileName) {}
+	Storage(char* fileName) : filename(fileName) {};
 
 	T saveData(T& data, function<std::string(T)> toStr);
 	vector<string> readData();
-	T findByCondition(std::string attr, auto value);
+	T* findOneBy(std::string attr, std::string value, function<T*(string)> strToElem);
 
 private:
 	int getLineCount();

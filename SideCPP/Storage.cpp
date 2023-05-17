@@ -1,10 +1,10 @@
 #include <fstream>
 #include <string>
-#include <functional>
 #include "Storage.h"
+#include "Helper.h"
 
 template <class T>
-T Storage<T>::saveData(T & data, function<std::string(T)> toStr) 
+T Storage<T>::saveData(T & data, function<string(T)> toStr) 
 {
 	data.id = getLineCount();
 	std::string dataStr = toStr(data);
@@ -46,8 +46,37 @@ int Storage<T>::getLineCount()
 }
 
 template <class T>
-T Storage<T>::findByCondition(std::string attr, auto value)
+T* Storage<T>::findOneBy(string attr, string value, function<T*(string)> strToElem)
 {
+	T* foundElem = nullptr;
+	string line;
+	int lineNumber = 0;
+	int searchAttrIndex = 0;
+	vector<string> header;
+	vector<string> lineData;
 
+	file.open(filename, ios::out | ios::binary);
+	if (file.is_open()) {
+		while (getline(file, line)) {
+			if (lineNumber == 0) {
+				header = Helper::splitChar(line);
+				for (const string& currentAttr : header) {
+					if (currentAttr == attr) break;
+					searchAttrIndex++;
+				}
+			}
+			else {
+				lineData = Helper::splitChar(line);
+				if (searchAttrIndex < lineData.size()) {
+					if (lineData[searchAttrIndex] == value) {
+						foundElem = strToElem(lineData);
+					}
+				}
+			}
+			
+			lineNumber++;
+		}
+	}
+	return foundElem;
 }
 
