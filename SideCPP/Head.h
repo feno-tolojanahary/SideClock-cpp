@@ -4,7 +4,7 @@
 #include <string>
 #include "Helper.h"
 
-#define DATA_SEPARATOR ";"
+#define DELIMITER ","
 
 using namespace std;
 
@@ -26,14 +26,14 @@ struct TimeClockOpt
 
 string timeclockHeader() 
 {
-	string separator = (string)DATA_SEPARATOR;
+	string separator = (string)DELIMITER;
 	return "id" + separator + "startDate" + separator + "endDate" + separator + "owner";
 }
 
 string stringifyTimeclock(const TimeClock & timeclock) 
 {
 	stringstream sstr;
-	sstr << timeclock.id << DATA_SEPARATOR << timeclock.startDate << DATA_SEPARATOR << timeclock.endDate << DATA_SEPARATOR << timeclock.owner << endl;
+	sstr << timeclock.id << DELIMITER << timeclock.startDate << DELIMITER << timeclock.endDate << DELIMITER << timeclock.owner << endl;
 	return sstr.str();
 }
 
