@@ -33,4 +33,12 @@ public:
 		time_t t = mktime(&tm);
 		return t;
 	}
+
+	static char* timeToChar(time_t t) {
+		stringstream sstr;
+		string dateStr;
+		sstr << t;
+		dateStr = sstr.str();
+		return &dateStr[0];
+	}
 };

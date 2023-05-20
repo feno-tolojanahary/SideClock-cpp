@@ -2,6 +2,7 @@
 #include <sstream>
 #include <vector>
 #include <string>
+#include <ctime>
 #include "Helper.h"
 
 #define DELIMITER ","
@@ -33,7 +34,7 @@ string timeclockHeader()
 string stringifyTimeclock(const TimeClock & timeclock) 
 {
 	stringstream sstr;
-	sstr << timeclock.id << DELIMITER << timeclock.startDate << DELIMITER << timeclock.endDate << DELIMITER << timeclock.owner << endl;
+	sstr << timeclock.id << DELIMITER << ctime(&timeclock.startDate) << DELIMITER << ctime(&timeclock.endDate) << DELIMITER << timeclock.owner << endl;
 	return sstr.str();
 }
 
