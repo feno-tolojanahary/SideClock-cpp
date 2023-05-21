@@ -77,5 +77,5 @@ std::optional<T> Storage<T, TOpt>::findOneBy(string attr, string value, function
 template <class T, class TOpt>
 bool Storage<T, TOpt>::updateById(int id, TOpt update)
 {
-
+	
 }
