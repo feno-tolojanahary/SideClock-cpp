@@ -1,3 +1,4 @@
+#include <vector>
 #include "ShiftManager.h"
 
 void ShiftManager::startTime()
@@ -19,4 +20,10 @@ void ShiftManager::stopTime()
 		timeclockOpt.owner = timeclock->owner;
 		storage->updateById(timeclock->id, timeclockOpt, &stringifyTimeclock, &parseTimeclock);
 	}
+}
+
+void ShiftManager::listTime()
+{
+	vector<TimeClock> timeclockList = storage->listData(&parseTimeclock);
+
 }

@@ -16,6 +16,7 @@ public:
 	vector<string> readData();
 	std::optional<T> findOneBy(std::string attr, std::string value, function<T(vector<string>, vector<string>)> strToElem);
 	bool updateById(const int & id, const TOpt & update, function<string(T)> toStr, function<T(vector<string>, vector<string>)> strToElem);
+	vector<T> listData(function<T(vector<string>, vector<string>)> strToElem);
 
 private:
 	int getLineCount();

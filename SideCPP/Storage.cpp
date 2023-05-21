@@ -11,10 +11,12 @@ T Storage<T, TOpt>::saveData(T & data, function<string(T)> toStr)
 	data.id = getLineCount();
 	std::string dataStr = toStr(data);
 	file.open(filename, ios::out | ios::app | ios::binary);
-	if (file.is_open()) {
-		file << dataStr << std::endl;
-		file.close();
+	if (!file.is_open())
+	{
+		return;
 	}
+	file << dataStr << std::endl;
+	file.close();
 	return data;
 }
 
@@ -24,10 +26,12 @@ vector<string> Storage<T, TOpt>::readData()
 	vector<string> content;
 	string line;
 	file.open(filename, ios::out | ios::in);
-	if (file.is_open()) {
-		while (getline(file, line)) {
-			content.push_back(line);
-		}
+	if (!file.is_open())
+	{
+		return content;
+	}
+	while (getline(file, line)) {
+		content.push_back(line);
 	}
 
 	return content;
@@ -39,10 +43,12 @@ int Storage<T, TOpt>::getLineCount()
 	int count = 0;
 	string line;
 	file.open(filename, ios::out | ios::binary);
-	if (file.is_open()) {
-		while (getline(file, line)) {
-			count++;
-		}
+	if (!file.is_open())
+	{
+		return 0;
+	}
+	while (getline(file, line)) {
+		count++;
 	}
 	file.close();
 	return count;
@@ -55,19 +61,21 @@ std::optional<T> Storage<T, TOpt>::findOneBy(string attr, string value, function
 	int searchAttrIndex = 0;
 
 	file.open(filename, ios::out | ios::binary);
-	if (file.is_open()) {
-		getline(file, line);
-		vector<string> headers = Helper::splitChar(line);
-		for (const string& currentAttr : headers) {
-			if (currentAttr == attr) break;
-			searchAttrIndex++;
-		}
-		while (getline(file, line)) {
-			vector<string> lineData = Helper::splitChar(line);
-			if (searchAttrIndex < lineData.size()) {
-				if (lineData[searchAttrIndex] == value) {
-					return strToElem(headers, lineData);
-				}
+	if (!file.is_open())
+	{
+		return {};
+	}
+	getline(file, line);
+	vector<string> headers = Helper::splitChar(line);
+	for (const string& currentAttr : headers) {
+		if (currentAttr == attr) break;
+		searchAttrIndex++;
+	}
+	while (getline(file, line)) {
+		vector<string> lineData = Helper::splitChar(line);
+		if (searchAttrIndex < lineData.size()) {
+			if (lineData[searchAttrIndex] == value) {
+				return strToElem(headers, lineData);
 			}
 		}
 	}
@@ -99,7 +107,7 @@ bool Storage<T, TOpt>::updateById(const int & id, const TOpt & update, function<
 	{
 		pos = file.tellg();
 		if (line.find(searchID) != string::npos) {
-			vector <string> splitedLine = Helper::splitChar(line);
+			vector<string> splitedLine = Helper::splitChar(line);
 			if (stoi(splitedLine[0]) == id) {
 				foundElem = strToElem(headers, splitedLine);
 				break;
@@ -112,4 +120,28 @@ bool Storage<T, TOpt>::updateById(const int & id, const TOpt & update, function<
 	file.seekp(pos);
 	file << toStr(foundElem);
 	file.close();
+}
+
+template <class T, class TOpt>
+vector<T> Storage<T, TOpt>::listData(function<T(vector<string>, vector<string>)> strToElem)
+{
+	vector<T> data;
+	string line;
+	file.open(filename, ios::out | ios::binary);
+	if (!file.is_open())
+	{
+		return false;
+	}
+	getline(file, line);
+	vector<string> headers = Helper::splitChar(line);
+	while (getline(file, line)) 
+	{
+		if (line.size() > 0) {
+			vector<string> splitedLine = Helper::splitChar(line);
+			T elem = strToElem(headers, splitedLine);
+			data.push_back(elem);
+		}
+	}
+	file.close();
+	return data;
 }
