@@ -10,8 +10,13 @@ void ShiftManager::startTime()
 
 void ShiftManager::stopTime()
 {
-	auto timeclock = storage->findOneBy("startDate", "", &parseTimeclock);
+	auto timeclock = storage->findOneBy("startDate", "0", &parseTimeclock);
 	if (timeclock && timeclock->id) {
-		
+		TimeClockOpt timeclockOpt;
+		timeclockOpt.startDate = timeclock->startDate;
+		time_t now = std::time(0);
+		timeclockOpt.endDate = now;
+		timeclockOpt.owner = timeclock->owner;
+		storage->updateById(timeclock->id, timeclockOpt, &stringifyTimeclock, &parseTimeclock);
 	}
 }

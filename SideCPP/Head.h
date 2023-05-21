@@ -6,8 +6,6 @@
 #include "Helper.h"
 
 #define DELIMITER ","
-#define TYPE_DATE_SIZE 25
-#define TYPE_INT_SIZE 5
 
 using namespace std;
 
@@ -26,7 +24,6 @@ struct TimeClockOpt
 	time_t endDate = 0;
 };
 
-
 string timeclockHeader() 
 {
 	string separator = (string)DELIMITER;
@@ -36,11 +33,7 @@ string timeclockHeader()
 string stringifyTimeclock(const TimeClock & timeclock) 
 {
 	stringstream sstr;
-	char* timeclockId = Helper::intToStrFile(&timeclock.id, TYPE_INT_SIZE);
-	char* owner = Helper::intToStrFile(&timeclock.id, TYPE_INT_SIZE);
-	char* startDate = Helper::timeToStrFile(&timeclock.startDate, TYPE_DATE_SIZE);
-	char* endDate = Helper::timeToStrFile(&timeclock.endDate, TYPE_DATE_SIZE);
-	sstr << *timeclockId << DELIMITER << *startDate << DELIMITER << *endDate << DELIMITER << *owner << endl;
+	sstr << timeclock.id << DELIMITER << timeclock.startDate << DELIMITER << timeclock.endDate << DELIMITER << timeclock.owner << endl;
 	return sstr.str();
 }
 

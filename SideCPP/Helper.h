@@ -37,7 +37,7 @@ public:
 		return t;
 	}
 
-	static void fillCharEmptySpace(char characters[], const int& valSize, const int& size)
+	/*static void fillCharEmptySpace(char characters[], const int& valSize, const int& size)
 	{
 		for (int i = valSize + 1; i < size; i++)
 		{
@@ -69,5 +69,5 @@ public:
 		strcpy(arrChar, strFile.c_str());
 		fillCharEmptySpace(arrChar, strlen(arrChar), size);
 		return arrChar;
-	}
+	}*/
 };

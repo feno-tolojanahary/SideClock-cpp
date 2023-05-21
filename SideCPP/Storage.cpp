@@ -3,6 +3,7 @@
 #include <optional>
 #include "Storage.h"
 #include "Helper.h"
+#include "Head.h"
 
 template <class T, class TOpt>
 T Storage<T, TOpt>::saveData(T & data, function<string(T)> toStr) 
@@ -52,20 +53,20 @@ std::optional<T> Storage<T, TOpt>::findOneBy(string attr, string value, function
 {
 	string line;
 	int searchAttrIndex = 0;
-	vector<string> lineData;
 
 	file.open(filename, ios::out | ios::binary);
 	if (file.is_open()) {
 		getline(file, line);
-		vector<string> header = Helper::splitChar(line);
-		for (const string& currentAttr : header) {
+		vector<string> headers = Helper::splitChar(line);
+		for (const string& currentAttr : headers) {
 			if (currentAttr == attr) break;
 			searchAttrIndex++;
 		}
 		while (getline(file, line)) {
+			vector<string> lineData = Helper::splitChar(line);
 			if (searchAttrIndex < lineData.size()) {
 				if (lineData[searchAttrIndex] == value) {
-					return strToElem(lineData);
+					return strToElem(headers, lineData);
 				}
 			}
 		}
@@ -75,7 +76,40 @@ std::optional<T> Storage<T, TOpt>::findOneBy(string attr, string value, function
 }
 
 template <class T, class TOpt>
-bool Storage<T, TOpt>::updateById(int id, TOpt update)
+bool Storage<T, TOpt>::updateById(const int & id, const TOpt & update, function<string(T)> toStr, function<T(vector<string>, vector<string>)> strToElem)
 {
-	
+	string line;
+	T foundElem;
+	file.open(filename, ios::in | ios::out | ios::binary);
+	if (!file.is_open())
+	{
+		return false;
+	}
+	long long int pos = file.tellg();
+	char* charID = Helper::intToStrFile(id, TYPE_INT_SIZE);
+	stringstream sstrIDsearch;
+	sstrIDsearch << charID << DELIMITER;
+	string searchID = sstrIDsearch.str();
+
+	getline(file, line);
+	vector<string> headers = Helper::splitChar(line);
+	pos = file.tellg();
+
+	for (line; getline(file, line);)
+	{
+		pos = file.tellg();
+		if (line.find(searchID) != string::npos) {
+			vector <string> splitedLine = Helper::splitChar(line);
+			if (stoi(splitedLine[0]) == id) {
+				foundElem = strToElem(headers, splitedLine);
+				break;
+			}
+		}
+		line.clear();
+	}
+
+	if (pos == 0 || foundElem.id != id) return false;
+	file.seekp(pos);
+	file << toStr(foundElem);
+	file.close();
 }
