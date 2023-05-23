@@ -150,6 +150,7 @@
     <ClInclude Include="Helper.h" />
     <ClInclude Include="ShiftManager.h" />
     <ClInclude Include="Storage.h" />
+    <ClInclude Include="TermGui.h" />
     <ClInclude Include="TimeClock.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

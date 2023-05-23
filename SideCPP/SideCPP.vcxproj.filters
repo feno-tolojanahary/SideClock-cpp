@@ -41,5 +41,8 @@
     <ClInclude Include="Helper.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="TermGui.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

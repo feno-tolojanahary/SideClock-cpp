@@ -55,7 +55,7 @@ int Storage<T, TOpt>::getLineCount()
 }
 
 template <class T, class TOpt>
-std::optional<T> Storage<T, TOpt>::findOneBy(string attr, string value, function<T(vector<string>, vector<string>)> strToElem)
+std::optional<T> Storage<T, TOpt>::findOneBy(string attr, string value, function<T(vector<string>, vector<string>)> strToElem) const
 {
 	string line;
 	int searchAttrIndex = 0;

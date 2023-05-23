@@ -14,7 +14,7 @@ public:
 
 	T saveData(T& data, function<std::string(T)> toStr);
 	vector<string> readData();
-	std::optional<T> findOneBy(std::string attr, std::string value, function<T(vector<string>, vector<string>)> strToElem);
+	std::optional<T> findOneBy(std::string attr, std::string value, function<T(vector<string>, vector<string>)> strToElem) const;
 	bool updateById(const int & id, const TOpt & update, function<string(T)> toStr, function<T(vector<string>, vector<string>)> strToElem);
 	vector<T> listData(function<T(vector<string>, vector<string>)> strToElem);
 
