@@ -1,5 +1,4 @@
 #include "Storage.h"
-#include "Head.h"	
 
 class ShiftManager {
 public:

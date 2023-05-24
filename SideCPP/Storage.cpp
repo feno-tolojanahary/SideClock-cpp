@@ -145,3 +145,11 @@ vector<T> Storage<T, TOpt>::listData(function<T(vector<string>, vector<string>)>
 	file.close();
 	return data;
 }
+
+template <class T, class TOpt>
+int Storage<T, TOpt>::generateId()
+{
+
+}
+
+

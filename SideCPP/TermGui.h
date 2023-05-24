@@ -2,15 +2,30 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <functional>
+#include "Head.h"
 
 #define WRAP_HORIZ_SEP '-'
 #define WRAP_VERT_SEP '|'
 
 using namespace std;
 
+template <class T>
 class TermGui {
 
 public:
+
+	static vector<vector<string>> castElemForPrint(const vector<T> & elements, function<string(T)> stringifyElem)
+	{
+		vector<vector<string>> castedForPrint;
+
+		for (const T& elem : elements)
+		{
+			string combinedElemStr = stringifyElem(elem);
+			castedForPrint.push_back(Helper::splitChar(combinedElemStr, DELIMITER));
+		}
+		return castedForPrint;
+	}
 
 	static string wrapStrResult(const vector<vector<string>> & tableWorld)
 	{
@@ -56,5 +71,10 @@ public:
 				ssout << headFootStr << endl;
 			}
 		}
+	}
+
+	static void print(const vector<T> & elements, function<string(T)> stringifyElem)
+	{
+
 	}
 };

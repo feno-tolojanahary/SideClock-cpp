@@ -2,20 +2,11 @@
 #include <sstream>
 #include <vector>
 #include <string>
-#include <ctime>
 #include "Helper.h"
 
 #define DELIMITER ","
 
 using namespace std;
-
-struct TimeClock 
-{
-	int id;
-	int owner = 1;
-	time_t startDate = 0;
-	time_t endDate = 0;
-};
 
 struct TimeClockOpt
 {

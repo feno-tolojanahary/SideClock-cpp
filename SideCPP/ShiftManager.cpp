@@ -1,5 +1,6 @@
 #include <vector>
 #include "ShiftManager.h"
+#include "TermGui.h"
 
 void ShiftManager::startTime()
 {
