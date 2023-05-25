@@ -3,7 +3,6 @@
 #include <optional>
 #include "Storage.h"
 #include "Helper.h"
-#include "Head.h"
 
 template <class T>
 T Storage<T>::saveData(T & data) 
@@ -54,7 +53,7 @@ int Storage<T>::getLineCount()
 }
 
 template <class T>
-void Storage<T>::findOneBy(string attr, string value, function<T&(vector<string>&, vector<string>&, T&)> strToElem, T& elem) const
+void Storage<T>::findOneBy(string attr, string value, function<void(vector<string>&, vector<string>&, T&)> strToElem, T& elem) const
 {
 	string line;
 	int searchAttrIndex = 0;
@@ -82,7 +81,7 @@ void Storage<T>::findOneBy(string attr, string value, function<T&(vector<string>
 }
 
 template <class T>
-bool Storage<T>::updateById(const int & id, function<T& (vector<string>&, vector<string>&, T&)> strToElem, const T& elem) const
+bool Storage<T>::updateById(const int & id, function<void(vector<string>&, vector<string>&, T&)> strToElem, const T& elem) const
 {
 	string line;
 	T foundElem;
@@ -120,7 +119,7 @@ bool Storage<T>::updateById(const int & id, function<T& (vector<string>&, vector
 }
 
 template <class T>
-vector<T> Storage<T>::listData(function<T& (vector<string>&, vector<string>&, T&)> strToElem) const
+vector<T> Storage<T>::listData(function<void(vector<string>&, vector<string>&, T&)> strToElem) const
 {
 	vector<T> data;
 	string line;

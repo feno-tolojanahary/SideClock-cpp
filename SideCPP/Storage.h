@@ -14,9 +14,9 @@ public:
 
 	T saveData(T& data);
 	vector<string> readData();
-	void findOneBy(std::string attr, std::string value, function<T& (vector<string>&, vector<string>&, T&)> strToElem, T& elem) const;
-	bool updateById(const int& id, function<T& (vector<string>&, vector<string>&, T&)> strToElem, const T& elem) const;
-	vector<T> listData(function<T& (vector<string>&, vector<string>&, T&)> strToElem) const;
+	void findOneBy(std::string attr, std::string value, function<void(vector<string>&, vector<string>&, T&)> strToElem, T& elem) const;
+	bool updateById(const int& id, function<void(vector<string>&, vector<string>&, T&)> strToElem, const T& elem) const;
+	vector<T> listData(function<void(vector<string>&, vector<string>&, T&)> strToElem) const;
 	int generateId();
 
 private:

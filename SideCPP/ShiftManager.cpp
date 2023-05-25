@@ -6,6 +6,7 @@ void ShiftManager::startTime()
 {
 	TimeClock timeclock(std::time(0), 1);
 	storage->saveData(timeclock);
+	cout << "Timeclock starting..." << endl;
 }
 
 void ShiftManager::stopTime()
@@ -17,11 +18,13 @@ void ShiftManager::stopTime()
 		time_t now = std::time(0);
 		timeclockOpt->setEndDate(now);
 		storage->updateById(timeclockOpt->getId(), TimeClock::parse, *timeclockOpt);
+		delete timeclockOpt;
 	}
+	cout << "Timeclock stopped." << endl;
 }
 
 void ShiftManager::listTime()
 {
-	vector<TimeClock> timeclockList = storage->listData(&parseTimeclock);
-
+	vector<TimeClock> timeclockList = storage->listData(TimeClock::parse);
+	termGui->print(timeclockList);
 }

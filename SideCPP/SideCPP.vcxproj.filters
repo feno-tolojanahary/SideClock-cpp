@@ -27,15 +27,15 @@
     <ClCompile Include="Timeclock.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TermGui.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Storage.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="ShiftManager.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Head.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="TimeClock.h">

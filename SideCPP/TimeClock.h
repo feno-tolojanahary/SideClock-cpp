@@ -1,7 +1,7 @@
 #include <ctime>
 #include "ModelStorage.h"
 
-class TimeClock: public ModelStorage<TimeClock>
+class TimeClock: public ModelStorage
 {
 
 private:
