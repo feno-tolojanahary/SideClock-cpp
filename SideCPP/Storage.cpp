@@ -5,23 +5,22 @@
 #include "Helper.h"
 #include "Head.h"
 
-template <class T, class TOpt>
-T Storage<T, TOpt>::saveData(T & data, function<string(T)> toStr) 
+template <class T>
+T Storage<T>::saveData(T & data) 
 {
-	data.id = getLineCount();
-	std::string dataStr = toStr(data);
+	data.setId(getLineCount());
 	file.open(filename, ios::out | ios::app | ios::binary);
 	if (!file.is_open())
 	{
 		return;
 	}
-	file << dataStr << std::endl;
+	file << data.stringify( << std::endl;
 	file.close();
 	return data;
 }
 
-template <class T, class TOpt>
-vector<string> Storage<T, TOpt>::readData()
+template <class T>
+vector<string> Storage<T>::readData()
 {
 	vector<string> content;
 	string line;
@@ -37,8 +36,8 @@ vector<string> Storage<T, TOpt>::readData()
 	return content;
 }
 
-template <class T, class TOpt>
-int Storage<T, TOpt>::getLineCount()
+template <class T>
+int Storage<T>::getLineCount()
 {
 	int count = 0;
 	string line;
@@ -54,8 +53,8 @@ int Storage<T, TOpt>::getLineCount()
 	return count;
 }
 
-template <class T, class TOpt>
-std::optional<T> Storage<T, TOpt>::findOneBy(string attr, string value, function<T(vector<string>, vector<string>)> strToElem) const
+template <class T>
+void Storage<T>::findOneBy(string attr, string value, function<T&(vector<string>&, vector<string>&, T&)> strToElem, T& elem) const
 {
 	string line;
 	int searchAttrIndex = 0;
@@ -75,16 +74,15 @@ std::optional<T> Storage<T, TOpt>::findOneBy(string attr, string value, function
 		vector<string> lineData = Helper::splitChar(line);
 		if (searchAttrIndex < lineData.size()) {
 			if (lineData[searchAttrIndex] == value) {
-				return strToElem(headers, lineData);
+				strToElem(headers, lineData, elem);
 			}
 		}
 	}
 	file.close();
-	return {};
 }
 
-template <class T, class TOpt>
-bool Storage<T, TOpt>::updateById(const int & id, const TOpt & update, function<string(T)> toStr, function<T(vector<string>, vector<string>)> strToElem)
+template <class T>
+bool Storage<T>::updateById(const int & id, function<T& (vector<string>&, vector<string>&, T&)> strToElem, const T& elem) const
 {
 	string line;
 	T foundElem;
@@ -94,9 +92,8 @@ bool Storage<T, TOpt>::updateById(const int & id, const TOpt & update, function<
 		return false;
 	}
 	long long int pos = file.tellg();
-	char* charID = Helper::intToStrFile(id, TYPE_INT_SIZE);
 	stringstream sstrIDsearch;
-	sstrIDsearch << charID << DELIMITER;
+	sstrIDsearch << id << DELIMITER;
 	string searchID = sstrIDsearch.str();
 
 	getline(file, line);
@@ -109,7 +106,7 @@ bool Storage<T, TOpt>::updateById(const int & id, const TOpt & update, function<
 		if (line.find(searchID) != string::npos) {
 			vector<string> splitedLine = Helper::splitChar(line);
 			if (stoi(splitedLine[0]) == id) {
-				foundElem = strToElem(headers, splitedLine);
+				strToElem(headers, splitedLine, foundElem);
 				break;
 			}
 		}
@@ -118,15 +115,16 @@ bool Storage<T, TOpt>::updateById(const int & id, const TOpt & update, function<
 
 	if (pos == 0 || foundElem.id != id) return false;
 	file.seekp(pos);
-	file << toStr(foundElem);
+	file << elem.stringify();
 	file.close();
 }
 
-template <class T, class TOpt>
-vector<T> Storage<T, TOpt>::listData(function<T(vector<string>, vector<string>)> strToElem)
+template <class T>
+vector<T> Storage<T>::listData(function<T& (vector<string>&, vector<string>&, T&)> strToElem) const
 {
 	vector<T> data;
 	string line;
+	T elem;
 	file.open(filename, ios::out | ios::binary);
 	if (!file.is_open())
 	{
@@ -138,7 +136,7 @@ vector<T> Storage<T, TOpt>::listData(function<T(vector<string>, vector<string>)>
 	{
 		if (line.size() > 0) {
 			vector<string> splitedLine = Helper::splitChar(line);
-			T elem = strToElem(headers, splitedLine);
+			strToElem(headers, splitedLine, elem);
 			data.push_back(elem);
 		}
 	}
@@ -146,8 +144,32 @@ vector<T> Storage<T, TOpt>::listData(function<T(vector<string>, vector<string>)>
 	return data;
 }
 
-template <class T, class TOpt>
-int Storage<T, TOpt>::generateId()
+template <class T>
+istream& Storage<T>::ignoreline(ifstream& in, ifstream::pos_type& pos)
+{
+	pos = in.tellg();
+	return in.ignore(numeric_limits<streamsize>::max(), '\n');
+}
+
+template <class T>
+string Storage<T>::getLastLine(ifstream& in)
+{
+	ifstream::pos_type pos = in.tellg();
+
+	ifstream::pos_type lastPos;
+	while (in >> std::ws && ignoreline(in, lastPos))
+		pos = lastPos;
+
+	in.clear();
+	in.seekg(pos);
+
+	string line;
+	getline(in, line);
+	return line;
+}
+
+template <class T>
+int Storage<T>::generateId()
 {
 
 }

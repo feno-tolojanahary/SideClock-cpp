@@ -4,22 +4,19 @@
 
 void ShiftManager::startTime()
 {
-	TimeClock* timeclock, tmc;
-	timeclock = &tmc;
-	timeclock->startDate = std::time(0);
-	storage->saveData(*timeclock, &stringifyTimeclock);
+	TimeClock timeclock(std::time(0), 1);
+	storage->saveData(timeclock);
 }
 
 void ShiftManager::stopTime()
 {
-	auto timeclock = storage->findOneBy("startDate", "0", &parseTimeclock);
-	if (timeclock && timeclock->id) {
-		TimeClockOpt timeclockOpt;
-		timeclockOpt.startDate = timeclock->startDate;
+	TimeClock timeclock;
+	storage->findOneBy("startDate", "0", TimeClock::parse, timeclock);
+	if (timeclock.getId()) {
+		TimeClock* timeclockOpt = new TimeClock(timeclock);
 		time_t now = std::time(0);
-		timeclockOpt.endDate = now;
-		timeclockOpt.owner = timeclock->owner;
-		storage->updateById(timeclock->id, timeclockOpt, &stringifyTimeclock, &parseTimeclock);
+		timeclockOpt->setEndDate(now);
+		storage->updateById(timeclockOpt->getId(), TimeClock::parse, *timeclockOpt);
 	}
 }
 

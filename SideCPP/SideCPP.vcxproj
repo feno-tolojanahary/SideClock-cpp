@@ -148,6 +148,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Head.h" />
+    <ClInclude Include="ModelStorage.h" />
     <ClInclude Include="Helper.h" />
     <ClInclude Include="ShiftManager.h" />
     <ClInclude Include="Storage.h" />

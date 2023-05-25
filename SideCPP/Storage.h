@@ -5,22 +5,24 @@
 
 using namespace std;
 
-template <class T, class TOpt = T>
+template <class T>
 class Storage {
 
 public: 
 
 	Storage(char* fileName) : filename(fileName) {};
 
-	T saveData(T& data, function<std::string(T)> toStr);
+	T saveData(T& data);
 	vector<string> readData();
-	std::optional<T> findOneBy(std::string attr, std::string value, function<T(vector<string>, vector<string>)> strToElem) const;
-	bool updateById(const int & id, const TOpt & update, function<string(T)> toStr, function<T(vector<string>, vector<string>)> strToElem);
-	vector<T> listData(function<T(vector<string>, vector<string>)> strToElem);
+	void findOneBy(std::string attr, std::string value, function<T& (vector<string>&, vector<string>&, T&)> strToElem, T& elem) const;
+	bool updateById(const int& id, function<T& (vector<string>&, vector<string>&, T&)> strToElem, const T& elem) const;
+	vector<T> listData(function<T& (vector<string>&, vector<string>&, T&)> strToElem) const;
 	int generateId();
 
 private:
 	int getLineCount();
+	istream& ignoreline(ifstream& in, ifstream::pos_type& pos);
+	string getLastLine(std::ifstream& in);
 
 	char * filename;
 	fstream file;

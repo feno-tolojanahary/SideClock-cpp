@@ -1,4 +1,5 @@
 #include "Storage.h"
+#include "TimeClock.h"
 
 class ShiftManager {
 public:
@@ -7,5 +8,5 @@ public:
 	void listTime();
 
 private:
-	Storage<TimeClock, TimeClockOpt>* storage;
+	Storage<TimeClock>* storage;
 };
