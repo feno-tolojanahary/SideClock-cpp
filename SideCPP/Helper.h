@@ -1,9 +1,12 @@
+#pragma once
 #include <iostream>
 #include <vector>
 #include <ctime>
 #include <sstream>
 #include <iomanip>
 #include <string>
+
+#define DELIMITER ','
 
 using namespace std;
 class Helper {

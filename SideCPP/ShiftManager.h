@@ -1,9 +1,18 @@
+#pragma once
 #include "Storage.h"
-#include "TimeClock.h"
 #include "TermGui.h"
+#include "TimeClock.h"
 
 class ShiftManager {
 public:
+
+	ShiftManager(): storage(nullptr), termGui(nullptr)
+	{
+		const char* filename = "timeclock";
+		this->storage = new Storage<TimeClock>(filename);
+		this->termGui = new TermGui<TimeClock>();
+	}
+
 	void startTime();
 	void stopTime();
 	void listTime();

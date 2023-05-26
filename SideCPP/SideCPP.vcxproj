@@ -143,8 +143,6 @@
   <ItemGroup>
     <ClCompile Include="ShiftManager.cpp" />
     <ClCompile Include="SideCPP.cpp" />
-    <ClCompile Include="Storage.cpp" />
-    <ClCompile Include="TermGui.cpp" />
     <ClCompile Include="Timeclock.cpp" />
   </ItemGroup>
   <ItemGroup>

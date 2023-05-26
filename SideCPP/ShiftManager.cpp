@@ -4,7 +4,8 @@
 
 void ShiftManager::startTime()
 {
-	TimeClock timeclock(std::time(0), 1);
+	TimeClock timeclock;
+	timeclock.setStartDate(std::time(0));
 	storage->saveData(timeclock);
 	cout << "Timeclock starting..." << endl;
 }

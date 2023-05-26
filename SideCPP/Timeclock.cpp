@@ -1,4 +1,5 @@
 #include "TimeClock.h"
+#include "Helper.h"
 
 
 TimeClock::~TimeClock()
@@ -8,8 +9,9 @@ TimeClock::~TimeClock()
 
 string TimeClock::getStrHeader() const
 {
-	string separator = (string)DELIMITER;
-	return "id" + separator + "startDate" + separator + "endDate" + separator + "owner";
+	stringstream sstr;
+	sstr << "id" << DELIMITER << "startDate" << DELIMITER << "endDate" << DELIMITER << "owner" << endl;
+	return sstr.str();
 }
 
 string TimeClock::stringify() const

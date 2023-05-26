@@ -1,3 +1,4 @@
+#pragma once
 #include <ctime>
 #include "ModelStorage.h"
 
@@ -5,29 +6,17 @@ class TimeClock: public ModelStorage
 {
 
 private:
-	int id;
+	int id = -1;
 	int owner = 1;
 	time_t startDate = 0;
 	time_t endDate = 0;
 
 public:
-	
-	TimeClock(time_t _startDate, time_t _endDate, int _owner, int _id)
-			: startDate(_startDate), endDate(_endDate), owner(_owner), id(_id) {};
-
-
-	TimeClock(time_t _startDate, time_t _endDate, int _owner)
-		: startDate(_startDate), endDate(_endDate), owner(_owner) {};
-
-	TimeClock(time_t _startDate, int _owner)
-		: startDate(_startDate), owner(_owner) {};
-
-	TimeClock() {};
 
 	~TimeClock();
 
-	string getStrHeader() const;
-	string stringify() const;
+	string getStrHeader() const override;
+	string stringify() const override;
 
 	void setStartDate(time_t startDate) 
 	{ 
@@ -44,12 +33,12 @@ public:
 		this->owner = owner;
 	}
 
-	void setId(int id)
+	void setId(int id) override 
 	{
 		this->id = id;
 	}
 
-	int getId() const
+	int getId() const override
 	{
 		return id;
 	}
