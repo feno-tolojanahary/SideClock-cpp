@@ -22,6 +22,9 @@ public:
 	{
 		vector<vector<string>> castedForPrint;
 
+		if (elements.size() > 0) {
+			castedForPrint.push_back(Helper::splitChar(elements[1].getStrHeader(), DELIMITER));
+		}
 		for (const T& elem : elements)
 		{
 			string combinedElemStr = elem.stringify();
@@ -67,7 +70,6 @@ public:
 		}
 		headFootWrap += WRAP_HORIZ_SEP;
 
-		delete[] maxColWidths;
 		int rowIndex(0);
 
 		for (const vector<string>& row : tableWorld)
@@ -79,6 +81,11 @@ public:
 			{
 				wordIndex++;
 				ssout << WRAP_VERT_SEP << " " << word << " ";
+				int space = *(maxColWidths + (wordIndex - 1)) - static_cast<int>(word.size()) - wordMargin ;
+				for (int j = 0; j < space; j++)
+				{
+					ssout << " ";
+				}
 				if (static_cast<int>(row.size()) == wordIndex)
 				{
 					ssout << WRAP_VERT_SEP << "\n";
@@ -89,6 +96,9 @@ public:
 				ssout << headFootWrap << "\n";
 			}
 		}
+
+		delete[] maxColWidths;
+
 
 		return ssout.str();
 	}
