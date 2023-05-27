@@ -1,22 +1,28 @@
 #include <iostream>
+#include <cstring>
 #include "ShiftManager.h"
+
+using namespace std;
 
 int main(int argc, char* argv[])
 {
-	if (argv[1] == "--start")
+	if (argc > 1) 
 	{
-		ShiftManager shiftManager;
-		shiftManager.startTime();
-	}
-	else if (argv[1] == "--stop")
-	{
-		ShiftManager shiftManager;
-		shiftManager.stopTime();
-	}
-	else if (argv[1] == "--list")
-	{
-		ShiftManager shiftManager;
-		shiftManager.listTime();
+		if (strcmp(argv[1], "--start") == 0)
+		{
+			ShiftManager shiftManager;
+			shiftManager.startTime();
+		}
+		else if (strcmp(argv[1], "--stop") == 0)
+		{
+			ShiftManager shiftManager;
+			shiftManager.stopTime();
+		}
+		else if (strcmp(argv[1], "--list") == 0)
+		{
+			ShiftManager shiftManager;
+			shiftManager.listTime();
+		}
 	}
 	else {
 		cout << "--start	 start time clock \n";

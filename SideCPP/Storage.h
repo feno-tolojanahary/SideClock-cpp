@@ -18,14 +18,26 @@ public:
 
 	T saveData(T& data)
 	{
-		data.setId(getLineCount());
-		fstream file(filename, ios::out | ios::app | ios::binary);
+		streampos begin, end;
+		string line;
+		int id = generateId();
+		data.setId(id);
+		fstream file(filename, fstream::out | fstream::app | fstream::binary);
 		if (!file.is_open())
 		{
 			return {};
 		}
 		string strData = data.stringify();
-		file << strData << std::endl;
+		
+		file.seekg(0, ios::end);
+		end = file.tellg();
+
+		if (end == 0)
+		{
+			string headers = data.getStrHeader();
+			file << headers;
+		}
+		file << strData;
 		file.close();
 		return data;
 	}
@@ -34,7 +46,7 @@ public:
 	{
 		vector<string> content;
 		string line;
-		fstream file(filename, ios::out | ios::in);
+		fstream file(filename, fstream::in | fstream::binary);
 		if (!file.is_open())
 		{
 			return content;
@@ -46,38 +58,38 @@ public:
 		return content;
 	}
 
-	void findOneBy(string attr, string value, function<void(vector<string>&, vector<string>&, T&)> strToElem, T& elem) const
+	void findOneBy(string attr, string value, T& elem) const
 	{
 		string line;
 		int searchAttrIndex = 0;
 
-		fstream file(filename, ios::out | ios::binary);
+		fstream file(filename, fstream::in | fstream::binary);
 		if (!file.is_open())
 		{
 			return;
 		}
 		getline(file, line);
-		vector<string> headers = Helper::splitChar(line.data(), DELIMITER);
+		vector<string> headers = Helper::splitChar(elem.getStrHeader(), DELIMITER);
 		for (const string& currentAttr : headers) {
 			if (currentAttr == attr) break;
 			searchAttrIndex++;
 		}
 		while (getline(file, line)) {
-			vector<string> lineData = Helper::splitChar(line.data(), DELIMITER);
+			vector<string> lineData = Helper::splitChar(line, DELIMITER);
 			if (searchAttrIndex < lineData.size()) {
-				if (lineData[searchAttrIndex] == value) {
-					strToElem(headers, lineData, elem);
+				if (lineData[searchAttrIndex].c_str() == value) {
+					elem.populateStr(headers, lineData);
 				}
 			}
 		}
 		file.close();
 	}
 
-	bool updateById(const int& id, function<void(vector<string>&, vector<string>&, T&)> strToElem, const T& elem) const
+	bool updateById(const int& id, const T& elem) const
 	{
 		string line;
 		T foundElem;
-		fstream file(filename, ios::in | ios::out | ios::binary);
+		fstream file(filename, fstream::in | fstream::out | fstream::binary);
 		if (!file.is_open())
 		{
 			return false;
@@ -88,19 +100,18 @@ public:
 		string searchID = sstrIDsearch.str();
 
 		getline(file, line);
-		vector<string> headers = Helper::splitChar(line.data(), DELIMITER);
+		vector<string> headers = Helper::splitChar(elem.getStrHeader(), DELIMITER);
 		pos = file.tellg();
-
 		for (line; getline(file, line);)
 		{
-			pos = file.tellg();
 			if (line.find(searchID) != string::npos) {
-				vector<string> splitedLine = Helper::splitChar(line.data(), DELIMITER);
+				vector<string> splitedLine = Helper::splitChar(line, DELIMITER);
 				if (stoi(splitedLine[0]) == id) {
-					strToElem(headers, splitedLine, foundElem);
+					foundElem.populateStr(headers, splitedLine);
 					break;
 				}
 			}
+			pos = file.tellg();
 			line.clear();
 		}
 
@@ -112,23 +123,23 @@ public:
 		return true;
 	}
 
-	vector<T> listData(function<void(vector<string>&, vector<string>&, T&)> strToElem) const
+	vector<T> listData() const
 	{
 		vector<T> data;
 		string line;
 		T elem;
-		fstream file(filename, ios::out | ios::binary);
+		fstream file(filename, fstream::in | fstream::binary);
 		if (!file.is_open())
 		{
 			return data;
 		}
 		getline(file, line);
-		vector<string> headers = Helper::splitChar(line.data(), DELIMITER);
+		vector<string> headers = Helper::splitChar(elem.getStrHeader(), DELIMITER);
 		while (getline(file, line))
 		{
 			if (line.size() > 0) {
-				vector<string> splitedLine = Helper::splitChar(line.data(), DELIMITER);
-				strToElem(headers, splitedLine, elem);
+				vector<string> splitedLine = Helper::splitChar(line, DELIMITER);
+				elem.populateStr(headers, splitedLine);
 				data.push_back(elem);
 			}
 		}
@@ -136,17 +147,12 @@ public:
 		return data;
 	}
 
-	int generateId()
-	{
-
-	}
-
 private:
 	int getLineCount()
 	{
 		int count = 0;
 		string line;
-		fstream file(filename, ios::out | ios::binary);
+		fstream file(filename, fstream::out | fstream::app | fstream::binary);
 		if (!file.is_open())
 		{
 			return 0;
@@ -178,6 +184,20 @@ private:
 		string line;
 		getline(in, line);
 		return line;
+	}
+
+	int generateId()
+	{
+		int generatedId;
+		ifstream file(filename, fstream::in | fstream::binary);
+		string strLastTimeclock = getLastLine(file);
+		T * tempElem = new T();
+		vector<string> headers = Helper::splitChar(tempElem->getStrHeader(), DELIMITER);
+		vector<string> splitedLine = Helper::splitChar(strLastTimeclock, DELIMITER);
+		tempElem->populateStr(headers, splitedLine);
+		generatedId = tempElem->getId() != -1 ? tempElem->getId() + 1 : 0;
+		delete tempElem;
+		return generatedId;
 	}
 
 	const char * filename;

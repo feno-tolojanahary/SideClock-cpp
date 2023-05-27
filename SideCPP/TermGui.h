@@ -32,45 +32,61 @@ public:
 
 	string wrapStrResult(const vector<vector<string>>& tableWorld) const
 	{
-		int colIndex(0), rowIndex(0), defaultWordColWidth(0);
-		int* wordColWidth = &defaultWordColWidth;
-		int const wordMargin = 4;
+		int rowSize(0);
+		const int wordMargin = 3;
+		string headFootWrap;
 		stringstream ssout;
+
+		if (tableWorld.size() > 1)
+		{
+			rowSize = static_cast<int>(tableWorld[1].size());
+		}
+		int *maxColWidths = new int[rowSize]();
 
 		for (const vector<string>& row : tableWorld)
 		{
+			int colIndex = 0;
 			for (const string& word : row)
 			{
-				int colLength = static_cast<int>(row.size()) + wordMargin;
-				if (*wordColWidth < colLength) wordColWidth = &colLength;
+				if (colIndex <= rowSize)
+				{
+					int & maxColWidth = *(maxColWidths + colIndex);
+					int wrapSize = static_cast<int>(word.size()) + wordMargin;
+					if (maxColWidth < wrapSize) maxColWidth = wrapSize;
+				}
+				colIndex++;
 			}
 		}
 
-		int wrapperWidth = *wordColWidth + wordMargin;
-		char* headFootStr = new char[wrapperWidth];
-		for (int i = 0; i < wrapperWidth; i++)
+		for (int i = 0; i < rowSize; i++)
 		{
-			headFootStr[i] = WRAP_HORIZ_SEP;
+			for (int j = 0; j < *(maxColWidths+i); j++)
+			{
+				headFootWrap += WRAP_HORIZ_SEP;
+			}
 		}
+		headFootWrap += WRAP_HORIZ_SEP;
+
+		delete[] maxColWidths;
+		int rowIndex(0);
 
 		for (const vector<string>& row : tableWorld)
 		{
 			int wordIndex(0);
 			rowIndex++;
-			ssout << headFootStr << endl;
+			ssout << headFootWrap << "\n";
 			for (const string& word : row)
 			{
-				ssout << WRAP_VERT_SEP << " " << word;
 				wordIndex++;
-				if (wordIndex == row.size())
+				ssout << WRAP_VERT_SEP << " " << word << " ";
+				if (static_cast<int>(row.size()) == wordIndex)
 				{
-					ssout << " " << WRAP_VERT_SEP << endl;
+					ssout << WRAP_VERT_SEP << "\n";
 				}
 			}
-
-			if (rowIndex == tableWorld.size())
+			if (static_cast<int>(tableWorld.size()) == rowIndex)
 			{
-				ssout << headFootStr << endl;
+				ssout << headFootWrap << "\n";
 			}
 		}
 

@@ -12,4 +12,5 @@ public:
 	virtual int getId() const = 0;
 	virtual string getStrHeader() const = 0;
 	virtual string stringify() const = 0;
+	virtual void populateStr(const vector<string>& headers, const vector<string>& timeclockValues) = 0;
 };

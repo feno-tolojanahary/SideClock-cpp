@@ -58,25 +58,5 @@ public:
 		return startDate;
 	}
 
-	static void parse(const vector<string>& headers, const vector<string>& timeclockValues, TimeClock & timeclock)
-	{
-		int index = 0;
-		for (const string& value : headers) {
-			if (index < timeclockValues.size()) {
-				if (value == "id") {
-					timeclock.setId(stoi(timeclockValues[index]));
-				}
-				else if (value == "startDate") {
-					timeclock.setStartDate(Helper::stringToTime(timeclockValues[index]));
-				}
-				else if (value == "endDate") {
-					timeclock.setEndDate(Helper::stringToTime(timeclockValues[index]));
-				}
-				else if (value == "owner") {
-					timeclock.setOwner(stoi(timeclockValues[index]));
-				}
-			}
-			index++;
-		}
-	}
+	void populateStr(const vector<string>& headers, const vector<string>& timeclockValues) override;
 };

@@ -13,20 +13,14 @@ class Helper {
 
 public: 
 
-	static vector<string> splitChar(char* lineChar, char separator)
+	static vector<string> splitChar(string lineStr, char delimiter)
 	{
 		vector<string> spliteStr;
-		string tempStr;
-		int i = 0;
-		while (lineChar[i] != '\0') 
-		{
-			if (lineChar[i] != separator) {
-				tempStr += lineChar;
-			}
-			else {
-				spliteStr.push_back(tempStr);
-			}
-			i++;
+		size_t pos = 0;
+		while ((pos = lineStr.find(delimiter)) != std::string::npos) {
+			string token = lineStr.substr(0, pos);
+			spliteStr.push_back(token);
+			lineStr.erase(0, pos + 1);
 		}
 		return spliteStr;
 	}
