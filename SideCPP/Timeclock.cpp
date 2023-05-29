@@ -1,4 +1,5 @@
 #include <string>
+#include <ctime>
 #include "TimeClock.h"
 #include "Helper.h"
 
@@ -15,10 +16,12 @@ string TimeClock::getStrHeader() const
 	return sstr.str();
 }
 
-string TimeClock::stringify() const
+string TimeClock::stringify(bool convertDate = false) const
 {
 	stringstream sstr;
-	sstr << id << DELIMITER << startDate << DELIMITER << endDate << DELIMITER << std::to_string(owner) + "\n";
+	string _startDate = convertDate ? ctime(&startDate) : to_string(static_cast<long int>(startDate));
+	string _endDate = convertDate ? ctime(&endDate) : to_string(static_cast<long int>(endDate));
+	sstr << id << DELIMITER << _startDate << DELIMITER << _endDate << DELIMITER << std::to_string(owner) + "\n";
 	return sstr.str();
 }
 

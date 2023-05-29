@@ -27,7 +27,7 @@ public:
 		}
 		for (const T& elem : elements)
 		{
-			string combinedElemStr = elem.stringify();
+			string combinedElemStr = elem.stringify(true);
 			castedForPrint.push_back(Helper::splitChar(combinedElemStr.data(), DELIMITER));
 		}
 		return castedForPrint;

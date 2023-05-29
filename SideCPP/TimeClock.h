@@ -16,7 +16,7 @@ public:
 	~TimeClock();
 
 	string getStrHeader() const override;
-	string stringify() const override;
+	string stringify(bool convertDate = false) const override;
 
 	void setStartDate(time_t startDate) 
 	{ 
