@@ -19,9 +19,24 @@ string TimeClock::getStrHeader() const
 string TimeClock::stringify(bool convertDate = false) const
 {
 	stringstream sstr;
-	string _startDate = convertDate ? ctime(&startDate) : to_string(static_cast<long int>(startDate));
-	string _endDate = convertDate ? ctime(&endDate) : to_string(static_cast<long int>(endDate));
-	sstr << id << DELIMITER << _startDate << DELIMITER << _endDate << DELIMITER << std::to_string(owner) + "\n";
+	string _startDate, _endDate;
+	if (convertDate)
+	{
+		char buffStart[70], buffEnd[70];
+		strftime(buffStart, sizeof buffStart, "%A %c", gmtime(&startDate));
+		if (endDate > 0)
+		{
+			strftime(buffEnd, sizeof buffEnd, "%A %c", gmtime(&endDate));
+		}
+		_startDate.assign(buffStart);
+		_endDate.assign(buffEnd);
+	}
+	else
+	{
+		_startDate = to_string(startDate);
+		_endDate = to_string(endDate);
+	}
+	sstr << id << DELIMITER << _startDate << DELIMITER << _endDate << DELIMITER << to_string(owner) + "\n";
 	return sstr.str();
 }
 
