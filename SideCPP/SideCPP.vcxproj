@@ -141,6 +141,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Planning.cpp" />
     <ClCompile Include="ShiftManager.cpp" />
     <ClCompile Include="SideCPP.cpp" />
     <ClCompile Include="Timeclock.cpp" />
@@ -148,6 +149,7 @@
   <ItemGroup>
     <ClInclude Include="ModelStorage.h" />
     <ClInclude Include="Helper.h" />
+    <ClInclude Include="Planning.h" />
     <ClInclude Include="ShiftManager.h" />
     <ClInclude Include="Storage.h" />
     <ClInclude Include="TermGui.h" />

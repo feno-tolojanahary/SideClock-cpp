@@ -20,7 +20,8 @@ public:
 
 	void startGui();
 	string getStrHeader() const override;
-	string stringify(bool convertDate = false) const override;
+	string stringify() const override;
+	string strOutput() const override;
 
 
 	void setStartDate(time_t startDate) 

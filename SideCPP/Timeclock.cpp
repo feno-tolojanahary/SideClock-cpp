@@ -24,27 +24,10 @@ string TimeClock::getStrHeader() const
 	return sstr.str();
 }
 
-string TimeClock::stringify(bool convertDate = false) const
+string TimeClock::stringify() const
 {
 	stringstream sstr;
-	string _startDate, _endDate;
-	if (convertDate)
-	{
-		char buffStart[70], buffEnd[70];
-		strftime(buffStart, sizeof buffStart, "%A %c", gmtime(&startDate));
-		if (endDate > 0)
-		{
-			strftime(buffEnd, sizeof buffEnd, "%A %c", gmtime(&endDate));
-		}
-		_startDate.assign(buffStart);
-		_endDate.assign(buffEnd);
-	}
-	else
-	{
-		_startDate = to_string(startDate);
-		_endDate = to_string(endDate);
-	}
-	sstr << id << DELIMITER << _startDate << DELIMITER << _endDate << DELIMITER << to_string(owner) + "\n";
+	sstr << id << DELIMITER << startDate << DELIMITER << endDate << DELIMITER << to_string(owner) + "\n";
 	return sstr.str();
 }
 
@@ -88,4 +71,20 @@ void TimeClock::startGui()
 		this->displayTimer(timer);
 		this_thread::sleep_for(std::chrono::milliseconds(1000));
 	}
+}
+
+string TimeClock::strOutput() const
+{
+	stringstream sstr;
+	string _startDate, _endDate;
+	char buffStart[70], buffEnd[70];
+	strftime(buffStart, sizeof buffStart, "%A %c", gmtime(&startDate));
+	if (endDate > 0)
+	{
+		strftime(buffEnd, sizeof buffEnd, "%A %c", gmtime(&endDate));
+	}
+	_startDate.assign(buffStart);
+	_endDate.assign(buffEnd);
+	sstr << id << DELIMITER << _startDate << DELIMITER << _endDate << DELIMITER << to_string(owner) + "\n";
+	return sstr.str();
 }
