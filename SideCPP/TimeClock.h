@@ -11,12 +11,17 @@ private:
 	time_t startDate = 0;
 	time_t endDate = 0;
 
+	tm* getTimeDiff();
+	void displayTimer(const tm* timer);
+
 public:
 
 	~TimeClock();
 
+	void startGui();
 	string getStrHeader() const override;
 	string stringify(bool convertDate = false) const override;
+
 
 	void setStartDate(time_t startDate) 
 	{ 
@@ -59,4 +64,5 @@ public:
 	}
 
 	void populateStr(const vector<string>& headers, const vector<string>& timeclockValues) override;
+
 };

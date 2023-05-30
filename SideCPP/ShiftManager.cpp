@@ -9,12 +9,12 @@ void ShiftManager::startTime()
 	storage->findOneBy("endDate", "0", existingTimeclock);
 	if (existingTimeclock.getId() != -1)
 	{
-		cout << "Timeclock already started" << endl;
+		timeclock.startGui();
 		return;
 	}
 	timeclock.setStartDate(std::time(0));
 	storage->saveData(timeclock);
-	cout << "Timeclock starting..." << endl;
+	timeclock.startGui();
 }
 
 void ShiftManager::stopTime()

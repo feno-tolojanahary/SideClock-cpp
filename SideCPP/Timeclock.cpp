@@ -1,5 +1,7 @@
 #include <string>
 #include <ctime>
+#include <chrono>
+#include <thread>
 #include "TimeClock.h"
 #include "Helper.h"
 
@@ -7,6 +9,12 @@
 TimeClock::~TimeClock()
 {
 
+}
+
+tm* TimeClock::getTimeDiff()
+{
+	time_t diff = difftime(endDate, startDate);
+	return gmtime(&diff);
 }
 
 string TimeClock::getStrHeader() const
@@ -59,5 +67,25 @@ void TimeClock::populateStr(const vector<string>& headers, const vector<string>&
 			}
 		}
 		index++;
+	}
+}
+
+void TimeClock::displayTimer(const tm* timer) 
+{
+	system("cls");
+	cout << setfill(' ') << setw(55) << " --------------------------\n";
+	cout << setfill(' ') << setw(37);
+	cout << "|         " << setfill('0') << setw(2) << timer->tm_hour << ":";
+	cout << setfill('0') << setw(2) << timer->tm_min << ":";
+	cout << setfill('0') << setw(2) << timer->tm_sec << "         |" << endl;
+	cout << setfill(' ') << setw(55) << " --------------------------\n";
+}
+
+void TimeClock::startGui()
+{
+	while (true) {
+		tm* timer = this->getTimeDiff();
+		this->displayTimer(timer);
+		this_thread::sleep_for(std::chrono::milliseconds(1000));
 	}
 }
