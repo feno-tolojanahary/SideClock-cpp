@@ -1,32 +1,50 @@
 #include <string>
+#include <vector>
 #include "Planning.h"
 #include "Helper.h"
+
+Planning::Planning(string strStartDate, string strEndDate, string strStartHour, string strEndHour)
+{
+	if (strStartDate.size() == 10) {
+		startDate = Helper::stringToTime(strStartDate, FORMAT_DATE);
+	}
+	if (strStartHour.size() == 5) {
+		startHour = Helper::stringToTime(strStartHour, FORMAT_HOUR);
+	}
+	if (strEndHour.size() == 5) {
+		endHour = Helper::stringToTime(strEndHour, FORMAT_HOUR);
+	}
+	if (strEndDate.size() == 5)
+	{
+		endDate = Helper::stringToTime(strEndDate, FORMAT_DATE);
+	}
+}
 
 string Planning::getStrHeader() const
 {
 	stringstream sstr;
-	sstr << "id" << DELIMITER << "date" << DELIMITER << "plannedHour\n";
+	sstr << "id" << DELIMITER << "startDate" << DELIMITER << "endDate" << DELIMITER << "startHour" << DELIMITER << "endHour\n";
 	return sstr.str();
 }
 
 string Planning::stringify() const
 {
 	stringstream sstr;
-	sstr << id << DELIMITER << date << DELIMITER << plannedHour + "\n";
+	sstr << id << DELIMITER << startDate << DELIMITER << endDate << DELIMITER << startHour << DELIMITER << endHour + "\n";
 	return sstr.str();
 }
 
 string Planning::strOutput() const
 {
 	stringstream sstr;
-	string _date, _plannedHour;
-	char buffDate[70];
-	struct tm* tmPlanned;
-	strftime(buffDate, sizeof buffDate, "%A %c", gmtime(&date));
-	_date.assign(buffDate);
-	tmPlanned = gmtime(&plannedHour);
-	_plannedHour = tmPlanned->tm_hour + ":" + tmPlanned->tm_min;
-	sstr << id << DELIMITER << _date << DELIMITER << _plannedHour + "\n";
+	char buffStartDate[10], buffEndDate[10], buffStartHour[5], buffEndHour[5];
+
+	strftime(buffStartDate, sizeof buffStartDate, FORMAT_DATE, gmtime(&startDate));
+	strftime(buffEndDate, sizeof buffEndDate, FORMAT_DATE, gmtime(&endDate));
+	strftime(buffStartHour, sizeof buffStartHour, FORMAT_HOUR, gmtime(&startHour));
+	strftime(buffEndHour, sizeof buffEndHour, FORMAT_HOUR, gmtime(&endHour));
+
+	sstr << id << DELIMITER << buffStartDate << DELIMITER << buffEndDate << DELIMITER << buffStartHour << DELIMITER << buffEndHour << "\n";
 	return sstr.str();
 }
 
@@ -38,11 +56,17 @@ void Planning::populateStr(const vector<string>& headers, const vector<string>& 
 			if (value == "id") {
 				this->setId(stoi(panningValues[index]));
 			}
-			else if (value == "date") {
-				this->setDate(stoi(panningValues[index]));
+			else if (value == "startDate") {
+				this->setStartDate(stoi(panningValues[index]));
 			}
-			else if (value == "planningHour") {
-				this->setPlannedHour(stoi(panningValues[index]));
+			else if (value == "endDate") {
+				this->setEndDate(stoi(panningValues[index]));
+			}
+			else if (value == "startHour") {
+				this->setStartHour(stoi(panningValues[index]));
+			}
+			else if (value == "endHour") {
+				this->setEndHour(stoi(panningValues[index]));
 			}
 		}
 		index++;

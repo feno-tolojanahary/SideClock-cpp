@@ -9,38 +9,75 @@ class Planning: public ModelStorage
 {
 private:
 	int id = -1;
-	time_t date = 0;
-	time_t plannedHour = 0;
+	time_t startDate = 0;
+	time_t endDate = 0;
+	time_t startHour = 0;
+	time_t endHour = 0;
 
 public:
+
+	Planning(time_t _startDate, time_t _endDate, time_t _startHour, time_t _endHour): 
+		startDate(_startDate), endDate(_endDate), startHour(_startHour), endHour(_endHour) {}
+
+	Planning(string strStartDate, string strEndDate, string strStartHour, string strEndHour);
 
 	string getStrHeader() const override;
 	string stringify() const override;
 	string strOutput() const override;
 	void populateStr(const vector<string>& headers, const vector<string>& panningValues) override;
 
-	void setId(int _id)
+	const string storageName() override
+	{
+		return "planningHour";
+	}
+
+	void setId(int _id) override
 	{
 		id = _id;
 	}
 
-	int getId() const
+	int getId() const override
 	{
 		return id;
 	}
 
-	void setDate(time_t _date)
+	void setStartDate(time_t date)
 	{
-		date = _date;
+		startDate = date;
 	}
 
-	time_t getDate() const
+	time_t getStartDate() const
 	{
-		return date;
+		return startDate;
 	}
 
-	void setPlannedHour(time_t hour)
+	void setEndDate(time_t date)
 	{
-		plannedHour = hour;
+		endDate = date;
+	}
+
+	time_t getEndDate() const
+	{
+		return endDate;
+	}
+
+	void setStartHour(time_t hour)
+	{
+		startHour = hour;
+	}
+
+	time_t getStartHour() const
+	{
+		return startHour;
+	}
+
+	void setEndHour(time_t hour)
+	{
+		endHour = hour;
+	}
+
+	time_t getEndHour() const
+	{
+		return endHour;
 	}
 };

@@ -1,31 +1,32 @@
 #include <vector>
 #include "ShiftManager.h"
 #include "TermGui.h"
+#include "Planning.h"
 
 void ShiftManager::startTime()
 {
 	TimeClock timeclock;
 	TimeClock existingTimeclock;
-	storage->findOneBy("endDate", "0", existingTimeclock);
+	storageTimeclock->findOneBy("endDate", 0, existingTimeclock);
 	if (existingTimeclock.getId() != -1)
 	{
 		timeclock.startGui();
 		return;
 	}
 	timeclock.setStartDate(std::time(0));
-	storage->saveData(timeclock);
+	storageTimeclock->saveData(timeclock);
 	timeclock.startGui();
 }
 
 void ShiftManager::stopTime()
 {
 	TimeClock timeclock;
-	storage->findOneBy("endDate", "0", timeclock);
+	storageTimeclock->findOneBy("endDate", 0, timeclock);
 	if (timeclock.getId() != -1) {
 		TimeClock* timeclockOpt = new TimeClock(timeclock);
 		time_t now = std::time(0);
 		timeclockOpt->setEndDate(now);
-		storage->updateById(timeclockOpt->getId(), *timeclockOpt);
+		storageTimeclock->updateById(timeclockOpt->getId(), *timeclockOpt);
 		delete timeclockOpt;
 
 		cout << "Timeclock stopped." << endl;
@@ -38,6 +39,31 @@ void ShiftManager::stopTime()
 
 void ShiftManager::listTime()
 {
-	vector<TimeClock> timeclockList = storage->listData();
+	vector<TimeClock> timeclockList = storageTimeclock->listData();
 	termGui->print(timeclockList);
+}
+
+void ShiftManager::plannedHour(const string& strStartDate, const string& strEndDate, const string& strStartHour, const string& strEndHour)
+{
+	Planning planning(strStartDate, strEndDate, strStartHour, strEndHour);
+	storagePlanning->findOneBy("startDate", Helper::stringToTime(strStartDate), planning);
+	if (planning.getId() != -1)
+	{
+		cout << "Planning already exists." << endl;
+		return;
+	}
+	storagePlanning->saveData(planning);
+	if (planning.getId() != -1)
+	{
+		cout << "Planning registered." << endl;
+	}
+	else {
+		cout << "Error when registering" << endl;
+	}
+}
+
+void ShiftManager::showResume()
+{
+	/*vector<TimeClock> timeclockList = storageTimeclock->listData();
+	vector<Planning> planningList = storagePlanning->listData();*/
 }

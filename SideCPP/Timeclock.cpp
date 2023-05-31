@@ -76,15 +76,12 @@ void TimeClock::startGui()
 string TimeClock::strOutput() const
 {
 	stringstream sstr;
-	string _startDate, _endDate;
-	char buffStart[70], buffEnd[70];
-	strftime(buffStart, sizeof buffStart, "%A %c", gmtime(&startDate));
+	char buffStart[16], buffEnd[16];
+	strftime(buffStart, sizeof buffStart, FORMAT_DATE_HOUR, gmtime(&startDate));
 	if (endDate > 0)
 	{
-		strftime(buffEnd, sizeof buffEnd, "%A %c", gmtime(&endDate));
+		strftime(buffEnd, sizeof buffEnd, FORMAT_DATE_HOUR, gmtime(&endDate));
 	}
-	_startDate.assign(buffStart);
-	_endDate.assign(buffEnd);
-	sstr << id << DELIMITER << _startDate << DELIMITER << _endDate << DELIMITER << to_string(owner) + "\n";
+	sstr << id << DELIMITER << buffStart << DELIMITER << buffEnd << DELIMITER << to_string(owner) + "\n";
 	return sstr.str();
 }

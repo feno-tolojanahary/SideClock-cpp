@@ -14,7 +14,7 @@ class Storage {
 
 public: 
 
-	Storage(const char* fileName) : filename(fileName) {};
+	Storage(const char* filename): fileName(filename) {}
 
 	T saveData(T& data)
 	{
@@ -58,7 +58,7 @@ public:
 		return content;
 	}
 
-	void findOneBy(string attr, string value, T& elem) const
+	void findOneBy(string attr, double value, T& elem) const
 	{
 		string line;
 		int searchAttrIndex = 0;
@@ -77,7 +77,7 @@ public:
 		while (getline(file, line)) {
 			vector<string> lineData = Helper::splitChar(line, DELIMITER);
 			if (searchAttrIndex < lineData.size()) {
-				if (lineData[searchAttrIndex].c_str() == value) {
+				if (lineData[searchAttrIndex].c_str() == to_string(value)) {
 					elem.populateStr(headers, lineData);
 				}
 			}

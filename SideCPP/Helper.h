@@ -7,6 +7,12 @@
 #include <string>
 
 #define DELIMITER ','
+#define DELIMITER_DATE '/'
+#define DELIMITER_HOUR ':'
+
+#define FORMAT_DATE "%m/%d/%Y"
+#define FORMAT_HOUR "%H:%S"
+#define FORMAT_DATE_HOUR "%m/%d/%Y %H:%S"
 
 using namespace std;
 class Helper {
@@ -25,46 +31,12 @@ public:
 		return spliteStr;
 	}
 
-	static time_t stringToTime(string timeStr) 
+	static time_t stringToTime(string timeStr, const char* format = "%a %b %d %H:%M:%S %Y") 
 	{
 		struct tm tm;
 		istringstream isstr(timeStr);
-		isstr >> get_time(&tm, "%a %b %d %H:%M:%S %Y");
+		isstr >> get_time(&tm, format);
 		time_t t = mktime(&tm);
 		return t;
 	}
-
-	/*static void fillCharEmptySpace(char characters[], const int& valSize, const int& size)
-	{
-		for (int i = valSize + 1; i < size; i++)
-		{
-			characters[i] = ' ';
-		}
-		characters[size] = '\0';
-	}
-
-	static char* timeToStrFile(const time_t *t, const int &size) 
-	{
-		char* timeChar = new char[size];
-
-		if (t == 0)
-		{	
-			fillCharEmptySpace(timeChar, 0, size);
-			return timeChar;
-		}
-		else 
-		{
-			return ctime(t);
-		}
-			
-	}
-
-	static char* intToStrFile(const int* value, const int &size)
-	{
-		string strFile = std::to_string((int) & value);
-		char* arrChar = new char[size];
-		strcpy(arrChar, strFile.c_str());
-		fillCharEmptySpace(arrChar, strlen(arrChar), size);
-		return arrChar;
-	}*/
 };

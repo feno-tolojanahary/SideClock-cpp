@@ -23,6 +23,10 @@ public:
 	string stringify() const override;
 	string strOutput() const override;
 
+	const string storageName() override
+	{
+		return "timeclock";
+	}
 
 	void setStartDate(time_t startDate) 
 	{ 
