@@ -1,6 +1,7 @@
 #pragma once
 #include "Storage.h"
 #include "TermGui.h"
+#include "TermGuiHyb.h"
 #include "TimeClock.h"
 #include "Planning.h"
 
@@ -14,6 +15,7 @@ public:
 		this->storageTimeclock = new Storage<TimeClock>(fileTimeclock);
 		this->storagePlanning = new Storage<Planning>(filePlanning);
 		this->termGui = new TermGui<TimeClock>();
+		this->termGuiHyb = new TermGuiHyb();
 	}
 
 	void startTime();
@@ -24,6 +26,7 @@ public:
 
 	~ShiftManager() {
 		delete storageTimeclock;
+		delete storagePlanning;
 		delete termGui;
 	}
 
@@ -31,4 +34,5 @@ private:
 	Storage<TimeClock>* storageTimeclock;
 	Storage<Planning>* storagePlanning;
 	TermGui<TimeClock>* termGui;
+	TermGuiHyb* termGuiHyb;
 };

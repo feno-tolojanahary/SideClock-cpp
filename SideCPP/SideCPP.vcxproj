@@ -144,6 +144,7 @@
     <ClCompile Include="Planning.cpp" />
     <ClCompile Include="ShiftManager.cpp" />
     <ClCompile Include="SideCPP.cpp" />
+    <ClCompile Include="TermGuiHyb.cpp" />
     <ClCompile Include="Timeclock.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -153,6 +154,7 @@
     <ClInclude Include="ShiftManager.h" />
     <ClInclude Include="Storage.h" />
     <ClInclude Include="TermGui.h" />
+    <ClInclude Include="TermGuiHyb.h" />
     <ClInclude Include="TimeClock.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

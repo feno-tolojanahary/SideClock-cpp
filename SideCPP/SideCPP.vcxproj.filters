@@ -27,6 +27,9 @@
     <ClCompile Include="Planning.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TermGuiHyb.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Storage.h">
@@ -48,6 +51,9 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Planning.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TermGuiHyb.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

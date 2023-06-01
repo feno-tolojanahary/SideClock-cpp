@@ -138,14 +138,41 @@ public:
 		vector<string> headers = Helper::splitChar(elem.getStrHeader(), DELIMITER);
 		while (getline(file, line))
 		{
-			if (line.size() > 0) {
-				vector<string> splitedLine = Helper::splitChar(line, DELIMITER);
-				elem.populateStr(headers, splitedLine);
-				data.push_back(elem);
-			}
+			
 		}
 		file.close();
 		return data;
+	}
+
+	vector<T> findDateBetween(const string attr, time_t startDate, time_t endDate) const
+	{
+		vector<T> foundData;
+		string line;
+		int searchAttrIndex(0);
+		fstream file(filename, fstream::in | fstream::binary);
+		if (!file.is_open())
+		{
+			return data;
+		}
+		vector<string> headers = Helper::splitChar(elem.getStrHeader(), DELIMITER);
+		for (const string& currentAttr : headers) {
+			if (currentAttr == attr) break;
+			searchAttrIndex++;
+		}
+		while (getline(file, line))
+		{
+			if (line.size() > 0) {
+				vector<string> lineData = Helper::splitChar(line, DELIMITER);
+				if (searchAttrIndex < lineData.size()) {
+					if (lineData[searchAttrIndex].c_str() == value) {
+						T elem;
+						elem.populateStr(headers, lineData);
+						foundData.push_back(elem);
+					}
+				}
+			}
+		}
+		return foundData;
 	}
 
 private:

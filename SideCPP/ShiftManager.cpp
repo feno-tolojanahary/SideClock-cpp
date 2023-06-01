@@ -64,6 +64,7 @@ void ShiftManager::plannedHour(const string& strStartDate, const string& strEndD
 
 void ShiftManager::showResume()
 {
-	/*vector<TimeClock> timeclockList = storageTimeclock->listData();
-	vector<Planning> planningList = storagePlanning->listData();*/
+	vector<TimeClock> timeclockList = storageTimeclock->listData();
+	vector<Planning> planningList = storagePlanning->listData();
+	termGuiHyb->printResume(timeclockList, planningList);
 }
