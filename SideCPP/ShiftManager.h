@@ -22,7 +22,7 @@ public:
 	void stopTime();
 	void listTime();
 	void plannedHour(const string& strDate, const string& strEndDate, const string& startHour, const string& endHour);
-	void showResume();
+	void showResume(const string& strStartDate, const string& strEndDate);
 
 	~ShiftManager() {
 		delete storageTimeclock;

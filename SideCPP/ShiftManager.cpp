@@ -62,9 +62,11 @@ void ShiftManager::plannedHour(const string& strStartDate, const string& strEndD
 	}
 }
 
-void ShiftManager::showResume()
+void ShiftManager::showResume(const string& strStartDate, const string& strEndDate)
 {
-	vector<TimeClock> timeclockList = storageTimeclock->listData();
-	vector<Planning> planningList = storagePlanning->listData();
+	const string attrDate = "startDate";
+	vector<TimeClock> timeclockList = storageTimeclock->findDateBetween(attrDate, strStartDate, strEndDate);
+	vector<Planning> planningList = storagePlanning->findDateBetween(attrDate, strStartDate, strEndDate);
 	termGuiHyb->printResume(timeclockList, planningList);
+
 }

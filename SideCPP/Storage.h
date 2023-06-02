@@ -144,7 +144,7 @@ public:
 		return data;
 	}
 
-	vector<T> findDateBetween(const string attr, time_t startDate, time_t endDate) const
+	vector<T> findDateBetween(const string& attr, const string& strStartDate, const string& strEndDate) const
 	{
 		vector<T> foundData;
 		string line;
@@ -154,6 +154,10 @@ public:
 		{
 			return data;
 		}
+
+		time_t startDate = Helper::stringToTime(strStartDate, FORMAT_DATE);
+		time_t endDate = Helper::stringToTime(strEndDate, FORMAT_DATE);
+
 		vector<string> headers = Helper::splitChar(elem.getStrHeader(), DELIMITER);
 		for (const string& currentAttr : headers) {
 			if (currentAttr == attr) break;
@@ -162,9 +166,11 @@ public:
 		while (getline(file, line))
 		{
 			if (line.size() > 0) {
+
 				vector<string> lineData = Helper::splitChar(line, DELIMITER);
 				if (searchAttrIndex < lineData.size()) {
-					if (lineData[searchAttrIndex].c_str() == value) {
+					string strTimeTcurrent = lineData[searchAttrIndex].c_str();
+					if (stoi(strTimeTcurrent) >= startDate && stoi(strTimeTcurrent) <= endDate) {
 						T elem;
 						elem.populateStr(headers, lineData);
 						foundData.push_back(elem);
