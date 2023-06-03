@@ -62,11 +62,16 @@ void ShiftManager::plannedHour(const string& strStartDate, const string& strEndD
 	}
 }
 
-void ShiftManager::showResume(const string& strStartDate, const string& strEndDate)
+void ShiftManager::showResume(const string& strMonth, const string& strYear)
 {
+	short month = stoi(strMonth);
+	int year = stoi(strYear);
+	int lastDayOfMonth = Helper::lastDayOfMonth(month, year);
+	time_t startDate = Helper::createDate(1, month, year);
+	time_t endDate = Helper::createDate(lastDayOfMonth, month, year);
 	const string attrDate = "startDate";
-	vector<TimeClock> timeclockList = storageTimeclock->findDateBetween(attrDate, strStartDate, strEndDate);
-	vector<Planning> planningList = storagePlanning->findDateBetween(attrDate, strStartDate, strEndDate);
-	termGuiHyb->printResume(timeclockList, planningList);
+	vector<TimeClock> timeclockList = storageTimeclock->findDateBetween(attrDate, startDate, endDate);
+	vector<Planning> planningList = storagePlanning->findDateBetween(attrDate, startDate, endDate);
+	termGuiHyb->printResume(timeclockList, planningList, month, year);
 
 }

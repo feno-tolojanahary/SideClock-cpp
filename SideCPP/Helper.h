@@ -39,4 +39,47 @@ public:
 		time_t t = mktime(&tm);
 		return t;
 	}
+
+	static time_t createDate(const short& date, const short& month, const int& year)
+	{
+		struct tm* tmDate;
+		tmDate->tm_year = year;
+		tmDate->tm_mon = month;
+		tmDate->tm_wday = date;
+		return mktime(tmDate);
+	}
+
+	static short lastDayOfMonth(short month, int year) {
+		if (month == 0 || month == 2 || month == 4 || month == 6 || month == 7 || month == 9 || month == 11)
+			return 31;
+		else if (month == 3 || month == 5 || month == 8 || month == 10)
+			return 30;
+		else {
+			if (year % 4 == 0) {
+				if (year % 100 == 0) {
+					if (year % 400 == 0)
+						return 29;
+					return 28;
+				}
+				return 29;
+			}
+			return 28;
+		}
+	}
+
+	static vector<time_t> allDatesOfMonth(short month, int year) {
+		vector<time_t> dateList;
+		short lastDay = Helper::lastDayOfMonth(month, year);
+
+		for (short i = 1; i <= lastDay; i++)
+		{
+			struct tm* tmDate;
+			tmDate->tm_wday = i;
+			tmDate->tm_mon = month;
+			tmDate->tm_year = year;
+			dateList.push_back(mktime(tmDate));
+		}
+
+		return dateList;
+	}
 };
