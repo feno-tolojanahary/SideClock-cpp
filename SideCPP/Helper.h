@@ -31,7 +31,7 @@ public:
 		return spliteStr;
 	}
 
-	static time_t stringToTime(string timeStr, const char* format = "%a %b %d %H:%M:%S %Y") 
+	static time_t stringToTime(const string &timeStr, const char* format = "%a %b %d %H:%M:%S %Y") 
 	{
 		struct tm tm;
 		istringstream isstr(timeStr);
@@ -42,11 +42,15 @@ public:
 
 	static time_t createDate(const short& date, const short& month, const int& year)
 	{
-		struct tm* tmDate;
-		tmDate->tm_year = year;
-		tmDate->tm_mon = month;
-		tmDate->tm_wday = date;
-		return mktime(tmDate);
+		struct tm tmDate;
+		tmDate.tm_mon = month;
+		tmDate.tm_wday = date;
+		tmDate.tm_year = year;
+
+		tmDate.tm_hour = 0;
+		tmDate.tm_min = 0;
+		tmDate.tm_sec = 0;
+		return mktime(&tmDate);
 	}
 
 	static short lastDayOfMonth(short month, int year) {
@@ -73,11 +77,8 @@ public:
 
 		for (short i = 1; i <= lastDay; i++)
 		{
-			struct tm* tmDate;
-			tmDate->tm_wday = i;
-			tmDate->tm_mon = month;
-			tmDate->tm_year = year;
-			dateList.push_back(mktime(tmDate));
+			time_t dateOfMonth = Helper::createDate(i, month, year);
+			dateList.push_back(dateOfMonth);
 		}
 
 		return dateList;
