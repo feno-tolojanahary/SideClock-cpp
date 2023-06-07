@@ -11,6 +11,7 @@ public:
 	virtual const string storageName() = 0;
 	virtual void setId(int id) = 0;
 	virtual int getId() const = 0;
+	virtual time_t getStartDate() const = 0;
 	virtual string getStrHeader() const = 0;
 	virtual string stringify() const = 0;
 	virtual string strOutput() const = 0;

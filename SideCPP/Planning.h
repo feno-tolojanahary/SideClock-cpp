@@ -46,7 +46,7 @@ public:
 		startDate = date;
 	}
 
-	time_t getStartDate() const
+	time_t getStartDate() const override
 	{
 		return startDate;
 	}
