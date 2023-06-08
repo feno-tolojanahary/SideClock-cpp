@@ -24,6 +24,13 @@ string TimeClock::getStrHeader() const
 	return sstr.str();
 }
 
+string TimeClock::getStrDate() const
+{
+	char buffDate[10];
+	strftime(buffDate, sizeof buffDate, FORMAT_HOUR, gmtime(&startDate));
+	return buffDate;
+}
+
 string TimeClock::stringify() const
 {
 	stringstream sstr;

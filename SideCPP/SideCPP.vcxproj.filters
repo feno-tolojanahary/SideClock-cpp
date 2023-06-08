@@ -56,5 +56,8 @@
     <ClInclude Include="TermGuiHyb.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="ModelTermGui.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

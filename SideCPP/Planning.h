@@ -24,6 +24,7 @@ public:
 	string getStrHeader() const override;
 	string stringify() const override;
 	string strOutput() const override;
+	string getStrDate() const override;
 	void populateStr(const vector<string>& headers, const vector<string>& panningValues) override;
 
 	const string storageName() override
@@ -46,7 +47,7 @@ public:
 		startDate = date;
 	}
 
-	time_t getStartDate() const override
+	time_t getStartDate() const
 	{
 		return startDate;
 	}

@@ -150,6 +150,7 @@
   <ItemGroup>
     <ClInclude Include="ModelStorage.h" />
     <ClInclude Include="Helper.h" />
+    <ClInclude Include="ModelTermGui.h" />
     <ClInclude Include="Planning.h" />
     <ClInclude Include="ShiftManager.h" />
     <ClInclude Include="Storage.h" />

@@ -106,8 +106,10 @@ public:
 	void print(const vector<T>& elements) const
 	{
 		vector<vector<string>> elemReadyToPrint = this->castElemForPrint(elements);
-		string printRes = this->wrapStrResult(elemReadyToPrint);
+		string* printRes = &this->wrapStrResult(elemReadyToPrint);
 
-		cout << printRes;
+		cout << *printRes;
 	}
+
+
 };

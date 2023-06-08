@@ -22,6 +22,7 @@ public:
 	string getStrHeader() const override;
 	string stringify() const override;
 	string strOutput() const override;
+	string getStrDate() const override;
 
 	const string storageName() override
 	{
@@ -63,7 +64,7 @@ public:
 		return endDate;
 	}
 
-	time_t getStartDate() const override
+	time_t getStartDate() const
 	{
 		return startDate;
 	}

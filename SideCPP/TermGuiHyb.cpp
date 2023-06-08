@@ -1,13 +1,12 @@
 #include "Helper.h"
 #include <utility>
 #include <ctime>
-#include <map>
 #include "TermGuiHyb.h"
+#include "TermGui.h"
 
 template<class T>
 bool TermGuiHyb::emplaceMatchValue(vector<string>* lineContent, const time_t& dateOfMonth, const T& elem)
 {
-	char buffStartDate[10];
 	struct tm* tmElemDate;
 	struct tm* tmDateOfMonth = localtime(&dateOfMonth);
 	time_t startDate = elem.getStartDate();
@@ -17,18 +16,15 @@ bool TermGuiHyb::emplaceMatchValue(vector<string>* lineContent, const time_t& da
 		&& tmElemDate->tm_mon == tmDateOfMonth->tm_mon
 		&& tmElemDate->tm_wday == tmDateOfMonth->tm_wday)
 	{
-		strftime(buffStartDate, sizeof buffStartDate, FORMAT_DATE, gmtime(&startDate));
-		lineContent->push_back(buffStartDate);
+		lineContent->push_back(elem.getStrDate());
 		return true;
 	}
 	return false;
 }
 
-void TermGuiHyb::printResume(const vector<TimeClock>& timeclocks, const vector<Planning>& plannings, const short& month, const int& year)
+void TermGuiHyb::processResume()
 {
-	vector<time_t> datesOfMonth = Helper::allDatesOfMonth(month, year);
-	
-	map<string, vector<string>> lineOutputs;
+	vector<time_t> datesOfMonth = Helper::allDatesOfMonth(*month, *year);
 
 	for (const time_t& dateOfMonth: datesOfMonth)
 	{
@@ -50,7 +46,42 @@ void TermGuiHyb::printResume(const vector<TimeClock>& timeclocks, const vector<P
 		}
 
 
-		lineOutputs.insert(line);
+		this->lineOutputs.insert(line);
 		line = make_pair(string(buffDateOfMonth), lineContent);
 	}
+}
+
+string TermGuiHyb::getStrHeader() const
+{
+	stringstream sstr;
+	sstr << "Date" << DELIMITER << "Planned" << DELIMITER << "Worked\n";
+	return sstr.str();
+}
+
+vector<vector<string>> TermGuiHyb::castForPrint() const
+{
+	vector<vector<string>> termValOutputs;
+
+	for (const pair<string, vector<string>>& lineStructuredTerm : this->lineOutputs)
+	{
+		vector<string> termLineVal;
+		termLineVal.push_back(lineStructuredTerm.first);
+
+		for (const string& content : lineStructuredTerm.second)
+		{
+			termLineVal.push_back(content);
+		}
+	}
+
+	return termValOutputs;
+}
+
+void TermGuiHyb::printResume(short& month, int& year)
+{
+	setMonth(month);
+	setYear(year);
+	vector<vector<string>> castedVals = this->castForPrint();
+	TermGui<TermGuiHyb> termgui;
+	string* printRes = &termgui.wrapStrResult(castedVals);
+	cout << *printRes;
 }
