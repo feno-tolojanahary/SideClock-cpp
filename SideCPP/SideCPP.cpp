@@ -6,6 +6,7 @@
 using namespace std;
 
 void parseMonthYearVal(const int& index, char* argv[], short* month, int* year);
+void parsePlanStartEnd(const int& index, char* argv[], string* strStartDate, string* strEndDate, string* strStartHour, string* strEndHour);
 
 int main(int argc, char* argv[])
 {
@@ -41,34 +42,73 @@ int main(int argc, char* argv[])
 				}
 			}
 
-			shiftManager.listTime(*month, *year);
+			shiftManager.showResume(*month, *year);
 		}
 		else if (strcmp(argv[1], "--plan") == 0)
 		{
-			
+			string* strStartDate, * strEndDate, * strStartHour, * strEndHour;
+			ShiftManager shiftManager;
+			if (argc > 2)
+			{
+				parsePlanStartEnd(2, argv, strStartDate, strEndDate, strStartHour, strEndHour);
+				if (argc > 3)
+				{
+					parsePlanStartEnd(3, argv, strStartDate, strEndDate, strStartHour, strEndHour);
+					if (argc > 4)
+					{
+						parsePlanStartEnd(4, argv, strStartDate, strEndDate, strStartHour, strEndHour);
+						if (argc > 5)
+						{
+							parsePlanStartEnd(5, argv, strStartDate, strEndDate, strStartHour, strEndHour);
+						}
+					}
+				}
+
+			}
 		}
 	}
 	else {
 		cout << "--start	 start time clock \n";
 		cout << "--stop		 stop time clock \n";
 		cout << "--list		 list time clock \n";
+		cout << "--plan		 plan time clock \n";
 	}
 }
+
+void assignValueStrIfExist(const string* argvVal, const string& argName, string* toStoreVal);
+void assignValueIntIfExist(const string* argVal, const string& argName, auto* toStoreVal);
 
 void parseMonthYearVal(const int& index, char* argv[], short* month, int* year)
 {
 	string* argument = new string(argv[index]);
-	if (argument->find("--month") != string::npos)
-	{
-		vector<string> splitedChar = Helper::splitChar(*argument, '=');
-		short monthVal = stoi(splitedChar[2]);
-		month = &monthVal;
+	assignValueIntIfExist(argument, "--month", month);
+	assignValueIntIfExist(argument, "--year", year);
+}
+
+void parsePlanStartEnd(const int& index, char* argv[], string* strStartDate, string* strEndDate, string* strStartHour, string* strEndHour)
+{
+	string* argument = new string(argv[index]);
+	assignValueStrIfExist(argument, "--startDate", strStartDate);
+	assignValueStrIfExist(argument, "--endDate", strEndDate);
+	assignValueStrIfExist(argument, "--startHour", strStartHour);
+	assignValueStrIfExist(argument, "--endHour", strEndHour);
+}
+
+void assignValueStrIfExist(const string* argvVal, const string& argName, string* toStoreVal)
+{
+	if (argvVal->find(argName) != string::npos) {
+		vector<string> splitedChar = Helper::splitChar(*argvVal, '=');
+		toStoreVal = &splitedChar[2];
 	}
-	if (argument->find("--year") != string::npos)
+}
+
+void assignValueIntIfExist(const string* argVal, const string& argName, auto* toStoreVal)
+{
+	if (argVal->find("--year") != string::npos)
 	{
-		vector<string> splitedChar = Helper::splitChar(*argument, '=');
-		int yearVal = stoi(splitedChar[2]);
-		year = &yearVal;
+		vector<string> splitedChar = Helper::splitChar(*argVal, '=');
+		int val = stoi(splitedChar[2]);
+		toStoreVal = &val;
 	}
 }
 

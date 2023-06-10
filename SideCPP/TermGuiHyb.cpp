@@ -22,9 +22,9 @@ bool TermGuiHyb::emplaceMatchValue(vector<string>* lineContent, const time_t& da
 	return false;
 }
 
-void TermGuiHyb::processResume()
+void TermGuiHyb::processResume(const short& month, const int& year)
 {
-	vector<time_t> datesOfMonth = Helper::allDatesOfMonth(*month, *year);
+	vector<time_t> datesOfMonth = Helper::allDatesOfMonth(month, year);
 
 	for (const time_t& dateOfMonth: datesOfMonth)
 	{
@@ -76,10 +76,9 @@ vector<vector<string>> TermGuiHyb::castForPrint() const
 	return termValOutputs;
 }
 
-void TermGuiHyb::printResume(short& month, int& year)
+void TermGuiHyb::printResume(const short& month, const int& year)
 {
-	setMonth(month);
-	setYear(year);
+	processResume(month, year);
 	vector<vector<string>> castedVals = this->castForPrint();
 	TermGui<TermGuiHyb> termgui;
 	string* printRes = &termgui.wrapStrResult(castedVals);

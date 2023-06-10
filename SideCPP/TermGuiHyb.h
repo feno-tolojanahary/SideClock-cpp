@@ -20,28 +20,16 @@ private:
 	template <class T>
 	bool emplaceMatchValue(vector<string>* lineContent, const time_t& dateOfMonth, const T& elem);
 	vector<vector<string>> castForPrint() const;
+	void processResume(const short& month, const int& year);
 
 public:
 	
-	void processResume();
 	string getStrHeader() const override;
-	void printResume(short& month, int& year);
-
-	void setMonth(short& aMonth)
-	{
-		month = &aMonth;
-	}
-
-	void setYear(int& aYear)
-	{
-		year = &aYear;
-	}
+	void printResume(const short& month, const int& year);
 
 private:
 	map<string, vector<string>> lineOutputs;
 	vector<Planning> plannings;
 	vector<TimeClock> timeclocks;
-	short* month = 0;
-	int* year = 0;
 };
 

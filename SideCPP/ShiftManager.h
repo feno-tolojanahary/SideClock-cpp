@@ -18,9 +18,8 @@ public:
 
 	void startTime();
 	void stopTime();
-	void listTime(const short& month, const int& year);
-	void plannedHour(const string& strDate, const string& strEndDate, const string& startHour, const string& endHour);
-	void showResume(const string& strStartDate, const string& strEndDate);
+	void planneHour(const string& strDate, const string& strEndDate, const string& startHour, const string& endHour);
+	void showResume(const short& month, const int& year);
 
 	~ShiftManager() {
 		delete storageTimeclock;

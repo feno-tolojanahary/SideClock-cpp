@@ -38,13 +38,7 @@ void ShiftManager::stopTime()
 	}
 }
 
-void ShiftManager::listTime(const short& month, const int& year)
-{
-	vector<TimeClock> timeclockList = storageTimeclock->listData();
-	termGui->print(timeclockList);
-}
-
-void ShiftManager::plannedHour(const string& strStartDate, const string& strEndDate, const string& strStartHour, const string& strEndHour)
+void ShiftManager::planneHour(const string& strStartDate, const string& strEndDate, const string& strStartHour, const string& strEndHour)
 {
 	Planning planning(strStartDate, strEndDate, strStartHour, strEndHour);
 	storagePlanning->findOneBy("startDate", Helper::stringToTime(strStartDate), planning);
@@ -63,16 +57,14 @@ void ShiftManager::plannedHour(const string& strStartDate, const string& strEndD
 	}
 }
 
-void ShiftManager::showResume(const string& strMonth, const string& strYear)
+void ShiftManager::showResume(const short& month, const int& year)
 {
-	short month = stoi(strMonth);
-	int year = stoi(strYear);
 	int lastDayOfMonth = Helper::lastDayOfMonth(month, year);
 	time_t startDate = Helper::createDate(1, month, year);
 	time_t endDate = Helper::createDate(lastDayOfMonth, month, year);
 	const string attrDate = "startDate";
 	vector<TimeClock> timeclockList = storageTimeclock->findDateBetween(attrDate, startDate, endDate);
 	vector<Planning> planningList = storagePlanning->findDateBetween(attrDate, startDate, endDate);
-
-
+	TermGuiHyb termGuiHyb(timeclockList, planningList);
+	termGuiHyb.printResume(month, year);
 }
