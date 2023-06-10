@@ -1,6 +1,7 @@
 #include <vector>
 #include "ShiftManager.h"
 #include "TermGui.h"
+#include "TermGuiHyb.h"
 #include "Planning.h"
 
 void ShiftManager::startTime()
@@ -37,7 +38,7 @@ void ShiftManager::stopTime()
 	}
 }
 
-void ShiftManager::listTime()
+void ShiftManager::listTime(const short& month, const int& year)
 {
 	vector<TimeClock> timeclockList = storageTimeclock->listData();
 	termGui->print(timeclockList);
@@ -72,6 +73,6 @@ void ShiftManager::showResume(const string& strMonth, const string& strYear)
 	const string attrDate = "startDate";
 	vector<TimeClock> timeclockList = storageTimeclock->findDateBetween(attrDate, startDate, endDate);
 	vector<Planning> planningList = storagePlanning->findDateBetween(attrDate, startDate, endDate);
-	termGuiHyb->printResume(timeclockList, planningList, month, year);
+
 
 }

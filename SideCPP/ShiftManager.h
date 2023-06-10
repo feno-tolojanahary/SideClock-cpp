@@ -1,7 +1,6 @@
 #pragma once
 #include "Storage.h"
 #include "TermGui.h"
-#include "TermGuiHyb.h"
 #include "TimeClock.h"
 #include "Planning.h"
 
@@ -15,12 +14,11 @@ public:
 		this->storageTimeclock = new Storage<TimeClock>(fileTimeclock);
 		this->storagePlanning = new Storage<Planning>(filePlanning);
 		this->termGui = new TermGui<TimeClock>();
-		this->termGuiHyb = new TermGuiHyb();
 	}
 
 	void startTime();
 	void stopTime();
-	void listTime();
+	void listTime(const short& month, const int& year);
 	void plannedHour(const string& strDate, const string& strEndDate, const string& startHour, const string& endHour);
 	void showResume(const string& strStartDate, const string& strEndDate);
 
@@ -34,5 +32,4 @@ private:
 	Storage<TimeClock>* storageTimeclock;
 	Storage<Planning>* storagePlanning;
 	TermGui<TimeClock>* termGui;
-	TermGuiHyb* termGuiHyb;
 };
