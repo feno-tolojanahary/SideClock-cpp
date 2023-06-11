@@ -65,6 +65,14 @@ int main(int argc, char* argv[])
 				}
 
 			}
+			if (strStartDate->empty() || strEndDate->empty() || strStartHour->empty() || strEndHour->empty())
+			{
+				cout << "Argument not complete or a wrong spell in one of argument name \n";
+				return 0;
+			}
+			else {
+				shiftManager.planneHour(*strStartDate, *strEndDate, *strStartHour, *strEndHour);
+			}
 		}
 	}
 	else {

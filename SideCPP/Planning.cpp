@@ -20,10 +20,17 @@ Planning::Planning(string strStartDate, string strEndDate, string strStartHour, 
 	}
 }
 
-string Planning::getStrHeader() const
+string Planning::getStrHeaderStorage() const
 {
 	stringstream sstr;
 	sstr << "id" << DELIMITER << "startDate" << DELIMITER << "endDate" << DELIMITER << "startHour" << DELIMITER << "endHour\n";
+	return sstr.str();
+}
+
+string Planning::getStrHeaderList() const
+{
+	stringstream sstr;
+	sstr << "Date" << DELIMITER << "Planned\n";
 	return sstr.str();
 }
 
@@ -84,4 +91,29 @@ void Planning::populateStr(const vector<string>& headers, const vector<string>& 
 		}
 		index++;
 	}
+}
+
+vector<vector<string>> Planning::castForOutput(vector<Planning> plannings, const short& month, const int& year)
+{
+	vector<vector<string>> castedOutputs;
+	vector<string> headers;
+	vector<time_t> datesOfMonth = Helper::allDatesOfMonth(month, year);
+	if (plannings.size() > 1)
+	{
+		string strHeaders = plannings[0].getStrHeaderList();
+		castedOutputs.push_back(Helper::splitChar(strHeaders, DELIMITER));
+	}
+	for (const time_t& dateMonth : datesOfMonth) {
+		vector<string> planningLine;
+		char buffDateOfMonth[10];
+		strftime(buffDateOfMonth, sizeof buffDateOfMonth, FORMAT_DATE, gmtime(&dateMonth));
+		planningLine.push_back(buffDateOfMonth);
+
+		for (const Planning& planning : plannings)
+		{
+			Helper::emplaceMatchDateOnMonth<Planning>(&planningLine, dateMonth, planning);
+		}
+		castedOutputs.push_back(planningLine);
+	}
+	return castedOutputs;
 }

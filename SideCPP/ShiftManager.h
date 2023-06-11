@@ -5,6 +5,9 @@
 #include "Planning.h"
 
 class ShiftManager {
+private:
+	void showCurrentPlannedList();
+
 public:
 
 	ShiftManager(): storageTimeclock(nullptr), termGui(nullptr)

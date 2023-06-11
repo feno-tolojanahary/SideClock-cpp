@@ -17,7 +17,7 @@ tm* TimeClock::getTimeDiff()
 	return gmtime(&diff);
 }
 
-string TimeClock::getStrHeader() const
+string TimeClock::getStrHeaderStorage() const
 {
 	stringstream sstr;
 	sstr << "id" << DELIMITER << "startDate" << DELIMITER << "endDate" << DELIMITER << "owner\n";

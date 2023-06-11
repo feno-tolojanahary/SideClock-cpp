@@ -19,7 +19,7 @@ public:
 	~TimeClock();
 
 	void startGui();
-	string getStrHeader() const override;
+	string getStrHeaderStorage() const override;
 	string stringify() const override;
 	string strOutput() const override;
 	string getStrDate() const override;

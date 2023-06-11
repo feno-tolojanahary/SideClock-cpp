@@ -34,7 +34,7 @@ public:
 
 		if (end == 0)
 		{
-			string headers = data.getStrHeader();
+			string headers = data.getStrHeaderStorage();
 			file << headers;
 		}
 		file << strData;
@@ -69,7 +69,7 @@ public:
 			return;
 		}
 		getline(file, line);
-		vector<string> headers = Helper::splitChar(elem.getStrHeader(), DELIMITER);
+		vector<string> headers = Helper::splitChar(elem.getStrHeaderStorage(), DELIMITER);
 		for (const string& currentAttr : headers) {
 			if (currentAttr == attr) break;
 			searchAttrIndex++;
@@ -101,7 +101,7 @@ public:
 		string searchID = sstrIDsearch.str();
 
 		getline(file, line);
-		vector<string> headers = Helper::splitChar(elem.getStrHeader(), DELIMITER);
+		vector<string> headers = Helper::splitChar(elem.getStrHeaderStorage(), DELIMITER);
 		pos = file.tellg();
 		for (line; getline(file, line);)
 		{
@@ -135,7 +135,7 @@ public:
 			return data;
 		}
 		getline(file, line);
-		vector<string> headers = Helper::splitChar(elem.getStrHeader(), DELIMITER);
+		vector<string> headers = Helper::splitChar(elem.getStrHeaderStorage(), DELIMITER);
 		while (getline(file, line))
 		{
 			
@@ -155,7 +155,7 @@ public:
 			return data;
 		}
 
-		vector<string> headers = Helper::splitChar(elem.getStrHeader(), DELIMITER);
+		vector<string> headers = Helper::splitChar(elem.getStrHeaderStorage(), DELIMITER);
 		for (const string& currentAttr : headers) {
 			if (currentAttr == attr) break;
 			searchAttrIndex++;
@@ -223,7 +223,7 @@ private:
 		ifstream file(filename, fstream::in | fstream::binary);
 		string strLastTimeclock = getLastLine(file);
 		T * tempElem = new T();
-		vector<string> headers = Helper::splitChar(tempElem->getStrHeader(), DELIMITER);
+		vector<string> headers = Helper::splitChar(tempElem->getStrHeaderStorage(), DELIMITER);
 		vector<string> splitedLine = Helper::splitChar(strLastTimeclock, DELIMITER);
 		tempElem->populateStr(headers, splitedLine);
 		generatedId = tempElem->getId() != -1 ? tempElem->getId() + 1 : 0;

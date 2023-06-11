@@ -83,4 +83,22 @@ public:
 
 		return dateList;
 	}
+
+	template <typename T>
+	static bool emplaceMatchDateOnMonth(vector<string>* lineContent, const time_t& dateOfMonth, const T& elem)
+	{
+		struct tm* tmElemDate;
+		struct tm* tmDateOfMonth = localtime(&dateOfMonth);
+		time_t startDate = elem.getStartDate();
+		tmElemDate = localtime(&startDate);
+
+		if (tmElemDate->tm_year == tmDateOfMonth->tm_year
+			&& tmElemDate->tm_mon == tmDateOfMonth->tm_mon
+			&& tmElemDate->tm_wday == tmDateOfMonth->tm_wday)
+		{
+			lineContent->push_back(elem.getStrDate());
+			return true;
+		}
+		return false;
+	}
 };

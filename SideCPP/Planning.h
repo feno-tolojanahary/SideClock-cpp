@@ -21,7 +21,8 @@ public:
 
 	Planning(string strStartDate, string strEndDate, string strStartHour, string strEndHour);
 
-	string getStrHeader() const override;
+	string getStrHeaderStorage() const override;
+	string getStrHeaderList() const;
 	string stringify() const override;
 	string strOutput() const override;
 	string getStrDate() const override;
@@ -81,4 +82,7 @@ public:
 	{
 		return endHour;
 	}
+
+	static vector<vector<string>> castForOutput(vector<Planning> plannings, const short& month, const int& year);
+
 };

@@ -68,3 +68,20 @@ void ShiftManager::showResume(const short& month, const int& year)
 	TermGuiHyb termGuiHyb(timeclockList, planningList);
 	termGuiHyb.printResume(month, year);
 }
+
+
+
+void ShiftManager::showCurrentPlannedList()
+{
+	time_t currentDate;
+	struct tm* tmDate;
+	time(&currentDate);
+	tmDate = gmtime(&currentDate);
+	int lastDayOfMonth = Helper::lastDayOfMonth(tmDate->tm_mon, tmDate->tm_year);
+	time_t startDate = Helper::createDate(1, tmDate->tm_mon, tmDate->tm_year);
+	time_t endDate = Helper::createDate(lastDayOfMonth, tmDate->tm_mon, tmDate->tm_year);
+	const string attrDate = "startDate";
+	vector<Planning> planningList = storagePlanning->findDateBetween(attrDate, startDate, endDate);
+	TermGuiHyb termGuiHyb(planningList);
+	termGuiHyb.printPlanningList(tmDate->tm_mon, tmDate->tm_year);
+}
