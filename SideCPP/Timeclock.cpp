@@ -6,10 +6,7 @@
 #include "Helper.h"
 
 
-TimeClock::~TimeClock()
-{
-
-}
+TimeClock::~TimeClock(){}
 
 tm* TimeClock::getTimeDiff()
 {

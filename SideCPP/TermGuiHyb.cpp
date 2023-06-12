@@ -27,9 +27,8 @@ void TermGuiHyb::processResume(const short& month, const int& year)
 			Helper::emplaceMatchDateOnMonth<Planning>(&lineContent, dateOfMonth, planning);
 		}
 
-
-		this->lineOutputs.insert(line);
 		line = make_pair(string(buffDateOfMonth), lineContent);
+		this->lineOutputs.insert(line);
 	}
 }
 

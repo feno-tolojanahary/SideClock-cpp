@@ -45,12 +45,14 @@ void ShiftManager::planneHour(const string& strStartDate, const string& strEndDa
 	if (planning.getId() != -1)
 	{
 		cout << "Planning already exists." << endl;
+		this->showCurrentPlannedList();
 		return;
 	}
 	storagePlanning->saveData(planning);
 	if (planning.getId() != -1)
 	{
 		cout << "Planning registered." << endl;
+		this->showCurrentPlannedList();
 	}
 	else {
 		cout << "Error when registering" << endl;

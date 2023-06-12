@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include <list>
 #include <ctime>
 #include <sstream>
 #include <iomanip>
@@ -44,7 +45,7 @@ public:
 	{
 		struct tm tmDate;
 		tmDate.tm_mon = month;
-		tmDate.tm_wday = date;
+		tmDate.tm_mday = date;
 		tmDate.tm_year = year;
 
 		tmDate.tm_hour = 0;
@@ -53,7 +54,8 @@ public:
 		return mktime(&tmDate);
 	}
 
-	static short lastDayOfMonth(const short& month, const int& year) {
+	static short lastDayOfMonth(const short& month, const int& year) 
+	{
 		if (month == 0 || month == 2 || month == 4 || month == 6 || month == 7 || month == 9 || month == 11)
 			return 31;
 		else if (month == 3 || month == 5 || month == 8 || month == 10)
@@ -71,7 +73,8 @@ public:
 		}
 	}
 
-	static vector<time_t> allDatesOfMonth(short month, int year) {
+	static vector<time_t> allDatesOfMonth(const short& month, const int& year) 
+	{
 		vector<time_t> dateList;
 		short lastDay = Helper::lastDayOfMonth(month, year);
 
@@ -94,7 +97,7 @@ public:
 
 		if (tmElemDate->tm_year == tmDateOfMonth->tm_year
 			&& tmElemDate->tm_mon == tmDateOfMonth->tm_mon
-			&& tmElemDate->tm_wday == tmDateOfMonth->tm_wday)
+			&& tmElemDate->tm_mday == tmDateOfMonth->tm_mday)
 		{
 			lineContent->push_back(elem.getStrDate());
 			return true;
