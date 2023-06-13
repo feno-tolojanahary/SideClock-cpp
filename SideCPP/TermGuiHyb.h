@@ -23,7 +23,7 @@ public:
 	}
 
 private:
-	vector<vector<string>> castForPrint() const;
+	list<vector<vector<string>>> castForPrint() const;
 	void processResume(const short& month, const int& year);
 
 public:
