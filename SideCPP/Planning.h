@@ -83,6 +83,6 @@ public:
 		return endHour;
 	}
 
-	static vector<vector<string>> castForOutput(vector<Planning> plannings, const short& month, const int& year);
+	static vector<vector<vector<string>>> castForOutput(vector<Planning> plannings, const short& month, const int& year);
 
 };

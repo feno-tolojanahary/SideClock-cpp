@@ -93,27 +93,42 @@ void Planning::populateStr(const vector<string>& headers, const vector<string>& 
 	}
 }
 
-vector<vector<string>> Planning::castForOutput(vector<Planning> plannings, const short& month, const int& year)
+vector<vector<vector<string>>> Planning::castForOutput(vector<Planning> plannings, const short& month, const int& year)
 {
-	vector<vector<string>> castedOutputs;
-	vector<string> headers;
+	const short	weekNumberMonth = 6;
+	const short columnNbr = 3;
+	vector<string> headers(columnNbr, " - ");
 	vector<time_t> datesOfMonth = Helper::allDatesOfMonth(month, year);
 	if (plannings.size() > 1)
 	{
 		string strHeaders = plannings[0].getStrHeaderList();
-		castedOutputs.push_back(Helper::splitChar(strHeaders, DELIMITER));
+		headers = Helper::splitChar(strHeaders, DELIMITER);
 	}
+	vector<vector<string>> defaultWeekOutput(1, headers);
+	vector<vector<vector<string>>> castedOutputs(weekNumberMonth, defaultWeekOutput);
+	int firstWeekOfYearInMonth = 0;
+
 	for (const time_t& dateMonth : datesOfMonth) {
 		vector<string> planningLine;
-		char buffDateOfMonth[10];
-		strftime(buffDateOfMonth, sizeof buffDateOfMonth, FORMAT_DATE, gmtime(&dateMonth));
+		int weekOfMonthIndex = 0;
+		char buffDateOfMonth[10], buffWeekOfYear[2];
+		struct tm* tmDateMonth = gmtime(&dateMonth);
+		strftime(buffDateOfMonth, sizeof buffDateOfMonth, FORMAT_DATE, tmDateMonth);
+		strftime(buffWeekOfYear, sizeof buffWeekOfYear, "%W", tmDateMonth);
+		weekOfMonthIndex = stoi(buffWeekOfYear);
+		if (tmDateMonth->tm_mday == 1)
+		{
+			firstWeekOfYearInMonth = weekOfMonthIndex;
+		}
 		planningLine.push_back(buffDateOfMonth);
 
 		for (const Planning& planning : plannings)
 		{
 			Helper::emplaceMatchDateOnMonth<Planning>(&planningLine, dateMonth, planning);
 		}
-		castedOutputs.push_back(planningLine);
+		vector<vector<string>> weekOutput = castedOutputs.at(weekOfMonthIndex);
+		weekOutput.push_back(planningLine);
+		castedOutputs.at(weekOfMonthIndex) = weekOutput;
 	}
 	return castedOutputs;
 }
