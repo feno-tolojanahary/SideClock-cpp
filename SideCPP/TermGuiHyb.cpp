@@ -83,13 +83,46 @@ vector<vector<vector<string>>> TermGuiHyb::castForPrint() const
 	return termValOutputs;
 }
 
+void TermGuiHyb::printTotalPlanTime() const
+{
+	int planningTotalHour = 0, timeclockTotalHour = 0;
+	vector<vector<string>> totalOut;
+	TermGui<TermGuiHyb> termgui;
+
+	for (const Planning& planning : plannings)
+	{
+		planningTotalHour += planning.getDiffHour();
+	}
+
+	for (const TimeClock& timeclock : timeclocks)
+	{
+		timeclockTotalHour += timeclock.getDiffHour();
+	}
+
+	vector<string> headers{"Planned", "Worked"};
+	vector<string> total;
+	total.push_back(to_string(planningTotalHour));
+	total.push_back(to_string(timeclockTotalHour));
+	totalOut.push_back(headers);
+	totalOut.push_back(total);
+
+	string printRes = "Total Month \n";
+	printRes += termgui.wrapStrResult(totalOut);
+	cout << printRes;
+}
+
 void TermGuiHyb::printGroupedWeekData(vector<vector<vector<string>>> weekData) const
 {
 	TermGui<TermGuiHyb> termgui;
 	string printRes = "";
-	for (const vector<vector<string>> weekCastedVal : weekData) {
+	int weekIndex = 1;
+
+	for (const vector<vector<string>> weekCastedVal : weekData) 
+	{
+		printRes += "Week " + to_string(weekIndex) + "\n";
 		printRes += termgui.wrapStrResult(weekCastedVal);
 		printRes += "\n\n";
+		weekIndex++;
 	}
 	cout << printRes;
 }
@@ -99,6 +132,7 @@ void TermGuiHyb::printResume(const short& month, const int& year)
 	processResume(month, year);
 	vector<vector<vector<string>>> castedVals = this->castForPrint();
 	this->printGroupedWeekData(castedVals);
+	this->printTotalPlanTime();
 }
 
 void TermGuiHyb::printPlanningList(const short& month, const int& year)

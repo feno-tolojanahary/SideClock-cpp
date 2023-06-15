@@ -28,6 +28,12 @@ string TimeClock::getStrDate() const
 	return buffDate;
 }
 
+int TimeClock::getDiffHour() const
+{
+	double diffTime = difftime(endDate, startDate);
+	return diffTime / 3600;
+}
+
 string TimeClock::stringify() const
 {
 	stringstream sstr;

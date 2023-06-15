@@ -27,6 +27,12 @@ string Planning::getStrHeaderStorage() const
 	return sstr.str();
 }
 
+int Planning::getDiffHour() const
+{
+	double diffTime = difftime(endDate, startDate);
+	return diffTime / 3600;
+}
+
 string Planning::getStrHeaderList() const
 {
 	stringstream sstr;

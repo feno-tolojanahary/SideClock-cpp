@@ -26,6 +26,7 @@ private:
 	vector<vector<vector<string>>> castForPrint() const;
 	void printGroupedWeekData(vector<vector<vector<string>>> weekData) const;
 	void processResume(const short& month, const int& year);
+	void printTotalPlanTime() const;
 
 public:
 	

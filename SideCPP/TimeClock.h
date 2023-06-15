@@ -24,6 +24,8 @@ public:
 	string strOutput() const override;
 	string getStrDate() const override;
 
+	int getDiffHour() const;
+
 	const string storageName() override
 	{
 		return "timeclock";

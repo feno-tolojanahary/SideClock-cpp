@@ -28,6 +28,8 @@ public:
 	string getStrDate() const override;
 	void populateStr(const vector<string>& headers, const vector<string>& panningValues) override;
 
+	int getDiffHour() const;
+
 	const string storageName() override
 	{
 		return "planningHour";
