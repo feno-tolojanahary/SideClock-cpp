@@ -19,7 +19,7 @@ public:
 		this->termGui = new TermGui<TimeClock>();
 	}
 
-	void startTime();
+	void startTime(const string& details);
 	void stopTime();
 	void planneHour(const string& strDate, const string& strEndDate, const string& startHour, const string& endHour);
 	void showResume(const short& month, const int& year);

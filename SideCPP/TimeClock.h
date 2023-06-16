@@ -10,6 +10,7 @@ private:
 	int owner = 1;
 	time_t startDate = 0;
 	time_t endDate = 0;
+	string details = "";
 
 	tm* getTimeDiff();
 	void displayTimer(const tm* timer);
@@ -51,6 +52,11 @@ public:
 		this->id = id;
 	}
 
+	void setDetails(string _details)
+	{
+		this->details = _details;
+	}
+
 	int getId() const override
 	{
 		return id;
@@ -59,6 +65,11 @@ public:
 	int getOwner() const
 	{
 		return owner;
+	}
+
+	string getDetails() const
+	{
+		return details;
 	}
 
 	time_t getEndDate() const

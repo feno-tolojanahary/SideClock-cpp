@@ -17,7 +17,7 @@ tm* TimeClock::getTimeDiff()
 string TimeClock::getStrHeaderStorage() const
 {
 	stringstream sstr;
-	sstr << "id" << DELIMITER << "startDate" << DELIMITER << "endDate" << DELIMITER << "owner\n";
+	sstr << "id" << DELIMITER << "startDate" << DELIMITER << "endDate" << DELIMITER << "owner" << DELIMITER << "details\n";
 	return sstr.str();
 }
 
@@ -37,7 +37,7 @@ int TimeClock::getDiffHour() const
 string TimeClock::stringify() const
 {
 	stringstream sstr;
-	sstr << id << DELIMITER << startDate << DELIMITER << endDate << DELIMITER << to_string(owner) + "\n";
+	sstr << id << DELIMITER << startDate << DELIMITER << endDate << DELIMITER << to_string(owner) << DELIMITER << details + "\n";
 	return sstr.str();
 }
 
@@ -57,6 +57,9 @@ void TimeClock::populateStr(const vector<string>& headers, const vector<string>&
 			}
 			else if (value == "owner") {
 				this->setOwner(stoi(timeclockValues[index]));
+			}
+			else if (value == "details") {
+				this->setDetails(timeclockValues[index]);
 			}
 		}
 		index++;

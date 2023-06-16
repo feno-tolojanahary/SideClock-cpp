@@ -8,21 +8,29 @@ using namespace std;
 void parseMonthYearVal(const int& index, char* argv[], short* month, int* year);
 void parsePlanStartEnd(const int& index, char* argv[], string* strStartDate, string* strEndDate, string* strStartHour, string* strEndHour);
 
+void parseAndAssignVal(const int& index, char* argv[], const string& argName, string* toStoreVal);
+
 int main(int argc, char* argv[])
 {
 	if (argc > 1) 
 	{
-		if (strcmp(argv[1], "--start") == 0)
-		{
+		if (strcmp(argv[1], "start") == 0) {
+
+			string details = "";
 			ShiftManager shiftManager;
-			shiftManager.startTime();
+
+			if (argc > 2)
+			{
+				parseAndAssignVal(2, argv, "--task", &details);
+			}
+			shiftManager.startTime(details);
 		}
-		else if (strcmp(argv[1], "--stop") == 0)
+		else if (strcmp(argv[1], "stop") == 0)
 		{
 			ShiftManager shiftManager;
 			shiftManager.stopTime();
 		}
-		else if (strcmp(argv[1], "--list") == 0)
+		else if (strcmp(argv[1], "list") == 0)
 		{
 			short* month;
 			int* year;
@@ -44,7 +52,7 @@ int main(int argc, char* argv[])
 
 			shiftManager.showResume(*month, *year);
 		}
-		else if (strcmp(argv[1], "--plan") == 0)
+		else if (strcmp(argv[1], "plan") == 0)
 		{
 			string* strStartDate, * strEndDate, * strStartHour, * strEndHour;
 			ShiftManager shiftManager;
@@ -76,15 +84,21 @@ int main(int argc, char* argv[])
 		}
 	}
 	else {
-		cout << "--start	 start time clock \n";
-		cout << "--stop		 stop time clock \n";
-		cout << "--list		 list time clock \n";
-		cout << "--plan		 plan time clock \n";
+		cout << "start		 start time clock \n";
+		cout << "stop		 stop time clock \n";
+		cout << "list		 list time clock \n";
+		cout << "plan		 plan time clock \n";
 	}
 }
 
 void assignValueStrIfExist(const string* argvVal, const string& argName, string* toStoreVal);
 void assignValueIntIfExist(const string* argVal, const string& argName, auto* toStoreVal);
+
+void parseAndAssignVal(const int& index, char* argv[], const string& argName, string* toStoreVal)
+{
+	string* argument = new string(argv[index]);
+	assignValueStrIfExist(argument, argName, toStoreVal);
+}
 
 void parseMonthYearVal(const int& index, char* argv[], short* month, int* year)
 {

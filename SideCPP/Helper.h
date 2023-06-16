@@ -7,7 +7,7 @@
 #include <iomanip>
 #include <string>
 
-#define DELIMITER ','
+#define DELIMITER '|'
 #define DELIMITER_DATE '/'
 #define DELIMITER_HOUR ':'
 

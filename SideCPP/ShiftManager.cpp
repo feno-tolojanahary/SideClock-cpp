@@ -4,7 +4,7 @@
 #include "TermGuiHyb.h"
 #include "Planning.h"
 
-void ShiftManager::startTime()
+void ShiftManager::startTime(const string& details)
 {
 	TimeClock timeclock;
 	TimeClock existingTimeclock;
@@ -15,6 +15,7 @@ void ShiftManager::startTime()
 		return;
 	}
 	timeclock.setStartDate(std::time(0));
+	timeclock.setDetails(details);
 	storageTimeclock->saveData(timeclock);
 	timeclock.startGui();
 }
