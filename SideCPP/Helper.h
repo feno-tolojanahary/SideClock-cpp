@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <list>
+#include <cmath>
 #include <ctime>
 #include <sstream>
 #include <iomanip>
@@ -103,5 +104,16 @@ public:
 			return true;
 		}
 		return false;
+	}
+
+	static string hourMinutesStrDiff(time_t endDate, time_t startDate)
+	{
+		int hours, minutes;
+		double diffSeconds = difftime(endDate, startDate);
+		hours = static_cast<int>(floor(diffSeconds / 3600));
+		minutes = static_cast<int>((diffSeconds / 60) - (hours * 60));
+		stringstream sstr;
+		sstr << setfill('0') << setw(2) << hours << ":" << setfill('0') << setw(2) << minutes;
+		return sstr.str();
 	}
 };

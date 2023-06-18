@@ -9,15 +9,14 @@ void ShiftManager::startTime(const string& details)
 	TimeClock timeclock;
 	TimeClock existingTimeclock;
 	storageTimeclock->findOneBy("endDate", 0, existingTimeclock);
+	timeclock.startGui();
 	if (existingTimeclock.getId() != -1)
 	{
-		timeclock.startGui();
 		return;
 	}
 	timeclock.setStartDate(std::time(0));
 	timeclock.setDetails(details);
 	storageTimeclock->saveData(timeclock);
-	timeclock.startGui();
 }
 
 void ShiftManager::stopTime()

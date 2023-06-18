@@ -23,9 +23,11 @@ string TimeClock::getStrHeaderStorage() const
 
 string TimeClock::getStrDate() const
 {
-	char buffDate[10];
-	strftime(buffDate, sizeof buffDate, FORMAT_HOUR, gmtime(&startDate));
-	return buffDate;
+	if (endDate == 0)
+	{
+		return "in progress...";
+	}
+	return Helper::hourMinutesStrDiff(endDate, startDate);
 }
 
 int TimeClock::getDiffHour() const

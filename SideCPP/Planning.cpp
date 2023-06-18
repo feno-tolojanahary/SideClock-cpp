@@ -42,15 +42,7 @@ string Planning::getStrHeaderList() const
 
 string Planning::getStrDate() const
 {
-	char buffDate[10];
-	time_t diffTime;
-	if (endDate == 0)
-	{
-		return "in progress...";
-	}
-	diffTime = difftime(endDate, startDate);
-	strftime(buffDate, sizeof buffDate, FORMAT_HOUR, gmtime(&diffTime));
-	return buffDate;
+	return Helper::hourMinutesStrDiff(endDate, startDate);
 }
 
 string Planning::stringify() const
