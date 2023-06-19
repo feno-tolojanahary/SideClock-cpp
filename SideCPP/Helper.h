@@ -91,10 +91,14 @@ public:
 	template <typename T>
 	static bool emplaceMatchDateOnMonth(vector<string>* lineContent, const time_t& dateOfMonth, const T& elem)
 	{
-		struct tm* tmElemDate;
-		struct tm* tmDateOfMonth = localtime(&dateOfMonth);
+		struct tm* tmElemDate, _tmElemDate;
+		struct tm* tmDateOfMonth, _tmDateOfMonth;
+		tmElemDate = &_tmElemDate;
+		tmDateOfMonth = &_tmDateOfMonth;
+
+		gmtime_s(tmElemDate, &dateOfMonth);
 		time_t startDate = elem.getStartDate();
-		tmElemDate = localtime(&startDate);
+		gmtime_s(tmDateOfMonth, &startDate);
 
 		if (tmElemDate->tm_year == tmDateOfMonth->tm_year
 			&& tmElemDate->tm_mon == tmDateOfMonth->tm_mon

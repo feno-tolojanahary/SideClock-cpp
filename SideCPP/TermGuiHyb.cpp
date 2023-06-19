@@ -14,9 +14,11 @@ void TermGuiHyb::processResume(const short& month, const int& year)
 	{
 		pair <string, vector<string>> line;
 		vector<string> lineContent;
-		char buffDateOfMonth[10], buffHourWorked[5];
-
-		strftime(buffDateOfMonth, sizeof buffDateOfMonth, FORMAT_DATE, gmtime(&dateOfMonth));
+		struct tm tmDateOfMonth;
+		char buffDateOfMonth[10];
+		
+		gmtime_s(&tmDateOfMonth, &dateOfMonth);
+		strftime(buffDateOfMonth, sizeof buffDateOfMonth, FORMAT_DATE, &tmDateOfMonth);
 		lineContent.push_back(buffDateOfMonth);
 
 		for (const TimeClock& timeclock : timeclocks)

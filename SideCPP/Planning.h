@@ -16,12 +16,13 @@ private:
 
 public:
 
+	Planning() {}
+
 	Planning(time_t _startDate, time_t _endDate, time_t _startHour, time_t _endHour): 
 		startDate(_startDate), endDate(_endDate), startHour(_startHour), endHour(_endHour) {}
 
 	Planning(string strStartDate, string strEndDate, string strStartHour, string strEndHour);
 
-	string getStrHeaderStorage() const override;
 	string getStrHeaderList() const;
 	string stringify() const override;
 	string strOutput() const override;
@@ -29,6 +30,9 @@ public:
 	void populateStr(const vector<string>& headers, const vector<string>& panningValues) override;
 
 	int getDiffHour() const;
+
+
+	static string getStrHeaderStorage();
 
 	const string storageName() override
 	{

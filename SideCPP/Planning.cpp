@@ -20,7 +20,7 @@ Planning::Planning(string strStartDate, string strEndDate, string strStartHour, 
 	}
 }
 
-string Planning::getStrHeaderStorage() const
+string Planning::getStrHeaderStorage()
 {
 	stringstream sstr;
 	sstr << "id" << DELIMITER << "startDate" << DELIMITER << "endDate" << DELIMITER << "startHour" << DELIMITER << "endHour\n";
@@ -30,7 +30,7 @@ string Planning::getStrHeaderStorage() const
 int Planning::getDiffHour() const
 {
 	double diffTime = difftime(endDate, startDate);
-	return diffTime / 3600;
+	return static_cast<int>(diffTime) / 3600;
 }
 
 string Planning::getStrHeaderList() const
@@ -55,13 +55,16 @@ string Planning::stringify() const
 string Planning::strOutput() const
 {
 	stringstream sstr;
+	struct tm tmStartDate, tmEndDate, tmStartHour, tmEndHour;
 	char buffStartDate[10], buffEndDate[10], buffStartHour[5], buffEndHour[5];
-
-	strftime(buffStartDate, sizeof buffStartDate, FORMAT_DATE, gmtime(&startDate));
-	strftime(buffEndDate, sizeof buffEndDate, FORMAT_DATE, gmtime(&endDate));
-	strftime(buffStartHour, sizeof buffStartHour, FORMAT_HOUR, gmtime(&startHour));
-	strftime(buffEndHour, sizeof buffEndHour, FORMAT_HOUR, gmtime(&endHour));
-
+	gmtime_s(&tmStartDate, &startDate);
+	gmtime_s(&tmEndDate, &endDate);
+	gmtime_s(&tmStartHour, &startHour);
+	gmtime_s(&tmEndHour, &endHour);
+	strftime(buffStartDate, sizeof buffStartDate, FORMAT_DATE, &tmStartDate);
+	strftime(buffEndDate, sizeof buffEndDate, FORMAT_DATE, &tmEndDate);
+	strftime(buffStartHour, sizeof buffStartHour, FORMAT_HOUR, &tmStartHour);
+	strftime(buffEndHour, sizeof buffEndHour, FORMAT_HOUR, &tmEndHour);
 	sstr << id << DELIMITER << buffStartDate << DELIMITER << buffEndDate << DELIMITER << buffStartHour << DELIMITER << buffEndHour << "\n";
 	return sstr.str();
 }
@@ -108,13 +111,14 @@ vector<vector<vector<string>>> Planning::castForOutput(vector<Planning> planning
 
 	for (const time_t& dateMonth : datesOfMonth) {
 		vector<string> planningLine;
+		struct tm tmDateMonth;
 		int weekOfMonthIndex = 0;
 		char buffDateOfMonth[10], buffWeekOfYear[2];
-		struct tm* tmDateMonth = gmtime(&dateMonth);
-		strftime(buffDateOfMonth, sizeof buffDateOfMonth, FORMAT_DATE, tmDateMonth);
-		strftime(buffWeekOfYear, sizeof buffWeekOfYear, "%W", tmDateMonth);
+		gmtime_s(&tmDateMonth, &dateMonth);
+		strftime(buffDateOfMonth, sizeof buffDateOfMonth, FORMAT_DATE, &tmDateMonth);
+		strftime(buffWeekOfYear, sizeof buffWeekOfYear, "%W", &tmDateMonth);
 		weekOfMonthIndex = stoi(buffWeekOfYear);
-		if (tmDateMonth->tm_mday == 1)
+		if (tmDateMonth.tm_mday == 1)
 		{
 			firstWeekOfYearInMonth = weekOfMonthIndex;
 		}

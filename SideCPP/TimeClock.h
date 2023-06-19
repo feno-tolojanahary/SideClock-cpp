@@ -20,12 +20,13 @@ public:
 	~TimeClock();
 
 	void startGui();
-	string getStrHeaderStorage() const override;
 	string stringify() const override;
 	string strOutput() const override;
 	string getStrDate() const override;
 
 	int getDiffHour() const;
+
+	static string getStrHeaderStorage();
 
 	const string storageName() override
 	{

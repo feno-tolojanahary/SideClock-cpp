@@ -76,9 +76,10 @@ void ShiftManager::showResume(const short& month, const int& year)
 void ShiftManager::showCurrentPlannedList()
 {
 	time_t currentDate;
-	struct tm* tmDate;
+	struct tm* tmDate, _tmDate;
+	tmDate = &_tmDate;
 	time(&currentDate);
-	tmDate = gmtime(&currentDate);
+	gmtime_s(tmDate, &currentDate);
 	int lastDayOfMonth = Helper::lastDayOfMonth(tmDate->tm_mon, tmDate->tm_year);
 	time_t startDate = Helper::createDate(1, tmDate->tm_mon, tmDate->tm_year);
 	time_t endDate = Helper::createDate(lastDayOfMonth, tmDate->tm_mon, tmDate->tm_year);

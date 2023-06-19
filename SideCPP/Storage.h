@@ -14,7 +14,7 @@ class Storage {
 
 public: 
 
-	Storage(const char* filename): fileName(filename) {}
+	Storage(const char* fileName): filename(fileName) {}
 
 	T saveData(T& data)
 	{
@@ -34,7 +34,7 @@ public:
 
 		if (end == 0)
 		{
-			string headers = data.getStrHeaderStorage();
+			string headers = T::getStrHeaderStorage();
 			file << headers;
 		}
 		file << strData;
@@ -58,7 +58,7 @@ public:
 		return content;
 	}
 
-	void findOneBy(string attr, double value, T& elem) const
+	void findOneBy(string attr, time_t value, T& elem) const
 	{
 		string line;
 		int searchAttrIndex = 0;
@@ -69,7 +69,7 @@ public:
 			return;
 		}
 		getline(file, line);
-		vector<string> headers = Helper::splitChar(elem.getStrHeaderStorage(), DELIMITER);
+		vector<string> headers = Helper::splitChar(T::getStrHeaderStorage(), DELIMITER);
 		for (const string& currentAttr : headers) {
 			if (currentAttr == attr) break;
 			searchAttrIndex++;
@@ -101,7 +101,7 @@ public:
 		string searchID = sstrIDsearch.str();
 
 		getline(file, line);
-		vector<string> headers = Helper::splitChar(elem.getStrHeaderStorage(), DELIMITER);
+		vector<string> headers = Helper::splitChar(T::getStrHeaderStorage(), DELIMITER);
 		pos = file.tellg();
 		for (line; getline(file, line);)
 		{
@@ -128,14 +128,13 @@ public:
 	{
 		vector<T> data;
 		string line;
-		T elem;
 		fstream file(filename, fstream::in | fstream::binary);
 		if (!file.is_open())
 		{
 			return data;
 		}
 		getline(file, line);
-		vector<string> headers = Helper::splitChar(elem.getStrHeaderStorage(), DELIMITER);
+		vector<string> headers = Helper::splitChar(T::getStrHeaderStorage(), DELIMITER);
 		while (getline(file, line))
 		{
 			
@@ -152,10 +151,10 @@ public:
 		fstream file(filename, fstream::in | fstream::binary);
 		if (!file.is_open())
 		{
-			return data;
+			return foundData;
 		}
 
-		vector<string> headers = Helper::splitChar(elem.getStrHeaderStorage(), DELIMITER);
+		vector<string> headers = Helper::splitChar(T::getStrHeaderStorage(), DELIMITER);
 		for (const string& currentAttr : headers) {
 			if (currentAttr == attr) break;
 			searchAttrIndex++;
@@ -223,7 +222,7 @@ private:
 		ifstream file(filename, fstream::in | fstream::binary);
 		string strLastTimeclock = getLastLine(file);
 		T * tempElem = new T();
-		vector<string> headers = Helper::splitChar(tempElem->getStrHeaderStorage(), DELIMITER);
+		vector<string> headers = Helper::splitChar(T::getStrHeaderStorage(), DELIMITER);
 		vector<string> splitedLine = Helper::splitChar(strLastTimeclock, DELIMITER);
 		tempElem->populateStr(headers, splitedLine);
 		generatedId = tempElem->getId() != -1 ? tempElem->getId() + 1 : 0;

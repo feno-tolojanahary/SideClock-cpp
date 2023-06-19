@@ -12,7 +12,6 @@ public:
 	virtual void setId(int id) = 0;
 	virtual int getId() const = 0;
 	virtual string getStrDate() const = 0;
-	virtual string getStrHeaderStorage() const = 0;
 	virtual string stringify() const = 0;
 	virtual string strOutput() const = 0;
 	virtual void populateStr(const vector<string>& headers, const vector<string>& values) = 0;

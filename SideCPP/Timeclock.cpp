@@ -10,11 +10,13 @@ TimeClock::~TimeClock(){}
 
 tm* TimeClock::getTimeDiff()
 {
+	struct tm tmDiff;
 	time_t diff = difftime(endDate, startDate);
-	return gmtime(&diff);
+	gmtime_s(&tmDiff, &diff);
+	return &tmDiff;
 }
 
-string TimeClock::getStrHeaderStorage() const
+string TimeClock::getStrHeaderStorage()
 {
 	stringstream sstr;
 	sstr << "id" << DELIMITER << "startDate" << DELIMITER << "endDate" << DELIMITER << "owner" << DELIMITER << "details\n";
@@ -92,10 +94,14 @@ string TimeClock::strOutput() const
 {
 	stringstream sstr;
 	char buffStart[16], buffEnd[16];
-	strftime(buffStart, sizeof buffStart, FORMAT_DATE_HOUR, gmtime(&startDate));
+	struct tm tmStartDate, tmEndDate;
+
+	gmtime_s(&tmStartDate, &startDate);
+	gmtime_s(&tmEndDate, &endDate);
+	strftime(buffStart, sizeof buffStart, FORMAT_DATE_HOUR, &tmStartDate);
 	if (endDate > 0)
 	{
-		strftime(buffEnd, sizeof buffEnd, FORMAT_DATE_HOUR, gmtime(&endDate));
+		strftime(buffEnd, sizeof buffEnd, FORMAT_DATE_HOUR, &tmEndDate);
 	}
 	sstr << id << DELIMITER << buffStart << DELIMITER << buffEnd << DELIMITER << to_string(owner) + "\n";
 	return sstr.str();
