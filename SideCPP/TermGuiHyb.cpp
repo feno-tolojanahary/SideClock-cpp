@@ -53,15 +53,18 @@ vector<vector<vector<string>>> TermGuiHyb::castForPrint() const
 	
 	int firstWeekOfYearInMonth = 0;
 
+
 	for (const pair<string, vector<string>>& lineStructuredTerm : this->lineOutputs)
 	{
 		int weekOfMonthIndex = 0;
 		int weekOfYear = 0;
 		vector<string> lineData;
-
+		
 		struct tm tmLineDate;
 		istringstream iss(lineStructuredTerm.first);
 		iss >> get_time(&tmLineDate, FORMAT_DATE);
+
+		cout << "value: " << lineStructuredTerm.first << endl;
 		
 		char buffWeekOfYear[2];
 		strftime(buffWeekOfYear, sizeof buffWeekOfYear, "%W", &tmLineDate);
@@ -133,8 +136,8 @@ void TermGuiHyb::printResume(const short& month, const int& year)
 {
 	processResume(month, year);
 	vector<vector<vector<string>>> castedVals = this->castForPrint();
-	this->printGroupedWeekData(castedVals);
-	this->printTotalPlanTime();
+	/*this->printGroupedWeekData(castedVals);
+	this->printTotalPlanTime();*/
 }
 
 void TermGuiHyb::printPlanningList(const short& month, const int& year)

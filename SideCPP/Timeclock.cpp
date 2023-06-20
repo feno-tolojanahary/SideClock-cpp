@@ -8,12 +8,12 @@
 
 TimeClock::~TimeClock(){}
 
-tm* TimeClock::getTimeDiff()
+tm TimeClock::getTimeDiff()
 {
 	struct tm tmDiff;
 	time_t diff = difftime(endDate, startDate);
 	gmtime_s(&tmDiff, &diff);
-	return &tmDiff;
+	return tmDiff;
 }
 
 string TimeClock::getStrHeaderStorage()
@@ -84,8 +84,8 @@ void TimeClock::displayTimer(const tm* timer)
 void TimeClock::startGui()
 {
 	while (true) {
-		tm* timer = this->getTimeDiff();
-		this->displayTimer(timer);
+		struct tm timer = this->getTimeDiff();
+		this->displayTimer(&timer);
 		this_thread::sleep_for(std::chrono::milliseconds(1000));
 	}
 }

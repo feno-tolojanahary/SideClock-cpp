@@ -12,7 +12,7 @@ private:
 	time_t endDate = 0;
 	string details = "";
 
-	tm* getTimeDiff();
+	tm getTimeDiff();
 	void displayTimer(const tm* timer);
 
 public:

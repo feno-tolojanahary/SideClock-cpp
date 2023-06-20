@@ -40,6 +40,8 @@ int main(int argc, char* argv[])
 
 			time(&currentTime);
 			gmtime_s(&tmCurrent, &currentTime);
+			month = tmCurrent.tm_mon;
+			year = tmCurrent.tm_year;
 
 			if (argc > 2)
 			{
