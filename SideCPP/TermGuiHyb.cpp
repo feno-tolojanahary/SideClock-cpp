@@ -15,9 +15,10 @@ void TermGuiHyb::processResume(const short& month, const int& year)
 		pair <string, vector<string>> line;
 		vector<string> lineContent;
 		struct tm tmDateOfMonth;
-		char buffDateOfMonth[10];
+		char buffDateOfMonth[11];
 		
 		gmtime_s(&tmDateOfMonth, &dateOfMonth);
+
 		strftime(buffDateOfMonth, sizeof buffDateOfMonth, FORMAT_DATE, &tmDateOfMonth);
 		lineContent.push_back(buffDateOfMonth);
 
@@ -64,11 +65,15 @@ vector<vector<vector<string>>> TermGuiHyb::castForPrint() const
 		istringstream iss(lineStructuredTerm.first);
 		iss >> get_time(&tmLineDate, FORMAT_DATE);
 
-		cout << "value: " << lineStructuredTerm.first << endl;
+		cout << "firstTerm: " << lineStructuredTerm.first << endl;
+		cout << "day: " << tmLineDate.tm_mday << " month: " << tmLineDate.tm_mon << " year: " << tmLineDate.tm_year << endl;
 		
-		char buffWeekOfYear[2];
-		strftime(buffWeekOfYear, sizeof buffWeekOfYear, "%W", &tmLineDate);
-		weekOfYear = stoi(buffWeekOfYear);
+		/*char buffWeekOfYear[3];
+		strftime(buffWeekOfYear, sizeof buffWeekOfYear, "%Y", &tmLineDate);*/
+		//weekOfYear = stoi(buffWeekOfYear);
+
+		weekOfYear = (tmLineDate.tm_yday - tmLineDate.tm_wday + 7) / 7;
+
 
 		if (tmLineDate.tm_mday == 1)
 			firstWeekOfYearInMonth = weekOfYear;
