@@ -65,9 +65,6 @@ vector<vector<vector<string>>> TermGuiHyb::castForPrint() const
 		istringstream iss(lineStructuredTerm.first);
 		iss >> get_time(&tmLineDate, FORMAT_DATE);
 
-		cout << "firstTerm: " << lineStructuredTerm.first << endl;
-		cout << "day: " << tmLineDate.tm_mday << " month: " << tmLineDate.tm_mon << " year: " << tmLineDate.tm_year << endl;
-		
 		/*char buffWeekOfYear[3];
 		strftime(buffWeekOfYear, sizeof buffWeekOfYear, "%Y", &tmLineDate);*/
 		//weekOfYear = stoi(buffWeekOfYear);
@@ -98,6 +95,7 @@ void TermGuiHyb::printTotalPlanTime() const
 	int planningTotalHour = 0, timeclockTotalHour = 0;
 	vector<vector<string>> totalOut;
 	TermGui<TermGuiHyb> termgui;
+	stringstream ssout;
 
 	for (const Planning& planning : plannings)
 	{
@@ -116,33 +114,33 @@ void TermGuiHyb::printTotalPlanTime() const
 	totalOut.push_back(headers);
 	totalOut.push_back(total);
 
-	string printRes = "Total Month \n";
-	printRes += termgui.wrapStrResult(totalOut);
-	cout << printRes;
+	ssout << "Total Month \n";
+	termgui.wrapStrResult(totalOut, ssout);
+	cout << ssout.str();
 }
 
 void TermGuiHyb::printGroupedWeekData(vector<vector<vector<string>>> weekData) const
 {
 	TermGui<TermGuiHyb> termgui;
-	string printRes = "";
 	int weekIndex = 1;
+	stringstream ssout;
 
 	for (const vector<vector<string>> weekCastedVal : weekData) 
 	{
-		printRes += "Week " + to_string(weekIndex) + "\n";
-		printRes += termgui.wrapStrResult(weekCastedVal);
-		printRes += "\n\n";
+		ssout << "Week " + to_string(weekIndex) + "\n";
+		termgui.wrapStrResult(weekCastedVal, ssout);
+		ssout << "\n\n";
 		weekIndex++;
 	}
-	cout << printRes;
+	cout << ssout.str();
 }
 
 void TermGuiHyb::printResume(const short& month, const int& year)
 {
 	processResume(month, year);
 	vector<vector<vector<string>>> castedVals = this->castForPrint();
-	/*this->printGroupedWeekData(castedVals);
-	this->printTotalPlanTime();*/
+	this->printGroupedWeekData(castedVals);
+	this->printTotalPlanTime();
 }
 
 void TermGuiHyb::printPlanningList(const short& month, const int& year)

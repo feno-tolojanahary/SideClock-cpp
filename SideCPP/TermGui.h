@@ -33,12 +33,11 @@ public:
 		return castedForPrint;
 	}
 
-	string wrapStrResult(const vector<vector<string>>& tableWorld) const
+	void wrapStrResult(const vector<vector<string>>& tableWorld, stringstream &ssout) const
 	{
 		int rowSize(0);
 		const int wordMargin = 3;
 		string headFootWrap;
-		stringstream ssout;
 
 		if (tableWorld.size() > 1)
 		{
@@ -98,17 +97,15 @@ public:
 		}
 
 		delete[] maxColWidths;
-
-
-		return ssout.str();
 	}
 
 	void print(const vector<T>& elements) const
 	{
+		stringstream ssout;
 		vector<vector<string>> elemReadyToPrint = this->castElemForPrint(elements);
-		string* printRes = &this->wrapStrResult(elemReadyToPrint);
+		this->wrapStrResult(elemReadyToPrint, ssout);
 
-		cout << *printRes;
+		cout << ssout.str();
 	}
 
 
