@@ -33,24 +33,29 @@ public:
 		return castedForPrint;
 	}
 
-	void wrapStrResult(const vector<vector<string>>& tableWorld, stringstream &ssout) const
+	void wrapStrResult(const vector<vector<string>>& tableWorld, const size_t& rowSize, stringstream &ssout) const
 	{
-		int rowSize(0);
 		const int wordMargin = 3;
 		string headFootWrap;
 
-		if (tableWorld.size() > 1)
+		if (rowSize < 1)
 		{
-			rowSize = static_cast<int>(tableWorld[1].size());
+			return;
 		}
+
 		int *maxColWidths = new int[rowSize]();
+
+		for (int i = 0; i < rowSize; i++)
+		{
+			*(maxColWidths + i) = 0;
+		}
 
 		for (const vector<string>& row : tableWorld)
 		{
 			int colIndex = 0;
 			for (const string& word : row)
 			{
-				if (colIndex <= rowSize)
+				if (colIndex < rowSize)
 				{
 					int & maxColWidth = *(maxColWidths + colIndex);
 					int wrapSize = static_cast<int>(word.size()) + wordMargin;
@@ -103,7 +108,12 @@ public:
 	{
 		stringstream ssout;
 		vector<vector<string>> elemReadyToPrint = this->castElemForPrint(elements);
-		this->wrapStrResult(elemReadyToPrint, ssout);
+		int rowSize = 0;
+		if (elemReadyToPrint.size > 0)
+		{
+			rowSize = elemReadyToPrint.size();
+		}
+		this->wrapStrResult(elemReadyToPrint, rowSize, ssout);
 
 		cout << ssout.str();
 	}

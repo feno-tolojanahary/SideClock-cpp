@@ -30,6 +30,7 @@ public:
 			spliteStr.push_back(token);
 			lineStr.erase(0, pos + 1);
 		}
+		spliteStr.push_back(lineStr);
 		return spliteStr;
 	}
 
@@ -89,7 +90,7 @@ public:
 	}
 
 	template <typename T>
-	static bool emplaceMatchDateOnMonth(vector<string>* lineContent, const time_t& dateOfMonth, const T& elem)
+	static void emplaceMatchDateOnMonth(vector<string>* lineContent, const time_t& dateOfMonth, const T& elem)
 	{
 		struct tm* tmElemDate, _tmElemDate;
 		struct tm* tmDateOfMonth, _tmDateOfMonth;
@@ -105,9 +106,10 @@ public:
 			&& tmElemDate->tm_mday == tmDateOfMonth->tm_mday)
 		{
 			lineContent->push_back(elem.getStrDate());
-			return true;
 		}
-		return false;
+		else {
+			lineContent->push_back("");
+		}
 	}
 
 	static string hourMinutesStrDiff(time_t endDate, time_t startDate)
@@ -120,4 +122,5 @@ public:
 		sstr << setfill('0') << setw(2) << hours << ":" << setfill('0') << setw(2) << minutes;
 		return sstr.str();
 	}
+
 };

@@ -65,15 +65,13 @@ vector<vector<vector<string>>> TermGuiHyb::castForPrint() const
 		istringstream iss(lineStructuredTerm.first);
 		iss >> get_time(&tmLineDate, FORMAT_DATE);
 
-		/*char buffWeekOfYear[3];
-		strftime(buffWeekOfYear, sizeof buffWeekOfYear, "%Y", &tmLineDate);*/
-		//weekOfYear = stoi(buffWeekOfYear);
+		char buffWeekOfYear[3];
+		strftime(buffWeekOfYear, sizeof buffWeekOfYear, "%V", &tmLineDate);
+		weekOfYear = stoi(buffWeekOfYear);
 
-		weekOfYear = (tmLineDate.tm_yday - tmLineDate.tm_wday + 7) / 7;
-
-
-		if (tmLineDate.tm_mday == 1)
+		if (tmLineDate.tm_mday == 1) {
 			firstWeekOfYearInMonth = weekOfYear;
+		}
 
 		weekOfMonthIndex = weekOfYear - firstWeekOfYearInMonth;
 
@@ -115,7 +113,7 @@ void TermGuiHyb::printTotalPlanTime() const
 	totalOut.push_back(total);
 
 	ssout << "Total Month \n";
-	termgui.wrapStrResult(totalOut, ssout);
+	termgui.wrapStrResult(totalOut, totalOut.size(), ssout);
 	cout << ssout.str();
 }
 
@@ -128,7 +126,7 @@ void TermGuiHyb::printGroupedWeekData(vector<vector<vector<string>>> weekData) c
 	for (const vector<vector<string>> weekCastedVal : weekData) 
 	{
 		ssout << "Week " + to_string(weekIndex) + "\n";
-		termgui.wrapStrResult(weekCastedVal, ssout);
+		termgui.wrapStrResult(weekCastedVal, weekCastedVal.size(), ssout);
 		ssout << "\n\n";
 		weekIndex++;
 	}
