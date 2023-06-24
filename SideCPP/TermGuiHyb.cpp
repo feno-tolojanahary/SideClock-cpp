@@ -60,14 +60,30 @@ vector<vector<vector<string>>> TermGuiHyb::castForPrint() const
 		int weekOfMonthIndex = 0;
 		int weekOfYear = 0;
 		vector<string> lineData;
-		
+		time_t currentTime = time(nullptr);
+		struct tm* currentLineDate;
+		gmtime_s(currentLineDate, &currentTime);
+
 		struct tm tmLineDate;
 		istringstream iss(lineStructuredTerm.first);
 		iss >> get_time(&tmLineDate, FORMAT_DATE);
 
+		currentLineDate->tm_year = tmLineDate.tm_year;
+		currentLineDate->tm_mon = tmLineDate.tm_mon;
+		currentLineDate->tm_mday = tmLineDate.tm_mday;
+
 		char buffWeekOfYear[3];
-		strftime(buffWeekOfYear, sizeof buffWeekOfYear, "%V", &tmLineDate);
+		strftime(buffWeekOfYear, sizeof buffWeekOfYear, "%U", currentLineDate);
 		weekOfYear = stoi(buffWeekOfYear);
+
+		/*cout << "year: " << currentLineDate->tm_year << " weekDay: " << currentLineDate->tm_wday << " yearDay: " << currentLineDate->tm_yday << endl;
+
+		cout << "currentWeek: " << weekOfYear << endl;*/
+		/*int daysSinceStartOfWeek = (tmLineDate.tm_wday + 7 - tmLineDate.tm_yday % 7) % 7;
+		weekOfYear = (tmLineDate.tm_yday + 7 - daysSinceStartOfWeek) / 7;*/
+
+
+		//cout << "week number: " << weekOfYear << endl;
 
 		if (tmLineDate.tm_mday == 1) {
 			firstWeekOfYearInMonth = weekOfYear;
