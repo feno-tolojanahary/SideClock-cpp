@@ -17,7 +17,7 @@ void TermGuiHyb::processResume(const short& month, const int& year)
 		struct tm tmDateOfMonth;
 		char buffDateOfMonth[11];
 		
-		gmtime_s(&tmDateOfMonth, &dateOfMonth);
+		localtime_s(&tmDateOfMonth, &dateOfMonth);
 
 		strftime(buffDateOfMonth, sizeof buffDateOfMonth, FORMAT_DATE, &tmDateOfMonth);
 		lineContent.push_back(buffDateOfMonth);
@@ -54,37 +54,23 @@ vector<vector<vector<string>>> TermGuiHyb::castForPrint() const
 	
 	int firstWeekOfYearInMonth = 0;
 
-
 	for (const pair<string, vector<string>>& lineStructuredTerm : this->lineOutputs)
 	{
 		int weekOfMonthIndex = 0;
 		int weekOfYear = 0;
 		vector<string> lineData;
-		time_t currentTime = time(nullptr);
-		struct tm* currentLineDate;
-		gmtime_s(currentLineDate, &currentTime);
 
 		struct tm tmLineDate;
+		memset(&tmLineDate, 0, sizeof(tmLineDate));
 		istringstream iss(lineStructuredTerm.first);
 		iss >> get_time(&tmLineDate, FORMAT_DATE);
 
-		currentLineDate->tm_year = tmLineDate.tm_year;
-		currentLineDate->tm_mon = tmLineDate.tm_mon;
-		currentLineDate->tm_mday = tmLineDate.tm_mday;
+		mktime(&tmLineDate);
 
 		char buffWeekOfYear[3];
-		strftime(buffWeekOfYear, sizeof buffWeekOfYear, "%U", currentLineDate);
+		strftime(buffWeekOfYear, sizeof buffWeekOfYear, "%W", &tmLineDate);
 		weekOfYear = stoi(buffWeekOfYear);
-
-		/*cout << "year: " << currentLineDate->tm_year << " weekDay: " << currentLineDate->tm_wday << " yearDay: " << currentLineDate->tm_yday << endl;
-
-		cout << "currentWeek: " << weekOfYear << endl;*/
-		/*int daysSinceStartOfWeek = (tmLineDate.tm_wday + 7 - tmLineDate.tm_yday % 7) % 7;
-		weekOfYear = (tmLineDate.tm_yday + 7 - daysSinceStartOfWeek) / 7;*/
-
-
-		//cout << "week number: " << weekOfYear << endl;
-
+		
 		if (tmLineDate.tm_mday == 1) {
 			firstWeekOfYearInMonth = weekOfYear;
 		}

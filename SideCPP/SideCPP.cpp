@@ -91,6 +91,8 @@ int main(int argc, char* argv[])
 		cout << "list		 list time clock \n";
 		cout << "plan		 plan time clock \n";
 	}
+
+	return 1;
 }
 
 void assignValueStrIfExist(const string* argvVal, const string& argName, string* toStoreVal);
