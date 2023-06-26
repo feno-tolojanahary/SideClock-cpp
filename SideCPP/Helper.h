@@ -123,4 +123,27 @@ public:
 		sstr << setfill('0') << setw(2) << hours << ":" << setfill('0') << setw(2) << minutes;
 		return sstr.str();
 	}
+
+	static short getWeekNumber(const short& month, const int& year)
+	{
+		struct tm tmStartMonthDate, tmEndMonthDate;
+		memset(&tmStartMonthDate, 0, sizeof(tmStartMonthDate));
+		memset(&tmEndMonthDate, 0, sizeof(tmEndMonthDate));
+		short lastDayOfMonth = Helper::lastDayOfMonth(month, year);
+	
+		tmStartMonthDate.tm_year = year - 1900;
+		tmStartMonthDate.tm_mon = month - 1;
+		tmStartMonthDate.tm_mday = 1;
+		
+		tmEndMonthDate.tm_year = year - 1900;
+		tmEndMonthDate.tm_mon = month - 1;
+		tmEndMonthDate.tm_mday = lastDayOfMonth;
+		mktime(&tmStartMonthDate);
+		mktime(&tmEndMonthDate);
+		char buffStartWeekOfYear[3], buffEndWeekOfYear[3];
+		strftime(buffStartWeekOfYear, sizeof buffStartWeekOfYear, "%W", &tmStartMonthDate);
+		strftime(buffEndWeekOfYear, sizeof buffEndWeekOfYear, "%W", &tmEndMonthDate);
+
+		return stoi(buffEndWeekOfYear) - stoi(buffEndWeekOfYear) + 1;
+	}
 };

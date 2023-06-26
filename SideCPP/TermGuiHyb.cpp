@@ -6,7 +6,39 @@
 #include "TermGui.h"
 #include "Helper.h"
 
-void TermGuiHyb::processResume(const short& month, const int& year)
+TermGuiHyb::TermGuiHyb(vector<Planning> _plannings)
+{
+	plannings = _plannings;
+	this->initializeMonthYear();
+}
+
+TermGuiHyb::TermGuiHyb(vector<TimeClock> _timeclocks, vector<Planning> _plannings)
+{
+	timeclocks = _timeclocks;
+	plannings = _plannings;
+	this->initializeMonthYear();
+}
+
+void TermGuiHyb::initializeMonthYear()
+{
+	struct tm tmCurrentDate;
+	time_t currentTime = time(0);
+	localtime_s(&tmCurrentDate, &currentTime);
+	month = tmCurrentDate.tm_mon + 1;
+	year = tmCurrentDate.tm_year + 1900;
+}
+
+void TermGuiHyb::setMonth(short _month)
+{
+	month = _month;
+}
+
+void TermGuiHyb::setYear(int _year)
+{
+	year = _year;
+}
+
+void TermGuiHyb::processResume()
 {
 	vector<time_t> datesOfMonth = Helper::allDatesOfMonth(month, year);
 
@@ -46,8 +78,8 @@ string TermGuiHyb::getStrHeader() const
 
 vector<vector<vector<string>>> TermGuiHyb::castForPrint() const
 {
-	const short	weekNumberMonth = 6;
 	const short columnNumberOutput = 3;
+	const short	weekNumberMonth = Helper::getWeekNumber(month, year);
 	vector<string> headers = Helper::splitChar(this->getStrHeader(), DELIMITER);
 	vector<vector<string>> defaultWeekOutput(1, headers);
 	vector<vector<vector<string>>> termValOutputs(weekNumberMonth, defaultWeekOutput);
@@ -135,15 +167,15 @@ void TermGuiHyb::printGroupedWeekData(vector<vector<vector<string>>> weekData) c
 	cout << ssout.str();
 }
 
-void TermGuiHyb::printResume(const short& month, const int& year)
+void TermGuiHyb::printResume()
 {
-	processResume(month, year);
+	processResume();
 	vector<vector<vector<string>>> castedVals = this->castForPrint();
 	this->printGroupedWeekData(castedVals);
 	this->printTotalPlanTime();
 }
 
-void TermGuiHyb::printPlanningList(const short& month, const int& year)
+void TermGuiHyb::printPlanningList()
 {
 	vector<vector<vector<string>>> castedVals = Planning::castForOutput(plannings, month, year);
 	TermGui<TermGuiHyb> termgui;

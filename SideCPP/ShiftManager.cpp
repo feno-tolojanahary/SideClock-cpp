@@ -68,7 +68,9 @@ void ShiftManager::showResume(const short& month, const int& year)
 	vector<TimeClock> timeclockList = storageTimeclock->findDateBetween(attrDate, startDate, endDate);
 	vector<Planning> planningList = storagePlanning->findDateBetween(attrDate, startDate, endDate);
 	TermGuiHyb termGuiHyb(timeclockList, planningList);
-	termGuiHyb.printResume(month, year);
+	termGuiHyb.setMonth(month);
+	termGuiHyb.setYear(year);
+	termGuiHyb.printResume();
 }
 
 
@@ -86,5 +88,5 @@ void ShiftManager::showCurrentPlannedList()
 	const string attrDate = "startDate";
 	vector<Planning> planningList = storagePlanning->findDateBetween(attrDate, startDate, endDate);
 	TermGuiHyb termGuiHyb(planningList);
-	termGuiHyb.printPlanningList(tmDate->tm_mon, tmDate->tm_year);
+	termGuiHyb.printPlanningList();
 }
