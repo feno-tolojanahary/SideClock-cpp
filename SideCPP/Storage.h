@@ -89,8 +89,7 @@ public:
 	{
 		string line;
 		T foundElem;
-		fstream file(filename, 
-		fstream::in | fstream::out | fstream::binary);
+		fstream file(filename, fstream::in | fstream::out | fstream::binary);
 		if (!file.is_open())
 		{
 			return false;
@@ -175,6 +174,17 @@ public:
 			}
 		}
 		return foundData;
+	}
+
+	void deleteById(const int id)
+	{
+		string line;
+		fstream file(filename, fstream::in | fstream::out | fstream::binary);
+		if (!file.is_open())
+		{
+			return;
+		}
+
 	}
 
 private:
