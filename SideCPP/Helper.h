@@ -146,4 +146,16 @@ public:
 
 		return stoi(buffEndWeekOfYear) - stoi(buffEndWeekOfYear) + 1;
 	}
+
+	static string trim(const string& str, const string& whitespace = " \t")
+	{
+		const auto strBegin = str.find_first_not_of(whitespace);
+		if (strBegin == string::npos)
+			return ""; // no content
+
+		const auto strEnd = str.find_last_not_of(whitespace);
+		const auto strRange = strEnd - strBegin + 1;
+
+		return str.substr(strBegin, strRange);
+	}
 };

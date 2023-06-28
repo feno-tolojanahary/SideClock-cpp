@@ -176,15 +176,35 @@ public:
 		return foundData;
 	}
 
-	void deleteById(const int id)
+	bool deleteById(const int id)
 	{
-		string line;
+		long long int pos;
+		string line{};
+		line.reserve(500);
 		fstream file(filename, fstream::in | fstream::out | fstream::binary);
 		if (!file.is_open())
 		{
 			return;
 		}
+		for (line; getline(file, line);)
+		{
+			vector<string> lineChunks = Helper::splitChar(line, DELIMITER);
+			if (strcmp(Helper::trim(lineChunks[0]), to_string(id))
+			{
+				pos = file.tellg();
+				break;
+			}
+			line.clear();
+		}
+		if (file.eof()) 
+		{
+			return false;
+		}
 
+		file.seekp(pos);
+		file << setfill(' ') << setw(line.size());
+		file.close();
+		return true;
 	}
 
 private:
@@ -192,7 +212,7 @@ private:
 	{
 		int count = 0;
 		string line;
-		fstream file(filename, fstream::out | fstream::app | fstream::binary);
+		fstream file(filename, fstream::out | fstream::binary);
 		if (!file.is_open())
 		{
 			return 0;
