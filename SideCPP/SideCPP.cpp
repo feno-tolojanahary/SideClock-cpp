@@ -56,33 +56,45 @@ int main(int argc, char* argv[])
 		}
 		else if (strcmp(argv[1], "plan") == 0)
 		{
-			string strStartDate, strEndDate, strStartHour, strEndHour;
-			ShiftManager shiftManager;
 			if (argc > 2)
 			{
-				parsePlanStartEnd(2, argv, &strStartDate, &strEndDate, &strStartHour, &strEndHour);
-				if (argc > 3)
+				if ((argv[2] == "-d" || argv[2] == "--delete") && argc > 3)
 				{
-					parsePlanStartEnd(3, argv, &strStartDate, &strEndDate, &strStartHour, &strEndHour);
-					if (argc > 4)
+					string dateRef;
+					parseAndAssignVal(3, argv, "--date", &dateRef);
+					// shiftManager.deleteTime();
+				}
+				else {
+					string strStartDate, strEndDate, strStartHour, strEndHour;
+					ShiftManager shiftManager;
+					parsePlanStartEnd(2, argv, &strStartDate, &strEndDate, &strStartHour, &strEndHour);
+					if (argc > 3)
 					{
-						parsePlanStartEnd(4, argv, &strStartDate, &strEndDate, &strStartHour, &strEndHour);
-						if (argc > 5)
+						parsePlanStartEnd(3, argv, &strStartDate, &strEndDate, &strStartHour, &strEndHour);
+						if (argc > 4)
 						{
-							parsePlanStartEnd(5, argv, &strStartDate, &strEndDate, &strStartHour, &strEndHour);
+							parsePlanStartEnd(4, argv, &strStartDate, &strEndDate, &strStartHour, &strEndHour);
+							if (argc > 5)
+							{
+								parsePlanStartEnd(5, argv, &strStartDate, &strEndDate, &strStartHour, &strEndHour);
+							}
 						}
 					}
-				}
 
-			}
-			if (strStartDate.empty() || strEndDate.empty() || strStartHour.empty() || strEndHour.empty())
-			{
-				cout << "Argument not complete or a wrong spell in one of argument name \n";
-				return 0;
+					if (strStartDate.empty() || strEndDate.empty() || strStartHour.empty() || strEndHour.empty())
+					{
+						cout << "Argument not complete or a wrong spell in one of argument name \n";
+						return 0;
+					}
+					else {
+						shiftManager.planneHour(strStartDate, strEndDate, strStartHour, strEndHour);
+					}
+				}
 			}
 			else {
-				shiftManager.planneHour(strStartDate, strEndDate, strStartHour, strEndHour);
+				cout << "You must provide an argument \n";
 			}
+			
 		}
 	}
 	else {

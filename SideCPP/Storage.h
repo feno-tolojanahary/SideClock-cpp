@@ -173,6 +173,7 @@ public:
 				}
 			}
 		}
+		file.close();
 		return foundData;
 	}
 
