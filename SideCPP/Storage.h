@@ -177,35 +177,30 @@ public:
 		return foundData;
 	}
 
-	bool deleteById(const int id)
+	bool deleteById(const int& id)
 	{
-		long long int pos;
+		streampos targetPos;
 		string line{};
 		line.reserve(500);
+
 		fstream file(filename, fstream::in | fstream::out | fstream::binary);
-		if (!file.is_open())
+		fstream tempFile("tempfile", fstream::out | fstream::binary);
+
+		if (!file.is_open() || !tempFile.is_open())
 		{
-			return;
-		}
-		for (line; getline(file, line);)
-		{
-			vector<string> lineChunks = Helper::splitChar(line, DELIMITER);
-			if (strcmp(Helper::trim(lineChunks[0]), to_string(id))
-			{
-				pos = file.tellg();
-				break;
-			}
-			line.clear();
-		}
-		if (file.eof()) 
-		{
+			cout << "Error when deleting element." << endl;
 			return false;
 		}
-
-		file.seekp(pos);
-		file << setfill(' ') << setw(line.size());
-		file.close();
-		return true;
+		targetPos = Storage<T>::linePositionById(file, id);
+		for (line; getline(file, line);)
+		{
+			streampos currentPos = file.tellg();
+			if (currentPos != targetPos && targetPos != 0) {
+				tempFile << line << endl;
+				return true;
+			} 
+		}
+		return false;
 	}
 
 private:
@@ -229,6 +224,27 @@ private:
 	{
 		pos = in.tellg();
 		return in.ignore(numeric_limits<streamsize>::max(), '\n');
+	}
+
+	static streampos linePositionById(fstream &targetFile, const int& id)
+	{
+		string line;
+		stringstream sstrIDsearch;
+		sstrIDsearch << id << DELIMITER;
+		string searchID = sstrIDsearch.str();
+
+		if (!targetFile.is_open()) {
+			return 0;
+		}
+		while (getline(file, line)) {
+			if (line.find(searchID) != string::npos) {
+				vector<string> splitedLine = Helper::splitChar(line, DELIMITER);
+				if (stoi(splitedLine[0]) == id) {
+					return targetFile.tellg();
+				}
+			}
+		}
+		return 0;
 	}
 
 	string getLastLine(std::ifstream& in)
