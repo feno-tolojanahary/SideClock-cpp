@@ -179,28 +179,33 @@ public:
 
 	bool deleteById(const int& id)
 	{
-		streampos targetPos;
+		int lineIndex = 0, lineIndexRemoval = 0;
 		string line{};
+		const string tempFilename = "tempfile";
+		bool isDeleted = false;
 		line.reserve(500);
 
 		fstream file(filename, fstream::in | fstream::out | fstream::binary);
-		fstream tempFile("tempfile", fstream::out | fstream::binary);
+		fstream tempFile(tempFilename, fstream::out | fstream::binary);
 
 		if (!file.is_open() || !tempFile.is_open())
 		{
 			cout << "Error when deleting element." << endl;
 			return false;
 		}
-		targetPos = Storage<T>::linePositionById(file, id);
+		int lineIndexRemoval = Storage<T>::lineIndexById(file, id);
 		for (line; getline(file, line);)
 		{
-			streampos currentPos = file.tellg();
-			if (currentPos != targetPos && targetPos != 0) {
+			lineIndex++;
+			if (lineIndex == lineIndexRemoval) {
 				tempFile << line << endl;
-				return true;
+				isDeleted = true;
+				break;
 			} 
 		}
-		return false;
+		remove(filename);
+		rename(tempFilename, filename);
+		return isDeleted;
 	}
 
 private:
@@ -226,8 +231,9 @@ private:
 		return in.ignore(numeric_limits<streamsize>::max(), '\n');
 	}
 
-	static streampos linePositionById(fstream &targetFile, const int& id)
+	static int lineIndexById(fstream &targetFile, const int& id)
 	{
+		int lineIndex = 0;
 		string line;
 		stringstream sstrIDsearch;
 		sstrIDsearch << id << DELIMITER;
@@ -237,14 +243,14 @@ private:
 			return 0;
 		}
 		while (getline(file, line)) {
+			lineIndex++;
 			if (line.find(searchID) != string::npos) {
 				vector<string> splitedLine = Helper::splitChar(line, DELIMITER);
-				if (stoi(splitedLine[0]) == id) {
-					return targetFile.tellg();
-				}
+				if (stoi(splitedLine[0]) == id)
+					break;
 			}
 		}
-		return 0;
+		return lineIndex;
 	}
 
 	string getLastLine(std::ifstream& in)
