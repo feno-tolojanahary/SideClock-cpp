@@ -30,7 +30,7 @@
     <ClCompile Include="TermGuiHyb.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ParsingArg.cpp">
+    <ClCompile Include="ArgsParsing.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -62,7 +62,7 @@
     <ClInclude Include="ModelTermGui.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="ParsingArg.h">
+    <ClInclude Include="ArgsParsing.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
