@@ -30,9 +30,6 @@
     <ClCompile Include="TermGuiHyb.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ArgsParsing.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Storage.h">
@@ -60,9 +57,6 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="ModelTermGui.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ArgsParsing.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

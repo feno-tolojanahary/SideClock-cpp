@@ -142,7 +142,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ArgsParsing.cpp" />
     <ClCompile Include="Planning.cpp" />
     <ClCompile Include="ShiftManager.cpp" />
     <ClCompile Include="SideCPP.cpp" />
@@ -153,7 +152,6 @@
     <ClInclude Include="ModelStorage.h" />
     <ClInclude Include="Helper.h" />
     <ClInclude Include="ModelTermGui.h" />
-    <ClInclude Include="ArgsParsing.h" />
     <ClInclude Include="Planning.h" />
     <ClInclude Include="ShiftManager.h" />
     <ClInclude Include="Storage.h" />

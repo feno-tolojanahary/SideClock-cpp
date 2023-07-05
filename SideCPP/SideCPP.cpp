@@ -2,153 +2,81 @@
 #include <cstring>
 #include "ShiftManager.h"
 #include "Helper.h"
+#include "lib/args-parser-master/args-parser/all.hpp"
 
 using namespace std;
 
-void parseMonthYearVal(const int& index, char* argv[], short* month, int* year);
-void parsePlanStartEnd(const int& index, char* argv[], string* strStartDate, string* strEndDate, string* strStartHour, string* strEndHour);
-
-void parseAndAssignVal(const int& index, char* argv[], const string& argName, string* toStoreVal);
-
 int main(int argc, char* argv[])
 {
-	if (argc > 1) 
-	{
-		if (strcmp(argv[1], "start") == 0) {
+	try {
+		Args::CmdLine cmd(argc, argv, Args::CmdLine::CommandIsRequired);
+		cmd.addCommand("start", Args::ValueOptions::NoValue, true, "Start timeclock", "Start tracking the timeclock")
+			.addArgWithFlagAndName('t', "task", true, false, "Description task")
+			.end();
+		cmd.addCommand("stop", Args::ValueOptions::NoValue, true, "Stop timeclock").end();
+		cmd.addCommand("list", Args::ValueOptions::NoValue, true, "List registered timeclock")
+			.addArgWithFlagAndName('m', "month", true, false, "Month of date")
+			.addArgWithFlagAndName('y', "year", true, false, "Year of date")
+			.end();
+		cmd.addCommand("plan", Args::ValueOptions::NoValue, true, "Plan a timeclock")
+			.addArgWithNameOnly("start-date", true, true, "Start date")
+			.addArgWithNameOnly("end-date", true, true, "End date")
+			.addArgWithNameOnly("start-hour", true, true, "Start hour")
+			.addArgWithNameOnly("end-hour", true, true, "End hour")
+			.addCommand("delete", Args::ValueOptions::NoValue, false, "Delete a planned timeclock")
+			.end();
+		cmd.parse();
 
-			string details = "";
+		if (cmd.isDefined("start")) {
 			ShiftManager shiftManager;
-
-			if (argc > 2)
-			{
-				parseAndAssignVal(2, argv, "--task", &details);
-			}
+			string details = "";
+			if (cmd.isDefined("-t"))
+				details = cmd.value("-t");
 			shiftManager.startTime(details);
 		}
-		else if (strcmp(argv[1], "stop") == 0)
-		{
+		if (cmd.isDefined("stop")) {
 			ShiftManager shiftManager;
 			shiftManager.stopTime();
 		}
-		else if (strcmp(argv[1], "list") == 0)
-		{
-			short month;
-			int year;
+		if (cmd.isDefined("list")) {
+			string month;
+			string year;
 			time_t currentTime;
 			struct tm tmCurrent;
 			ShiftManager shiftManager;
 
 			time(&currentTime);
 			gmtime_s(&tmCurrent, &currentTime);
-			month = tmCurrent.tm_mon;
-			year = tmCurrent.tm_year;
+			month = to_string(tmCurrent.tm_mon);
+			year = to_string(tmCurrent.tm_year);
 
-			if (argc > 2)
-			{
-				parseMonthYearVal(2, argv, &month, &year);
-				if (argc > 3)
-				{
-					parseMonthYearVal(3, argv, &month, &year);
-				}
-			}
+			if (cmd.isDefined("-m"))
+				month = cmd.value("-m");
+			if (cmd.isDefined("-y"))
+				year = cmd.value("-y");
 
-			shiftManager.showResume(month, year);
+			shiftManager.showResume(stoi(month), stoi(year));
 		}
-		else if (strcmp(argv[1], "plan") == 0)
-		{
-			if (argc > 2)
-			{
-				if ((argv[2] == "-d" || argv[2] == "--delete") && argc > 3)
-				{
-					string dateRef;
-					parseAndAssignVal(3, argv, "--date", &dateRef);
-					// shiftManager.deleteTime();
-				}
-				else {
-					string strStartDate, strEndDate, strStartHour, strEndHour;
-					ShiftManager shiftManager;
-					parsePlanStartEnd(2, argv, &strStartDate, &strEndDate, &strStartHour, &strEndHour);
-					if (argc > 3)
-					{
-						parsePlanStartEnd(3, argv, &strStartDate, &strEndDate, &strStartHour, &strEndHour);
-						if (argc > 4)
-						{
-							parsePlanStartEnd(4, argv, &strStartDate, &strEndDate, &strStartHour, &strEndHour);
-							if (argc > 5)
-							{
-								parsePlanStartEnd(5, argv, &strStartDate, &strEndDate, &strStartHour, &strEndHour);
-							}
-						}
-					}
-
-					if (strStartDate.empty() || strEndDate.empty() || strStartHour.empty() || strEndHour.empty())
-					{
-						cout << "Argument not complete or a wrong spell in one of argument name \n";
-						return 0;
-					}
-					else {
-						shiftManager.planneHour(strStartDate, strEndDate, strStartHour, strEndHour);
-					}
-				}
-			}
-			else {
-				cout << "You must provide an argument \n";
-			}
-			
+		if (cmd.isDefined("plan")) {
+			string strStartDate, strEndDate, strStartHour, strEndHour;
+			ShiftManager shiftManager;
+			strStartDate = cmd.value("--start-date");
+			strEndDate = cmd.value("--end-date");
+			strStartHour = cmd.value("--start-hour");
+			strEndHour = cmd.value("--end-hour");
+			shiftManager.planneHour(strStartDate, strEndDate, strStartHour, strEndHour);
 		}
 	}
-	else {
-		cout << "start		 start time clock \n";
-		cout << "stop		 stop time clock \n";
-		cout << "list		 list time clock \n";
-		cout << "plan		 plan time clock \n";
+	catch (const Args::HelpHasBeenPrintedException&) {
+		cout << "Error arguments" << endl;
+		return;
 	}
+	catch (const Args::BaseException& x)
+	{
+		Args::outStream() << x.desc() << "\n";
 
+		return;
+	}
 	return 1;
 }
-
-void assignValueStrIfExist(const string* argvVal, const string& argName, string* toStoreVal);
-void assignValueIntIfExist(const string* argVal, const string& argName, int* toStoreVal);
-
-void parseAndAssignVal(const int& index, char* argv[], const string& argName, string* toStoreVal)
-{
-	string* argument = new string(argv[index]);
-	assignValueStrIfExist(argument, argName, toStoreVal);
-}
-
-void parseMonthYearVal(const int& index, char* argv[], short* month, int* year)
-{
-	string* argument = new string(argv[index]);
-	int convertedMonth = static_cast<int>(*month);
-	assignValueIntIfExist(argument, "--month", &convertedMonth);
-	assignValueIntIfExist(argument, "--year", year);
-}
-
-void parsePlanStartEnd(const int& index, char* argv[], string* strStartDate, string* strEndDate, string* strStartHour, string* strEndHour)
-{
-	string* argument = new string(argv[index]);
-	assignValueStrIfExist(argument, "--startDate", strStartDate);
-	assignValueStrIfExist(argument, "--endDate", strEndDate);
-	assignValueStrIfExist(argument, "--startHour", strStartHour);
-	assignValueStrIfExist(argument, "--endHour", strEndHour);
-}
-
-void assignValueStrIfExist(const string* argvVal, const string& argName, string* toStoreVal)
-{
-	if (argvVal->find(argName) != string::npos) {
-		vector<string> splitedChar = Helper::splitChar(*argvVal, '=');
-		toStoreVal = &splitedChar[2];
-	}
-}
-
-void assignValueIntIfExist(const string* argVal, const string& argName, int* toStoreVal)
-{
-	if (argVal->find("--year") != string::npos)
-	{
-		vector<string> splitedChar = Helper::splitChar(*argVal, '=');
-		int val = stoi(splitedChar[2]);
-		toStoreVal = &val;
-	}
-}
-
 
