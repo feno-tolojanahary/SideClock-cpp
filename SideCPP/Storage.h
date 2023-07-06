@@ -208,10 +208,15 @@ public:
 		return isDeleted;
 	}
 
+	/*bool deleteByDate(const string& strDate)
+	{
+
+	}*/
+
 private:
 	int getLineCount()
 	{
-		int count = 0;
+		int count = 0;                         
 		string line;
 		fstream file(filename, fstream::out | fstream::binary);
 		if (!file.is_open())
@@ -231,9 +236,9 @@ private:
 		return in.ignore(numeric_limits<streamsize>::max(), '\n');
 	}
 
-	static int lineIndexById(fstream &targetFile, const int& id)
+	static int lineIndexById(fstream& targetFile, const int& id)
 	{
-		int lineIndex = 0;
+		int lineIndex(0);
 		string line;
 		stringstream sstrIDsearch;
 		sstrIDsearch << id << DELIMITER;
@@ -248,6 +253,30 @@ private:
 				vector<string> splitedLine = Helper::splitChar(line, DELIMITER);
 				if (stoi(splitedLine[0]) == id)
 					break;
+			}
+		}
+		return lineIndex;
+	}
+
+	static int lineIndexByAttr(fstream& targetFile, const string& attrName, const auto& value)
+	{
+		string line;
+		int attrIndex(0), lineIndex(0);
+		if (!targetFile.is_open()) {
+			return 0;
+		}
+		vector<string> headers = Helper::splitChar(T::getStrHeaderStorage(), DELIMITER);
+		for (const string& currentAttr : headers) {
+			if (currentAttr == attrName) break;
+			attrIndex++;
+		}
+		while (getline(targetFile, line)) {
+			lineIndex++;
+			vector<string> lineData = Helper::splitChar(line, DELIMITER);
+			if (attrIndex < lineData.size()) {
+				if (lineData[attrIndex].c_str() == to_string(value)) {
+					break;
+				}
 			}
 		}
 		return lineIndex;

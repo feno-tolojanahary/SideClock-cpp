@@ -73,8 +73,6 @@ void ShiftManager::showResume(const short& month, const int& year)
 	termGuiHyb.printResume();
 }
 
-
-
 void ShiftManager::showCurrentPlannedList()
 {
 	time_t currentDate;
@@ -90,3 +88,8 @@ void ShiftManager::showCurrentPlannedList()
 	TermGuiHyb termGuiHyb(planningList);
 	termGuiHyb.printPlanningList();
 }
+
+//void ShiftManager::deletePlannedHour(const string& strDate)
+//{
+//
+//}

@@ -22,6 +22,7 @@ public:
 	void startTime(const string& details);
 	void stopTime();
 	void planneHour(const string& strDate, const string& strEndDate, const string& startHour, const string& endHour);
+	//void deletePlannedHour(const string& strDate);
 	void showResume(const short& month, const int& year);
 
 	~ShiftManager() {
