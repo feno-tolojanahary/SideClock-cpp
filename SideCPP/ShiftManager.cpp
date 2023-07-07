@@ -88,8 +88,3 @@ void ShiftManager::showCurrentPlannedList()
 	TermGuiHyb termGuiHyb(planningList);
 	termGuiHyb.printPlanningList();
 }
-
-//void ShiftManager::deletePlannedHour(const string& strDate)
-//{
-//
-//}

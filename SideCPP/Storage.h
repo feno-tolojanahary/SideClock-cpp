@@ -142,7 +142,7 @@ public:
 		return data;
 	}
 
-	vector<T> findDateBetween(const string& attr, const time_t startDate, const time_t endDate) const
+	vector<T> findDateBetween(const string& attr, const time_t& startDate, const time_t& endDate) const
 	{
 		vector<T> foundData;
 		string line;
@@ -207,11 +207,6 @@ public:
 		rename(tempFilename, filename);
 		return isDeleted;
 	}
-
-	/*bool deleteByDate(const string& strDate)
-	{
-
-	}*/
 
 private:
 	int getLineCount()

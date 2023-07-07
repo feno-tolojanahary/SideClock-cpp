@@ -23,6 +23,7 @@ int main(int argc, char* argv[])
 			.addArgWithNameOnly("end-date", true, true, "End date")
 			.addArgWithNameOnly("start-hour", true, true, "Start hour")
 			.addArgWithNameOnly("end-hour", true, true, "End hour")
+			.addArgWithFlagAndName('l', "list", false, false, "List planned hours")
 			.addCommand("delete", Args::ValueOptions::NoValue, false, "Delete a planned timeclock")
 			.end();
 		cmd.parse();
