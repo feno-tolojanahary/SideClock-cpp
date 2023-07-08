@@ -5,9 +5,6 @@
 #include "Planning.h"
 
 class ShiftManager {
-private:
-	void showCurrentPlannedList();
-
 public:
 
 	ShiftManager(): storageTimeclock(nullptr), termGui(nullptr)
@@ -23,6 +20,10 @@ public:
 	void stopTime();
 	void planneHour(const string& strDate, const string& strEndDate, const string& startHour, const string& endHour);
 	void showResume(const short& month, const int& year);
+	void showCurrentPlannedList();
+	void deletePlannedHour(const int& id);
+	void deletePlannedHour(const string& date);
+	void deletePlannedHour(const string& startDate, const string& endDate);
 
 	~ShiftManager() {
 		delete storageTimeclock;

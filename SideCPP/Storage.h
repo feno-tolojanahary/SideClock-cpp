@@ -61,7 +61,8 @@ public:
 	void findOneBy(string attr, time_t value, T& elem) const
 	{
 		string line;
-		int searchAttrIndex = 0;
+		int searchAttrIndex(0);
+		bool foundAttrIndex(false);
 
 		fstream file(filename, fstream::in | fstream::binary);
 		if (!file.is_open())
@@ -71,9 +72,13 @@ public:
 		getline(file, line);
 		vector<string> headers = Helper::splitChar(T::getStrHeaderStorage(), DELIMITER);
 		for (const string& currentAttr : headers) {
-			if (currentAttr == attr) break;
+			if (currentAttr == attr) {
+				foundAttrIndex = true;
+				break;
+			}
 			searchAttrIndex++;
 		}
+		if (!foundAttrIndex) return;
 		while (getline(file, line)) {
 			vector<string> lineData = Helper::splitChar(line, DELIMITER);
 			if (searchAttrIndex < lineData.size()) {
@@ -125,21 +130,26 @@ public:
 
 	vector<T> listData() const
 	{
-		vector<T> data;
+		vector<T> foundData;
 		string line;
 		fstream file(filename, fstream::in | fstream::binary);
 		if (!file.is_open())
 		{
-			return data;
+			return foundData;
 		}
 		getline(file, line);
 		vector<string> headers = Helper::splitChar(T::getStrHeaderStorage(), DELIMITER);
 		while (getline(file, line))
 		{
-			
+			if (line.size() > 0) {
+				T elem;
+				vector<string> lineData = Helper::splitChar(line, DELIMITER);
+				elem.populateStr(headers, lineData);
+				foundData.push_back(elem);
+			}
 		}
 		file.close();
-		return data;
+		return foundData;
 	}
 
 	vector<T> findDateBetween(const string& attr, const time_t& startDate, const time_t& endDate) const
@@ -194,6 +204,7 @@ public:
 			return false;
 		}
 		int lineIndexRemoval = Storage<T>::lineIndexById(file, id);
+		file.seekg(0);
 		for (line; getline(file, line);)
 		{
 			lineIndex++;
@@ -206,6 +217,89 @@ public:
 		remove(filename);
 		rename(tempFilename, filename);
 		return isDeleted;
+	}
+
+	int deleteByDate(const string& attrName, const string& date)
+	{
+		string line{}, headerLine{};
+		int attrIndex(0), deletedCount(0);
+		bool foundAttrIndex(false);
+		const string tempFilename = "tempfile";
+		fstream file(filename, fstream::in | fstream::binary);
+		fstream tempFile(tempFilename, fstream::out | fstream::binary);
+
+		if (!file.is_open() || !tempFile.is_open())
+		{
+			cout << "Error when deleting element." << endl;
+			return 0;
+		}
+		getline(file, headerLine);
+		tempFile << headerLine;
+		for (const string headerName : Helper::splitChar(headerLine, DELIMITER)) {
+			if (strcmp(attrName, headerName) == 0) {
+				foundAttrIndex = true;
+				break;
+			}
+			attrIndex++;
+		}
+		if (!foundAttrIndex) return 0;
+		for (line; getline(file, line))
+		{
+			struct tm tmLineDate;
+			char buffFormatedLineDate[10];
+			vector<string> splitedLine = Helper::splitChar(line, DELIMITER);
+			time_t dateVal = stod(splitedLine[attrIndex]);
+			gmtime_s(&tmLineDate, &dateVal);
+			strftime(buffFormatedLineDate, sizeof buffFormatedLineDate, FORMAT_DATE, &tmLineDate);
+			if (strcmp(date, buffFormatedLineDate) == 0) {
+				deletedCount++;
+			}
+			else {
+				tempFile << line;
+			}
+		}
+		remove(filename);
+		rename(tempFilename, filename);
+		return deletedCount;
+	}
+
+	int deleteBetweenADate(const string& attrName, const string& strStartDate, const string& strEndDate)
+	{
+		string line{}, headerLine{};
+		bool foundAttrIndex(false);
+		int attrIndex(0), deletedCount(0);
+		const string tempFilename = "tempfile";
+		fstream file(filename, fstream::in | fstream::binary);
+		fstream tempFile(tempFilename, fstream::out | fstream::binary);
+
+		if (!file.is_open() || !tempFile.is_open())
+		{
+			cout << "Error when deleting element." << endl;
+			return 0;
+		}
+		for (const string headerName : Helper::splitChar(headerLine, DELIMITER)) {
+			if (strcmp(startAttrName, headerName) == 0) {
+				foundAttrIndex = true;
+				break;
+			}
+			attrIndex++;
+		}
+		if (!foundAttrIndex) return 0;
+		time_t startDate = Helper::stringToTime(strStartDate, FORMAT_DATE);
+		time_t endDate = Helper::stringToTime(strEndDate, FORMAT_DATE);
+		for (line; getline(file, line))
+		{
+			if (line.size() == 0) break;
+			time_t lineDate = stod(Helper::splitChar(headerLine, DELIMITER));
+			if (lineDate >= startDate && lineDate <= endDate) {
+				deletedCount++;
+				break;
+			}
+			tempFile << line;
+		}
+		remove(filename);
+		rename(tempFilename, filename);
+		return deletedCount;
 	}
 
 private:

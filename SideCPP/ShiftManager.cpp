@@ -88,3 +88,25 @@ void ShiftManager::showCurrentPlannedList()
 	TermGuiHyb termGuiHyb(planningList);
 	termGuiHyb.printPlanningList();
 }
+
+void ShiftManager::deletePlannedHour(const int& id)
+{
+	if (storageTimeclock->deleteById(id)) {
+		cout << "Planned hour deleted with success" << endl;
+	}
+	else {
+		cout << "No planned hour to delete" << endl;
+	}
+}
+
+void ShiftManager::deletePlannedHour(const string& date)
+{
+	int deletedCount = storageTimeclock->deleteByDate("startDate", date);
+	cout << deletedCount <<" deleted rows" << endl;
+}
+
+void ShiftManager::deletePlannedHour(const string& startDate, const string& endDate)
+{
+	int deletedCount = storageTimeclock->deleteBetweenADate("startDate", startDate, endDate);
+	cout << deletedCount << " deleted rows" << endl;
+}

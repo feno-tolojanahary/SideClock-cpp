@@ -24,19 +24,26 @@ int main(int argc, char* argv[])
 			.addArgWithNameOnly("start-hour", true, true, "Start hour")
 			.addArgWithNameOnly("end-hour", true, true, "End hour")
 			.addArgWithFlagAndName('l', "list", false, false, "List planned hours")
+			.end()
+			.addCommand("plan", Args::ValueOptions::NoValue, true, "Plan a timeclock")
 			.addCommand("delete", Args::ValueOptions::NoValue, false, "Delete a planned timeclock")
+			.addArgWithNameOnly("id", true, false, "Id of timeclock to delete", "Specify an id of timeclock to delete in the list")
+			.addArgWithNameOnly("date", true, false, "Point out a special date to delete")
+			.addArgWithNameOnly("start-date", true, false, "Specify a start of date")
+			.addArgWithNameOnly("end-date", true, false, "Specify an end of date")
+			.end()
 			.end();
+
 		cmd.parse();
 
+		ShiftManager shiftManager;
 		if (cmd.isDefined("start")) {
-			ShiftManager shiftManager;
 			string details = "";
 			if (cmd.isDefined("-t"))
 				details = cmd.value("-t");
 			shiftManager.startTime(details);
 		}
 		if (cmd.isDefined("stop")) {
-			ShiftManager shiftManager;
 			shiftManager.stopTime();
 		}
 		if (cmd.isDefined("list")) {
@@ -44,7 +51,6 @@ int main(int argc, char* argv[])
 			string year;
 			time_t currentTime;
 			struct tm tmCurrent;
-			ShiftManager shiftManager;
 
 			time(&currentTime);
 			gmtime_s(&tmCurrent, &currentTime);
@@ -59,13 +65,20 @@ int main(int argc, char* argv[])
 			shiftManager.showResume(stoi(month), stoi(year));
 		}
 		if (cmd.isDefined("plan")) {
-			string strStartDate, strEndDate, strStartHour, strEndHour;
-			ShiftManager shiftManager;
-			strStartDate = cmd.value("--start-date");
-			strEndDate = cmd.value("--end-date");
-			strStartHour = cmd.value("--start-hour");
-			strEndHour = cmd.value("--end-hour");
-			shiftManager.planneHour(strStartDate, strEndDate, strStartHour, strEndHour);
+			if (cmd.isDefined("-l")) {
+				shiftManager.showCurrentPlannedList();
+			}
+			if (cmd.isDefined("delete")) {
+
+			}
+			else {
+				string strStartDate, strEndDate, strStartHour, strEndHour;
+				strStartDate = cmd.value("--start-date");
+				strEndDate = cmd.value("--end-date");
+				strStartHour = cmd.value("--start-hour");
+				strEndHour = cmd.value("--end-hour");
+				shiftManager.planneHour(strStartDate, strEndDate, strStartHour, strEndHour);
+			}
 		}
 	}
 	catch (const Args::HelpHasBeenPrintedException&) {
