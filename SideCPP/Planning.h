@@ -27,12 +27,12 @@ public:
 	string stringify() const override;
 	string strOutput() const override;
 	string getStrDate() const override;
-	void populateStr(const vector<string>& headers, const vector<string>& panningValues) override;
 
 	int getDiffHour() const;
 
 
 	static string getStrHeaderStorage();
+	static void populateStr(Planning planningconst vector<string>& headers, const vector<string>& panningValues);
 
 	const string storageName() override
 	{

@@ -14,5 +14,4 @@ public:
 	virtual string getStrDate() const = 0;
 	virtual string stringify() const = 0;
 	virtual string strOutput() const = 0;
-	virtual void populateStr(const vector<string>& headers, const vector<string>& values) = 0;
 };

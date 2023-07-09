@@ -27,6 +27,7 @@ public:
 	int getDiffHour() const;
 
 	static string getStrHeaderStorage();
+	static void populateStr(const vector<string>& headers, const vector<string>& timeclockValues);
 
 	const string storageName() override
 	{
@@ -83,6 +84,5 @@ public:
 		return startDate;
 	}
 
-	void populateStr(const vector<string>& headers, const vector<string>& timeclockValues) override;
 
 };

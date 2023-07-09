@@ -142,6 +142,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GuiRender.cpp" />
     <ClCompile Include="Planning.cpp" />
     <ClCompile Include="ShiftManager.cpp" />
     <ClCompile Include="SideCPP.cpp" />
@@ -149,6 +150,7 @@
     <ClCompile Include="Timeclock.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GuiRender.h" />
     <ClInclude Include="ModelStorage.h" />
     <ClInclude Include="Helper.h" />
     <ClInclude Include="ModelTermGui.h" />
