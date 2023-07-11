@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <ctime>
+#include <vector>
 #include "ModelStorage.h"
 
 using namespace std;
@@ -29,10 +30,9 @@ public:
 	string getStrDate() const override;
 
 	int getDiffHour() const;
-
+	void populateStr(const vector<string>& headers, const vector<string>& panningValues);
 
 	static string getStrHeaderStorage();
-	static void populateStr(Planning planningconst vector<string>& headers, const vector<string>& panningValues);
 
 	const string storageName() override
 	{

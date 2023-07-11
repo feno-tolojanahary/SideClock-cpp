@@ -14,4 +14,7 @@ class GuiRender {
 public:
 
 	void printListData(vector<vector<string>> contents);
+
+private:
+	vector<string> headers;
 };

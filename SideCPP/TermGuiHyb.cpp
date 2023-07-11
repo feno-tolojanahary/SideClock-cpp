@@ -5,6 +5,7 @@
 #include "TermGuiHyb.h"
 #include "TermGui.h"
 #include "Helper.h"
+#include "GuiRender.h"
 
 TermGuiHyb::TermGuiHyb(vector<Planning> _plannings)
 {
@@ -127,6 +128,7 @@ void TermGuiHyb::printTotalPlanTime() const
 	int planningTotalHour = 0, timeclockTotalHour = 0;
 	vector<vector<string>> totalOut;
 	TermGui<TermGuiHyb> termgui;
+	GuiRender render;
 	stringstream ssout;
 
 	for (const Planning& planning : plannings)
@@ -147,7 +149,7 @@ void TermGuiHyb::printTotalPlanTime() const
 	totalOut.push_back(total);
 
 	ssout << "Total Month \n";
-	termgui.wrapStrResult(totalOut, totalOut.size(), ssout);
+	render.printListData(totalOut);
 	cout << ssout.str();
 }
 
@@ -159,8 +161,9 @@ void TermGuiHyb::printGroupedWeekData(vector<vector<vector<string>>> weekData) c
 
 	for (const vector<vector<string>> weekCastedVal : weekData) 
 	{
+		GuiRender render;
 		ssout << "Week " + to_string(weekIndex) + "\n";
-		termgui.wrapStrResult(weekCastedVal, weekCastedVal.size(), ssout);
+		render.printListData(weekCastedVal);
 		ssout << "\n\n";
 		weekIndex++;
 	}
