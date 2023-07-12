@@ -93,7 +93,7 @@ public:
 	bool updateById(const int& id, const T& elem) const
 	{
 		string line;
-		T foundElem;
+		T foundElem{};
 		fstream file(filename, fstream::in | fstream::out | fstream::binary);
 		if (!file.is_open())
 		{
@@ -142,7 +142,7 @@ public:
 		while (getline(file, line))
 		{
 			if (line.size() > 0) {
-				T elem;
+				T elem{};
 				vector<string> lineData = Helper::splitChar(line, DELIMITER);
 				elem.populateStr(headers, lineData);
 				foundData.push_back(elem);
@@ -176,7 +176,7 @@ public:
 				if (searchAttrIndex < lineData.size()) {
 					string strTimeTcurrent = lineData[searchAttrIndex].c_str();
 					if (stoi(strTimeTcurrent) >= startDate && stoi(strTimeTcurrent) <= endDate) {
-						T elem;
+						T elem{};
 						elem.populateStr(headers, lineData);
 						foundData.push_back(elem);
 					}
@@ -191,7 +191,7 @@ public:
 	{
 		int lineIndex = 0, lineIndexRemoval = 0;
 		string line{};
-		const string tempFilename = "tempfile";
+		const char* tempFilename = "tempfile";
 		bool isDeleted = false;
 		line.reserve(500);
 
@@ -203,7 +203,7 @@ public:
 			cout << "Error when deleting element." << endl;
 			return false;
 		}
-		int lineIndexRemoval = Storage<T>::lineIndexById(file, id);
+		lineIndexRemoval = Storage<T>::lineIndexById(file, id);
 		file.seekg(0);
 		for (line; getline(file, line);)
 		{
@@ -224,7 +224,7 @@ public:
 		string line{}, headerLine{};
 		int attrIndex(0), deletedCount(0);
 		bool foundAttrIndex(false);
-		const string tempFilename = "tempfile";
+		const char* tempFilename = "tempfile";
 		fstream file(filename, fstream::in | fstream::binary);
 		fstream tempFile(tempFilename, fstream::out | fstream::binary);
 
@@ -236,14 +236,15 @@ public:
 		getline(file, headerLine);
 		tempFile << headerLine;
 		for (const string headerName : Helper::splitChar(headerLine, DELIMITER)) {
-			if (strcmp(attrName, headerName) == 0) {
+			if (attrName == headerName) {
 				foundAttrIndex = true;
 				break;
 			}
 			attrIndex++;
 		}
-		if (!foundAttrIndex) return 0;
-		for (line; getline(file, line))
+		if (!foundAttrIndex) 
+			return 0;
+		while (getline(file, line))
 		{
 			struct tm tmLineDate;
 			char buffFormatedLineDate[10];
@@ -251,7 +252,7 @@ public:
 			time_t dateVal = stod(splitedLine[attrIndex]);
 			gmtime_s(&tmLineDate, &dateVal);
 			strftime(buffFormatedLineDate, sizeof buffFormatedLineDate, FORMAT_DATE, &tmLineDate);
-			if (strcmp(date, buffFormatedLineDate) == 0) {
+			if (strcmp(date.data(), buffFormatedLineDate) == 0) {
 				deletedCount++;
 			}
 			else {
@@ -268,7 +269,7 @@ public:
 		string line{}, headerLine{};
 		bool foundAttrIndex(false);
 		int attrIndex(0), deletedCount(0);
-		const string tempFilename = "tempfile";
+		const char* tempFilename = "tempfile";
 		fstream file(filename, fstream::in | fstream::binary);
 		fstream tempFile(tempFilename, fstream::out | fstream::binary);
 
@@ -278,19 +279,21 @@ public:
 			return 0;
 		}
 		for (const string headerName : Helper::splitChar(headerLine, DELIMITER)) {
-			if (strcmp(startAttrName, headerName) == 0) {
+			if (attrName == headerName) {
 				foundAttrIndex = true;
 				break;
 			}
 			attrIndex++;
 		}
-		if (!foundAttrIndex) return 0;
+		if (!foundAttrIndex) 
+			return 0;
 		time_t startDate = Helper::stringToTime(strStartDate, FORMAT_DATE);
 		time_t endDate = Helper::stringToTime(strEndDate, FORMAT_DATE);
-		for (line; getline(file, line))
+		while (getline(file, line))
 		{
-			if (line.size() == 0) break;
-			time_t lineDate = stod(Helper::splitChar(headerLine, DELIMITER));
+			if (line.size() == 0) 
+				break;
+			time_t lineDate = stod(Helper::splitChar(line, DELIMITER)[attrIndex]);
 			if (lineDate >= startDate && lineDate <= endDate) {
 				deletedCount++;
 				break;
@@ -336,7 +339,7 @@ private:
 		if (!targetFile.is_open()) {
 			return 0;
 		}
-		while (getline(file, line)) {
+		while (getline(targetFile, line)) {
 			lineIndex++;
 			if (line.find(searchID) != string::npos) {
 				vector<string> splitedLine = Helper::splitChar(line, DELIMITER);
@@ -356,7 +359,8 @@ private:
 		}
 		vector<string> headers = Helper::splitChar(T::getStrHeaderStorage(), DELIMITER);
 		for (const string& currentAttr : headers) {
-			if (currentAttr == attrName) break;
+			if (currentAttr == attrName) 
+				break;
 			attrIndex++;
 		}
 		while (getline(targetFile, line)) {

@@ -83,13 +83,13 @@ int main(int argc, char* argv[])
 	}
 	catch (const Args::HelpHasBeenPrintedException&) {
 		cout << "Error arguments" << endl;
-		return;
+		return 0;
 	}
 	catch (const Args::BaseException& x)
 	{
 		Args::outStream() << x.desc() << "\n";
 
-		return;
+		return 0;
 	}
 	return 1;
 }
