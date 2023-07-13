@@ -30,11 +30,11 @@
     <ClCompile Include="TermGuiHyb.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GuiRender.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Storage.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="ShiftManager.h">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -58,6 +58,12 @@
     </ClInclude>
     <ClInclude Include="ModelTermGui.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GuiRender.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Storage\Storage.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
