@@ -27,3 +27,22 @@ bool StoreHandler::saveData(vector<vector<string>> fileData)
 	file.close();
 	return true;
 }
+
+vector<vector<string>> StoreHandler::readData()
+{
+	vector<vector<string>> content;
+	string line;
+	fstream file(filename, fstream::in | fstream::binary);
+	if (!file.is_open())
+	{
+		return content;
+	}
+	while (getline(file, line)) {
+		if (line.size() > 0) {
+			vector<string> valLines = Helper::splitChar(line, DELIMITER);
+			content.push_back(valLines);
+		}
+	}
+
+	return content;
+}

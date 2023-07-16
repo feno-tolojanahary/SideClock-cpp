@@ -11,6 +11,7 @@ public:
 	StoreHandler(string fileName): filename(fileName) {}
 
 	bool saveData(vector<vector<string>> data);
+	vector<vector<string>> readData();
 
 private:
 	string filename;

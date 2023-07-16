@@ -5,10 +5,10 @@
 
 using namespace std;
 
-enum Type {
-	INT,
-	CHAR,
-	DATE
+enum class Type {
+	TYPE_INT,
+	TYPE_CHAR,
+	TYPE_DATE
 };
 
 struct Field {
@@ -27,9 +27,11 @@ struct Model {
 };
 
 class Store {
+	const string CONF_MODEL = "conf_model";
+
 public:
-	Store* createModel(const string& modelName);
-	Store* field(const string& fieldName, Type type);
+	void createModel(const string& modelName);
+	void field(const string& fieldName, Type type);
 	Model addVal(const string& modelName);
 	Model field(const string& fieldName, auto& val);
 	void exec();
