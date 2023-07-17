@@ -6,9 +6,9 @@
 using namespace std;
 
 enum class Type {
-	TYPE_INT,
-	TYPE_CHAR,
-	TYPE_DATE
+	TYPE_INT = 1,
+	TYPE_CHAR = 2,
+	TYPE_DATE = 3
 };
 
 struct Field {
@@ -26,8 +26,12 @@ struct Model {
 	vector<string> values;
 };
 
+
+const string CONF_MODEL = "conf_model";
+const string CONF_DELIMITER = ";";
+const string CONF_FIELD_DELIMITER = "|";
+
 class Store {
-	const string CONF_MODEL = "conf_model";
 
 public:
 	void createModel(const string& modelName);
