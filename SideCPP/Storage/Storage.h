@@ -16,48 +16,6 @@ public:
 
 	Storage(const char* fileName): filename(fileName) {}
 
-	T saveData(T& data)
-	{
-		streampos begin, end;
-		string line;
-		int id = generateId();
-		data.setId(id);
-		fstream file(filename, fstream::out | fstream::app | fstream::binary);
-		if (!file.is_open())
-		{
-			return {};
-		}
-		string strData = data.stringify();
-		
-		file.seekg(0, ios::end);
-		end = file.tellg();
-
-		if (end == 0)
-		{
-			string headers = T::getStrHeaderStorage();
-			file << headers;
-		}
-		file << strData;
-		file.close();
-		return data;
-	}
-	
-	vector<string> readData()
-	{
-		vector<string> content;
-		string line;
-		fstream file(filename, fstream::in | fstream::binary);
-		if (!file.is_open())
-		{
-			return content;
-		}
-		while (getline(file, line)) {
-			content.push_back(line);
-		}
-
-		return content;
-	}
-
 	void findOneBy(string attr, time_t value, T& elem) const
 	{
 		string line;
