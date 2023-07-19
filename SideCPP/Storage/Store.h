@@ -5,10 +5,15 @@
 
 using namespace std;
 
-enum class Type {
-	TYPE_INT = 1,
-	TYPE_CHAR = 2,
-	TYPE_DATE = 3
+enum class Type: char {
+	TYPE_INT = 'n',
+	TYPE_CHAR = 's',
+	TYPE_DATE = 'd'
+};
+
+enum class Action {
+	CREATE,
+	ADD_VAL,
 };
 
 struct Field {
@@ -35,11 +40,12 @@ class Store {
 
 public:
 	void createModel(const string& modelName);
-	void field(const string& fieldName, Type type);
-	Model addVal(const string& modelName);
-	Model field(const string& fieldName, auto& val);
+	void field(const string& fieldName, auto val);
+	void addVal(const string& fieldName, auto value);
 	void exec();
 
 private:
+	Action currentAction = Action::CREATE;
 	ModelCreate model;
+	vector<pair<string, string>> attrValues;
 };
