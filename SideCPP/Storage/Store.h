@@ -14,6 +14,8 @@ enum class Type: char {
 enum class Action {
 	CREATE,
 	ADD_VAL,
+	UPDATE_VAL,
+	DELETE_VAL
 };
 
 struct Field {
@@ -33,8 +35,8 @@ struct Model {
 
 
 const string CONF_MODEL = "conf_model";
-const string CONF_DELIMITER = ";";
-const string CONF_FIELD_DELIMITER = "|";
+const char CONF_DELIMITER = ';';
+const char CONF_FIELD_DELIMITER = '|';
 
 class Store {
 
@@ -45,6 +47,9 @@ public:
 	void exec();
 
 private:
+	void execCreate();
+	void execAddVal();
+
 	Action currentAction = Action::CREATE;
 	ModelCreate model;
 	vector<pair<string, string>> attrValues;

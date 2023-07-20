@@ -147,7 +147,7 @@
     <ClCompile Include="ShiftManager.cpp" />
     <ClCompile Include="SideCPP.cpp" />
     <ClCompile Include="Storage\Store.cpp" />
-    <ClCompile Include="Storage\StoreHandler.cpp" />
+    <ClCompile Include="Storage\StorageBase.cpp" />
     <ClCompile Include="TermGuiHyb.cpp" />
     <ClCompile Include="Timeclock.cpp" />
   </ItemGroup>
@@ -160,7 +160,7 @@
     <ClInclude Include="ShiftManager.h" />
     <ClInclude Include="Storage\Store.h" />
     <ClInclude Include="Storage\Storage.h" />
-    <ClInclude Include="Storage\StoreHandler.h" />
+    <ClInclude Include="Storage\StorageBase.h" />
     <ClInclude Include="TermGui.h" />
     <ClInclude Include="TermGuiHyb.h" />
     <ClInclude Include="TimeClock.h" />

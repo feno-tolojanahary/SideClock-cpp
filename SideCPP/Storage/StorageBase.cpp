@@ -1,8 +1,8 @@
-#include "StoreHandler.h"
+#include "StorageBase.h"
 #include "../Helper.h"
 #include <fstream>
 
-bool StoreHandler::saveData(vector<vector<string>> fileData)
+bool StorageBase::saveData(vector<vector<string>> fileData)
 {
 	streampos begin, end;
 	string line;
@@ -28,7 +28,7 @@ bool StoreHandler::saveData(vector<vector<string>> fileData)
 	return true;
 }
 
-vector<vector<string>> StoreHandler::readData()
+vector<vector<string>> StorageBase::readData()
 {
 	vector<vector<string>> content;
 	string line;

@@ -33,7 +33,7 @@
     <ClCompile Include="GuiRender.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Storage\StoreHandler.cpp">
+    <ClCompile Include="Storage\StorageBase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Storage\Store.cpp">
@@ -71,7 +71,7 @@
     <ClInclude Include="Storage\Storage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Storage\StoreHandler.h">
+    <ClInclude Include="Storage\StorageBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Storage\Store.h">

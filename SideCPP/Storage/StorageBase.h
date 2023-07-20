@@ -5,10 +5,10 @@
 
 using namespace std;
 
-class StoreHandler {
+class StorageBase {
 
 public:
-	StoreHandler(string fileName): filename(fileName) {}
+	StorageBase(string fileName): filename(fileName) {}
 
 	bool saveData(vector<vector<string>> data);
 	vector<vector<string>> readData();
