@@ -9,6 +9,7 @@ void Store::createModel(const string& modelName)
 {
 	this->currentAction = Action::CREATE;
 	this->model.name = modelName;
+	this->attrValues = {};
 }
 
 void Store::field(const string& fieldName, auto val)
@@ -18,7 +19,7 @@ void Store::field(const string& fieldName, auto val)
 		Field field(fieldName, type);
 		this->model.fields.push_back(field);
 	}
-	else if (this->currentAction == Action::ADD_VAL) {
+	else if (this->currentAction == Action::ADD_VAL || this->currentAction == Action::UPDATE_VAL) {
 		pair<string, string> assignedAttrVal(fieldName, value);
 		this->attrValues.push_back(assignedAttrVal);
 	}
@@ -32,6 +33,8 @@ void Store::exec()
 			this->execCreate();
 		case Action::ADD_VAL:
 			this->execAddVal();
+		case Action::UPDATE_VAL:
+			this->execUpdateVal();
 		default:
 			break;
 	}
@@ -117,8 +120,16 @@ void Store::execAddVal()
 	}
 }
 
-void Store::addVal(const string& fieldName, auto value)
+void Store::addVal(const string& modelName)
 {
 	this->currentAction = Action::ADD_VAL;
 	this->model.name = modelName;
+	this->attrValues = {};
+}
+
+void Store::updateVal(const string& modelName)
+{
+	this->currentAction = Action::UPDATE_VAL;
+	this->model.name = modelName;
+	this->attrValues = {};
 }

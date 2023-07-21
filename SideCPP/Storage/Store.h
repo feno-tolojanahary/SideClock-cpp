@@ -43,12 +43,14 @@ class Store {
 public:
 	void createModel(const string& modelName);
 	void field(const string& fieldName, auto val);
-	void addVal(const string& fieldName, auto value);
 	void exec();
+	void addVal(const string& modelName);
+	void updateVal(const string& modelName);
+	void andWhere(const string& fieldName, auto value);
 
 private:
-	void execCreate();
 	void execAddVal();
+	void execUpdateVal();
 
 	Action currentAction = Action::CREATE;
 	ModelCreate model;
