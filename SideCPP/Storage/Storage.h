@@ -86,30 +86,6 @@ public:
 		return true;
 	}
 
-	vector<T> listData() const
-	{
-		vector<T> foundData;
-		string line;
-		fstream file(filename, fstream::in | fstream::binary);
-		if (!file.is_open())
-		{
-			return foundData;
-		}
-		getline(file, line);
-		vector<string> headers = Helper::splitChar(T::getStrHeaderStorage(), DELIMITER);
-		while (getline(file, line))
-		{
-			if (line.size() > 0) {
-				T elem{};
-				vector<string> lineData = Helper::splitChar(line, DELIMITER);
-				elem.populateStr(headers, lineData);
-				foundData.push_back(elem);
-			}
-		}
-		file.close();
-		return foundData;
-	}
-
 	vector<T> findDateBetween(const string& attr, const time_t& startDate, const time_t& endDate) const
 	{
 		vector<T> foundData;
@@ -143,38 +119,6 @@ public:
 		}
 		file.close();
 		return foundData;
-	}
-
-	bool deleteById(const int& id)
-	{
-		int lineIndex = 0, lineIndexRemoval = 0;
-		string line{};
-		const char* tempFilename = "tempfile";
-		bool isDeleted = false;
-		line.reserve(500);
-
-		fstream file(filename, fstream::in | fstream::out | fstream::binary);
-		fstream tempFile(tempFilename, fstream::out | fstream::binary);
-
-		if (!file.is_open() || !tempFile.is_open())
-		{
-			cout << "Error when deleting element." << endl;
-			return false;
-		}
-		lineIndexRemoval = Storage<T>::lineIndexById(file, id);
-		file.seekg(0);
-		for (line; getline(file, line);)
-		{
-			lineIndex++;
-			if (lineIndex == lineIndexRemoval) {
-				tempFile << line << endl;
-				isDeleted = true;
-				break;
-			} 
-		}
-		remove(filename);
-		rename(tempFilename, filename);
-		return isDeleted;
 	}
 
 	int deleteByDate(const string& attrName, const string& date)
