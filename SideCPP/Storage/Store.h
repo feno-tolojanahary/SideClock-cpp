@@ -15,7 +15,8 @@ enum class Action {
 	CREATE,
 	ADD_VAL,
 	UPDATE_VAL,
-	DELETE_VAL
+	DELETE_VAL,
+	GET_VAL
 };
 
 struct Field {
@@ -45,12 +46,16 @@ public:
 	void field(const string& fieldName, auto val);
 	void exec();
 	void addVal(const string& modelName);
+	vector<vector<string>> getVal(const string& modelName);
+	//void getVal(const string& modelName, vector<string> selectedFields);
 	void updateVal(const string& modelName);
 	void andWhere(const string& fieldName, auto value);
 
 private:
+	void execCreate();
 	void execAddVal();
 	void execUpdateVal();
+	void execGetVal();
 
 	Action currentAction = Action::CREATE;
 	ModelCreate model;

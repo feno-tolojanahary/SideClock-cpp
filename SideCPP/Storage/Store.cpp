@@ -81,9 +81,7 @@ void Store::execAddVal()
 	{
 		if (line.find(this->model.name) != string::npos) {
 			vector<string> splitedModelInfo = Helper::splitChar(line, CONF_DELIMITER);
-			if (splitedModelInfo.size() == 0)
-				continue;
-			if (splitedModelInfo[0].compare(this->model.name) != 0)
+			if (splitedModelInfo.size() == 0 || splitedModelInfo[0].compare(this->model.name) != 0)
 				continue;
 			for (const string& modelInfo : splitedModelInfo)
 			{
@@ -132,4 +130,38 @@ void Store::updateVal(const string& modelName)
 	this->currentAction = Action::UPDATE_VAL;
 	this->model.name = modelName;
 	this->attrValues = {};
+}
+
+vector<vector<string>> Store::getVal(const string& modelName)
+{
+	this->currentAction = Action::GET_VAL;
+	this->model.name = modelName;
+	string line;
+
+	fstream file(CONF_MODEL, fstream::out | fstream::binary);
+	if (!file.is_open())
+	{
+		return;
+	}
+	vector<pair<int, string>> columnsOrder;
+	StorageBase *storage = new StorageBase(this->model.name);
+	while (getline(file, line))
+	{
+		if (line.find(this->model.name) != string::npos)
+		{
+			vector<string> splitedLine = Helper::splitChar(line, CONF_DELIMITER);
+			if (splitedLine[0].compare(this->model.name) == 0) {
+				int lineIndex = 0;
+				for (const string& field : splitedLine) {
+					lineIndex++;
+					if (lineIndex > 1) {
+						vector<string> fieldInfo = Helper::splitChar(field, CONF_FIELD_DELIMITER);
+						columnsOrder.push_back(make_pair(lineIndex - 1, fieldInfo[0]));
+					}
+				}
+			}
+		}
+	}
+	vector<vector<string>> data = storage->readData();
+	return data;
 }
