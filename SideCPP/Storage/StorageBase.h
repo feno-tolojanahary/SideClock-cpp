@@ -5,6 +5,10 @@
 
 using namespace std;
 
+struct Condition {
+	pair<string, string> attrVal;
+};
+
 class StorageBase {
 
 public:
@@ -12,6 +16,7 @@ public:
 
 	bool saveData(vector<vector<string>> data);
 	vector<vector<string>> readData();
+	//vector<string> updateData(vector<Condition> conditions, vector<vector<string>> update);
 
 private:
 	string filename;

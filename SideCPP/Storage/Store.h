@@ -42,6 +42,7 @@ const char CONF_FIELD_DELIMITER = '|';
 class Store {
 
 public:
+	Store();
 	void createModel(const string& modelName);
 	void field(const string& fieldName, auto val);
 	void exec();
@@ -59,5 +60,7 @@ private:
 
 	Action currentAction = Action::CREATE;
 	ModelCreate model;
+	vector<pair<int, string>> orderedColumns;
 	vector<pair<string, string>> attrValues;
+	vector<pair<string, string>> condAttrValues;
 };
