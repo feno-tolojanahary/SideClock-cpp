@@ -158,6 +158,7 @@
     <ClInclude Include="ModelTermGui.h" />
     <ClInclude Include="Planning.h" />
     <ClInclude Include="ShiftManager.h" />
+    <ClInclude Include="Storage\Header.h" />
     <ClInclude Include="Storage\Store.h" />
     <ClInclude Include="Storage\Storage.h" />
     <ClInclude Include="Storage\StorageBase.h" />
