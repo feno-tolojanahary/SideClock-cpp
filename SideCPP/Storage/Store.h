@@ -28,6 +28,6 @@ private:
 	Action currentAction = Action::CREATE;
 	ModelCreate model;
 	vector<pair<int, string>> orderedColumns;
-	vector<pair<string, string>> attrValues;
-	vector<pair<string, string>> condAttrValues;
+	vector<Value> attrValues;
+	vector<Value> condAttrValues;
 };

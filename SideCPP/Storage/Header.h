@@ -20,6 +20,16 @@ struct Field {
 	std::string name;
 	Type type;
 	int length = 200;
+	 
+	bool operator==(const Field& rfield)
+	{
+		return name == rfield.name;
+	}
+};
+
+struct Value {
+	std::string fieldName;
+	std::string value;
 };
 
 struct ModelCreate {

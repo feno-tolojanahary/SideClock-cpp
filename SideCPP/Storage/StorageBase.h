@@ -21,7 +21,7 @@ class StorageBase {
 public:
 	StorageBase(const string& fileName);
 
-	bool saveData(vector<vector<string>> data);
+	bool saveData(vector<Value> data);
 	vector<vector<string>> readData();
 	//UpdateResult updateData(vector<Condition> conditions, vector<vector<string>> update);
 

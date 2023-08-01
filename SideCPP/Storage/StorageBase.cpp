@@ -1,6 +1,8 @@
 #include "StorageBase.h"
 #include "../Helper.h"
+#include "HelperStore.h"
 #include <fstream>
+#include <iomanip>
 
 StorageBase::StorageBase(const string& fileName)
 {
@@ -45,7 +47,7 @@ StorageBase::StorageBase(const string& fileName)
 	file.close();
 }
 
-bool StorageBase::saveData(vector<vector<string>> fileData)
+bool StorageBase::saveData(vector<Value> fileData)
 {
 	streampos begin, end;
 	string line;
@@ -58,12 +60,10 @@ bool StorageBase::saveData(vector<vector<string>> fileData)
 	file.seekg(0, ios::end);
 	end = file.tellg();
 
-	for (const vector<string> lineData : fileData)
+	for (const Value lineData : fileData)
 	{
-		for (const string& valueData : lineData)
-		{
-			file << valueData << DELIMITER;
-		}
+		const Field fieldInfo = HelperStore::fieldByName(lineData.fieldName, currentColumnsInfo);
+		file << lineData.value << setfill(' ') << setw(fieldInfo.length);
 		file << "\n";
 	}
 
