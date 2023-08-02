@@ -47,7 +47,7 @@ StorageBase::StorageBase(const string& fileName)
 	file.close();
 }
 
-bool StorageBase::saveData(vector<Value> fileData)
+bool StorageBase::saveData(vector<RawData> listRawData)
 {
 	streampos begin, end;
 	string line;
@@ -60,10 +60,12 @@ bool StorageBase::saveData(vector<Value> fileData)
 	file.seekg(0, ios::end);
 	end = file.tellg();
 
-	for (const Value lineData : fileData)
+	for (const RawData lineData : listRawData)
 	{
-		const Field fieldInfo = HelperStore::fieldByName(lineData.fieldName, currentColumnsInfo);
-		file << lineData.value << setfill(' ') << setw(fieldInfo.length);
+		for (const Value valData : lineData.data) {
+			const Field fieldInfo = fieldByName(valData.fieldName, currentColumnsInfo);
+			file << setw(fieldInfo.length) << valData.value << setfill(' ') << DELIMITER;
+		}
 		file << "\n";
 	}
 
@@ -86,11 +88,72 @@ vector<vector<string>> StorageBase::readData()
 			content.push_back(valLines);
 		}
 	}
-
+	file.close();
 	return content;
 }
 
-//UpdateResult updateData(vector<Condition> conditions, vector<vector<string>> update)
-//{
-//	
-//}
+UpdateResult StorageBase::updateData(vector<Condition> conditions, vector<Value> update)
+{
+	string line;
+	UpdateResult resUpdate;
+	UpdateResult* res = &resUpdate;
+	fstream file(filename, fstream::in | fstream::out | fstream::binary);
+	res->isSuccess = false;
+	res->udpatedCount = 0;
+
+	if (!file.is_open())
+	{
+		cout << "Error opening file for update" << endl;
+		return *res;
+	}
+	long long int pos = file.tellg();
+	
+	for (line; getline(file, line);)
+	{
+		// first check by string
+		bool isDetected = false;
+		for (const Condition cond : conditions) {
+			if (line.find(cond.value) != string::npos) {
+				isDetected = true;
+			}
+			else {
+				isDetected = false;
+				break;
+			}
+		}
+		if (!isDetected) {
+			break;
+		}
+		// second check real equal
+		vector<string> rawDataStr = splitChar(line, DELIMITER);
+		RawData rawData;
+		int index = 0;
+		for (const Field& field : currentColumnsInfo)
+		{
+			Value value;
+			value.fieldName = field.name;
+			value.value = trim(rawDataStr[index]);
+			index++;
+		}
+
+		for (const Condition& cond : conditions)
+		{
+			for (const Value& dataVal : rawData.data)
+			{
+				if (cond.attr == dataVal.fieldName) {
+					if (cond.value != dataVal.value) {
+						isDetected = false;
+					}
+				}
+			}
+		}
+
+		if (!isDetected) {
+			break;
+		}
+
+
+	}
+
+	return *res;
+}

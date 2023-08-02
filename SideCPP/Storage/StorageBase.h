@@ -16,14 +16,18 @@ struct UpdateResult {
 	bool isSuccess = false;
 };
 
+struct RawData {
+	vector<Value> data;
+};
+
 class StorageBase {
 
 public:
 	StorageBase(const string& fileName);
 
-	bool saveData(vector<Value> data);
+	bool saveData(vector<RawData> listRawData);
 	vector<vector<string>> readData();
-	//UpdateResult updateData(vector<Condition> conditions, vector<vector<string>> update);
+	UpdateResult updateData(vector<Condition> conditions, vector<Value> update);
 
 private:
 	string filename;
