@@ -30,6 +30,11 @@ struct Field {
 struct Value {
 	std::string fieldName;
 	std::string value;
+
+	bool operator==(const Value& rValue)
+	{
+		return fieldName == rValue.fieldName;
+	}
 };
 
 struct ModelCreate {

@@ -16,7 +16,7 @@ struct UpdateResult {
 	bool isSuccess = false;
 };
 
-struct RawData {
+struct RowData {
 	vector<Value> data;
 };
 
@@ -25,7 +25,7 @@ class StorageBase {
 public:
 	StorageBase(const string& fileName);
 
-	bool saveData(vector<RawData> listRawData);
+	bool saveData(vector<RowData> listRawData);
 	vector<vector<string>> readData();
 	UpdateResult updateData(vector<Condition> conditions, vector<Value> update);
 

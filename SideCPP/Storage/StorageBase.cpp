@@ -47,7 +47,7 @@ StorageBase::StorageBase(const string& fileName)
 	file.close();
 }
 
-bool StorageBase::saveData(vector<RawData> listRawData)
+bool StorageBase::saveData(vector<RowData> listRowData)
 {
 	streampos begin, end;
 	string line;
@@ -60,7 +60,7 @@ bool StorageBase::saveData(vector<RawData> listRawData)
 	file.seekg(0, ios::end);
 	end = file.tellg();
 
-	for (const RawData lineData : listRawData)
+	for (const RowData lineData : listRowData)
 	{
 		for (const Value valData : lineData.data) {
 			const Field fieldInfo = fieldByName(valData.fieldName, currentColumnsInfo);
@@ -97,6 +97,7 @@ UpdateResult StorageBase::updateData(vector<Condition> conditions, vector<Value>
 	string line;
 	UpdateResult resUpdate;
 	UpdateResult* res = &resUpdate;
+	vector<pair<long long int, RowData>> foundRowData;
 	fstream file(filename, fstream::in | fstream::out | fstream::binary);
 	res->isSuccess = false;
 	res->udpatedCount = 0;
@@ -106,7 +107,7 @@ UpdateResult StorageBase::updateData(vector<Condition> conditions, vector<Value>
 		cout << "Error opening file for update" << endl;
 		return *res;
 	}
-	long long int pos = file.tellg();
+	long long int pos = 0;
 	
 	for (line; getline(file, line);)
 	{
@@ -125,20 +126,24 @@ UpdateResult StorageBase::updateData(vector<Condition> conditions, vector<Value>
 			break;
 		}
 		// second check real equal
-		vector<string> rawDataStr = splitChar(line, DELIMITER);
-		RawData rawData;
+		vector<string> rowDataStr = splitChar(line, DELIMITER);
+		RowData curRowData;
+		vector<Value> currentFieldValues;
 		int index = 0;
 		for (const Field& field : currentColumnsInfo)
 		{
 			Value value;
 			value.fieldName = field.name;
-			value.value = trim(rawDataStr[index]);
+			value.value = trim(rowDataStr[index]);
+			currentFieldValues.push_back(value);
 			index++;
 		}
+		
+		curRowData.data = currentFieldValues;
 
 		for (const Condition& cond : conditions)
 		{
-			for (const Value& dataVal : rawData.data)
+			for (const Value& dataVal : curRowData.data)
 			{
 				if (cond.attr == dataVal.fieldName) {
 					if (cond.value != dataVal.value) {
@@ -151,9 +156,33 @@ UpdateResult StorageBase::updateData(vector<Condition> conditions, vector<Value>
 		if (!isDetected) {
 			break;
 		}
+		
+
+		pos = file.tellg();
+	
+		foundRowData.push_back(make_pair(pos, curRowData));
+	}
+
+	// Update line on file
+	for (const pair<long long int, RowData> rowDataPos : foundRowData)
+	{
+		RowData newRowData;
+		for (Value val : rowDataPos.second.data)
+		{
+			for (const Value& valUpdate : update)
+			{
+				if (val.fieldName == valUpdate.fieldName)
+				{
+					val.value = valUpdate.value;
+				} 
+			}
+			newRowData.data.push_back(val);
+		}
 
 
 	}
+
+	file.close();
 
 	return *res;
 }
