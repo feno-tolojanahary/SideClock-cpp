@@ -17,6 +17,7 @@ enum class Action {
 };
 
 struct Field {
+	short range = -1;
 	std::string name;
 	Type type;
 	int length = 200;

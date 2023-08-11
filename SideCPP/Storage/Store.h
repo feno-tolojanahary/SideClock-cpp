@@ -27,7 +27,7 @@ private:
 
 	Action currentAction = Action::CREATE;
 	ModelCreate model;
-	vector<pair<int, string>> orderedColumns;
+	vector<Field> orderedColumns;
 	vector<Value> attrValues;
 	vector<Value> condAttrValues;
 };

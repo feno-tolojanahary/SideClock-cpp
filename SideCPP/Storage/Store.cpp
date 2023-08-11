@@ -37,9 +37,9 @@ Store::Store()
 
 void Store::createModel(const string& modelName)
 {
-	this->currentAction = Action::CREATE;
-	this->model.name = modelName;
-	this->attrValues = {};
+	currentAction = Action::CREATE;
+	model.name = modelName;
+	attrValues = {};
 }
 
 void Store::field(const string& fieldName, auto val)
@@ -57,14 +57,14 @@ void Store::field(const string& fieldName, auto val)
 
 void Store::exec()
 {
-	switch (this->currentAction)
+	switch (currentAction)
 	{
 		case Action::CREATE:
-			this->execCreate();
+			execCreate();
 		case Action::ADD_VAL:
-			this->execAddVal();
+			execAddVal();
 		case Action::UPDATE_VAL:
-			this->execUpdateVal();
+			execUpdateVal();
 		default:
 			break;
 	}
@@ -79,8 +79,8 @@ void Store::execCreate()
 		cout << "Error opening conf file..." << endl;
 		return;
 	}
-	oss << this->model.name << CONF_DELIMITER;
-	for (const Field& field : this->model.fields) {
+	oss << model.name << CONF_DELIMITER;
+	for (const Field& field : model.fields) {
 		oss << field.name << CONF_FIELD_DELIMITER << static_cast<char>(field.type) << CONF_FIELD_DELIMITER << field.length;
 		oss << CONF_DELIMITER;
 	}
@@ -92,17 +92,18 @@ void Store::execCreate()
 void Store::execAddVal()
 {
 	// Call value storage on database
-	StorageBase storageBase(this->model.name);
+	StorageBase storageBase(model.name);
 	StorageBase* storage = &storageBase;
-	vector<vector<string>> orderedValues{};
+	vector<RowData> orderedValues{};
 	
-	for (const pair<string, string> attrVal : this->attrValues)
+	for (const Value & attrVal : attrValues)
 	{
 		vector<string> lineValue(orderedColumns.size(), "");
 		int indexStoreVal;
-		for (const pair<int, string> orderFieldInfo : orderedColumns) {
-			if (attrVal.first.compare(orderFieldInfo.second) == 0) {
-				lineValue.at(indexStoreVal) = attrVal.second;
+		for (const Field & currentField : orderedColumns) {
+			if (attrVal.fieldName.compare(currentField.name) == 0) {
+
+				lineValue.at(indexStoreVal) = attrVal.value;
 				orderedValues.push_back(lineValue);
 			}
 		}
@@ -118,16 +119,16 @@ void Store::execAddVal()
 
 void Store::addVal(const string& modelName)
 {
-	this->currentAction = Action::ADD_VAL;
-	this->model.name = modelName;
-	this->attrValues = {};
+	currentAction = Action::ADD_VAL;
+	model.name = modelName;
+	attrValues = {};
 }
 
 vector<vector<string>> Store::getVal(const string& modelName)
 {
-	this->currentAction = Action::GET_VAL;
-	this->model.name = modelName;
-	StorageBase *storage = new StorageBase(this->model.name);
+	currentAction = Action::GET_VAL;
+	model.name = modelName;
+	StorageBase *storage = new StorageBase(model.name);
 	vector<vector<string>> data = storage->readData();
 	return data;
 }
@@ -136,15 +137,15 @@ void Store::andWhere(const string& fieldName, auto value)
 {
 	Type type = static_cast<string>(val);
 	Field field(fieldName, type);
-	this->condAttrValues.push_back(field);
+	condAttrValues.push_back(field);
 }
 
 void Store::updateVal(const string& modelName)
 {
-	this->currentAction = Action::UPDATE_VAL;
-	this->model.name = modelName;
-	this->attrValues = {};
-	this->condAttrValues = {};
+	currentAction = Action::UPDATE_VAL;
+	model.name = modelName;
+	attrValues = {};
+	condAttrValues = {};
 }
 
 //void Store::execUpdateVal()
