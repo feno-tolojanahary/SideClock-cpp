@@ -92,11 +92,10 @@ vector<vector<string>> StorageBase::readData()
 	return content;
 }
 
-UpdateResult StorageBase::updateData(vector<Condition> conditions, vector<Value> update)
+UpdateResult* StorageBase::updateData(vector<Condition> conditions, vector<Value> update)
 {
 	string line;
-	UpdateResult resUpdate;
-	UpdateResult* res = &resUpdate;
+	std::unique_ptr<UpdateResult> res = std::make_unique<UpdateResult>();
 	vector<pair<long long int, RowData>> foundRowData;
 	fstream file(filename, fstream::in | fstream::out | fstream::binary);
 	res->isSuccess = false;
@@ -104,8 +103,9 @@ UpdateResult StorageBase::updateData(vector<Condition> conditions, vector<Value>
 
 	if (!file.is_open())
 	{
+		file.close();
 		cout << "Error opening file for update" << endl;
-		return *res;
+		return res.get();
 	}
 	long long int pos = 0;
 	
@@ -163,10 +163,16 @@ UpdateResult StorageBase::updateData(vector<Condition> conditions, vector<Value>
 		foundRowData.push_back(make_pair(pos, curRowData));
 	}
 
+
+	if (pos == 0 && foundRowData.size() == 0) {
+		file.close();
+		return res.get();
+	}
+
 	// Update line on file
 	for (const pair<long long int, RowData> rowDataPos : foundRowData)
 	{
-		RowData newRowData;
+		std::shared_ptr<RowData> newRowData = std::make_shared<RowData>();
 		for (Value val : rowDataPos.second.data)
 		{
 			for (const Value& valUpdate : update)
@@ -176,13 +182,27 @@ UpdateResult StorageBase::updateData(vector<Condition> conditions, vector<Value>
 					val.value = valUpdate.value;
 				} 
 			}
-			newRowData.data.push_back(val);
+			newRowData->data.push_back(val);
 		}
 
-
+		// directly write update on file
+		const string rowParsed = parseQuery(newRowData);
+		file.seekg(rowDataPos.first);
+		file << rowParsed;
 	}
 
 	file.close();
 
-	return *res;
+	return res.get();
+}
+
+string StorageBase::parseQuery(std::shared_ptr<RowData> rowData)
+{
+	ostringstream osstr;
+	for (const Value valData : rowData->data) {
+		const Field fieldInfo = fieldByName(valData.fieldName, currentColumnsInfo);
+		osstr << setw(fieldInfo.length) << valData.value << setfill(' ') << DELIMITER;
+	}
+	osstr << "\n";
+	return osstr.str();
 }

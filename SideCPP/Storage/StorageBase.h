@@ -27,7 +27,8 @@ public:
 
 	bool saveData(vector<RowData> listRawData);
 	vector<vector<string>> readData();
-	UpdateResult updateData(vector<Condition> conditions, vector<Value> update);
+	string parseQuery(std::shared_ptr<RowData> rowData);
+	UpdateResult* updateData(vector<Condition> conditions, vector<Value> update);
 
 private:
 	string filename;
