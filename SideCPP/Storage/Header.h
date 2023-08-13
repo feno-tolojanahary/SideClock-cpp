@@ -5,7 +5,17 @@
 enum class Type : char {
 	TYPE_INT = 'n',
 	TYPE_CHAR = 's',
-	TYPE_DATE = 'd'
+	TYPE_DATE = 'd',
+	TYPE_ANY
+};
+
+struct RowData {
+	vector<Value> data;
+};
+
+struct Condition {
+	string attr;
+	string value;
 };
 
 enum class Action {
@@ -50,3 +60,17 @@ struct Model {
 const std::string CONF_MODEL = "conf_model";
 const char CONF_DELIMITER = ';';
 const char CONF_FIELD_DELIMITER = '|';
+
+
+Type getType(const char& typeIndex) {
+	switch (typeIndex) {
+	case 'n':
+		return Type::TYPE_INT;
+	case 's':
+		return Type::TYPE_CHAR;
+	case 'd':
+		return Type::TYPE_DATE;
+	default:
+		return Type::TYPE_ANY;
+	}
+}

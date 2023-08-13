@@ -25,9 +25,9 @@ private:
 	void execUpdateVal();
 	void execGetVal();
 
-	Action currentAction = Action::CREATE;
+	Action action = Action::CREATE;
 	ModelCreate model;
 	vector<Field> orderedColumns;
-	vector<Value> attrValues;
+	vector<Value> pinnedValues;
 	vector<Value> condAttrValues;
 };

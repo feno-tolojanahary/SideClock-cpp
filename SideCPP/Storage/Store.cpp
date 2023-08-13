@@ -17,16 +17,21 @@ Store::Store()
 	}
 	while (getline(file, line))
 	{
-		if (line.find(this->model.name) != string::npos)
+		if (line.find(model.name) != string::npos)
 		{
-			vector<string> splitedLine = Helper::splitChar(line, CONF_DELIMITER);
-			if (splitedLine[0].compare(this->model.name) == 0) {
+			vector<string> modelChains = Helper::splitChar(line, CONF_DELIMITER);
+			if (modelChains[0].compare(model.name) == 0) {
 				int lineIndex = 0;
-				for (const string& field : splitedLine) {
+				for (const string& fieldInfo : modelChains) {
 					lineIndex++;
 					if (lineIndex > 1) {
-						vector<string> fieldInfo = Helper::splitChar(field, CONF_FIELD_DELIMITER);
-						orderedColumns.push_back(make_pair(lineIndex - 1, fieldInfo[0]));
+						vector<string> fieldChains = Helper::splitChar(fieldInfo, CONF_FIELD_DELIMITER);
+						Field definedField;
+						definedField.range = lineIndex;
+						definedField.name = fieldChains[0];
+						definedField.type = getType(*(fieldChains[1].data()));
+						definedField.length = stoi(fieldChains[2]);
+						orderedColumns.push_back(definedField);
 					}
 				}
 			}
@@ -37,27 +42,30 @@ Store::Store()
 
 void Store::createModel(const string& modelName)
 {
-	currentAction = Action::CREATE;
+	action = Action::CREATE;
 	model.name = modelName;
-	attrValues = {};
+	pinnedValues = {};
 }
 
 void Store::field(const string& fieldName, auto val)
 {
-	if (this->currentAction == Action::CREATE) {
+	if (action == Action::CREATE) {
 		Type type = static_cast<string>(val);
 		Field field(fieldName, type);
-		this->model.fields.push_back(field);
+		model.fields.push_back(field);
 	}
-	else if (this->currentAction == Action::ADD_VAL || this->currentAction == Action::UPDATE_VAL) {
-		pair<string, string> assignedAttrVal(fieldName, value);
-		this->attrValues.push_back(assignedAttrVal);
+	else if (action == Action::ADD_VAL || action == Action::UPDATE_VAL) {
+		Value value{
+			.fieldName = fieldName,
+			.value = val
+		}
+		pinnedValues.push_back(value);
 	}
 }
 
 void Store::exec()
 {
-	switch (currentAction)
+	switch (action)
 	{
 		case Action::CREATE:
 			execCreate();
@@ -92,24 +100,24 @@ void Store::execCreate()
 void Store::execAddVal()
 {
 	// Call value storage on database
-	StorageBase storageBase(model.name);
-	StorageBase* storage = &storageBase;
-	vector<RowData> orderedValues{};
-	
-	for (const Value & attrVal : attrValues)
-	{
-		vector<string> lineValue(orderedColumns.size(), "");
-		int indexStoreVal;
-		for (const Field & currentField : orderedColumns) {
-			if (attrVal.fieldName.compare(currentField.name) == 0) {
+	std::unique_ptr<StorageBase> storage = make_unique<StorageBase>(model.name);
+	vector<RowData> savingRowData{};
 
-				lineValue.at(indexStoreVal) = attrVal.value;
-				orderedValues.push_back(lineValue);
+	RowData oneRowData;	
+	for (const Value & pinnedVal : pinnedValues)
+	{
+		int indexStoreVal;
+		for (const Field & field : orderedColumns) {
+			if (pinnedVal.fieldName.compare(field.name) == 0) {
+				oneRowData.data.push_back(pinnedVal);
 			}
+
 		}
+
+		savingRowData.toSaveValue(lineValue);
 	}
 
-	if (storage->saveData(orderedValues)) {
+	if (storage->saveData(savingRowData)) {
 		cout << "saved with success." << endl;
 	}
 	else {
@@ -119,14 +127,14 @@ void Store::execAddVal()
 
 void Store::addVal(const string& modelName)
 {
-	currentAction = Action::ADD_VAL;
+	action = Action::ADD_VAL;
 	model.name = modelName;
-	attrValues = {};
+	pinnedValues = {};
 }
 
 vector<vector<string>> Store::getVal(const string& modelName)
 {
-	currentAction = Action::GET_VAL;
+	action = Action::GET_VAL;
 	model.name = modelName;
 	StorageBase *storage = new StorageBase(model.name);
 	vector<vector<string>> data = storage->readData();
@@ -142,9 +150,9 @@ void Store::andWhere(const string& fieldName, auto value)
 
 void Store::updateVal(const string& modelName)
 {
-	currentAction = Action::UPDATE_VAL;
+	action = Action::UPDATE_VAL;
 	model.name = modelName;
-	attrValues = {};
+	pinnedValues = {};
 	condAttrValues = {};
 }
 

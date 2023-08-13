@@ -6,18 +6,9 @@
 
 using namespace std;
 
-struct Condition {
-	string attr;
-	string value;
-};
-
 struct UpdateResult {
 	int udpatedCount = 0;
 	bool isSuccess = false;
-};
-
-struct RowData {
-	vector<Value> data;
 };
 
 class StorageBase {
