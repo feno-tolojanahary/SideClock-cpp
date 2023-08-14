@@ -68,9 +68,6 @@
     <ClInclude Include="GuiRender.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Storage\Storage.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Storage\StorageBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
