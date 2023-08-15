@@ -14,7 +14,7 @@ struct RowData {
 };
 
 struct Condition {
-	string attr;
+	string fieldName;
 	string value;
 };
 
@@ -56,6 +56,13 @@ struct ModelCreate {
 struct Model {
 	std::vector<std::string> values;
 };
+
+
+struct UpdateResult {
+	int udpatedCount = 0;
+	bool isSuccess = false;
+};
+
 
 const std::string CONF_MODEL = "conf_model";
 const char CONF_DELIMITER = ';';

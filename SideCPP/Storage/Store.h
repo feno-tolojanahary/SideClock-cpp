@@ -25,9 +25,12 @@ private:
 	void execUpdateVal();
 	void execGetVal();
 
+	void resetAction();
+	void initTouchModel(const string & modelName, const Action & action);
+
 	Action action = Action::CREATE;
 	ModelCreate model;
 	vector<Field> orderedColumns;
 	vector<Value> pinnedValues;
-	vector<Value> condAttrValues;
+	vector<Condition> conditionUpdate;
 };

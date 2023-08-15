@@ -6,11 +6,6 @@
 
 using namespace std;
 
-struct UpdateResult {
-	int udpatedCount = 0;
-	bool isSuccess = false;
-};
-
 class StorageBase {
 
 public:

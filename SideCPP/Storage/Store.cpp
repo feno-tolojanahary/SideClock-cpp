@@ -40,11 +40,41 @@ Store::Store()
 	file.close();
 }
 
+void Store::resetAction()
+{
+	pinnedValues = {};
+	conditionUpdate = {};
+}
+
+void Store::initTouchModel(const string & modelName, const Action & _action)
+{
+	model.name = modelName;
+	action = _action;
+	resetAction();
+}
+
 void Store::createModel(const string& modelName)
 {
-	action = Action::CREATE;
-	model.name = modelName;
-	pinnedValues = {};
+	initTouchModel(modelName, Action::CREATE);
+}
+
+void Store::addVal(const string& modelName)
+{
+	initTouchModel(modelName, Action::ADD_VAL);
+}
+
+void Store::updateVal(const string& modelName)
+{
+	initTouchModel(modelName, Action::UPDATE_VAL);
+}
+
+void Store::andWhere(const string& fieldName, auto value)
+{
+	Condition condition{
+		fieldName = fieldName,
+		value = static_cast<string>(value)
+	}
+	conditionUpdate.push_back(condition);
 }
 
 void Store::field(const string& fieldName, auto val)
@@ -119,38 +149,24 @@ void Store::execAddVal()
 	}
 }
 
-void Store::addVal(const string& modelName)
-{
-	action = Action::ADD_VAL;
-	model.name = modelName;
-	pinnedValues = {};
-}
-
 vector<vector<string>> Store::getVal(const string& modelName)
 {
 	action = Action::GET_VAL;
 	model.name = modelName;
-	StorageBase *storage = new StorageBase(model.name);
+	std::unique_ptr<StorageBase> storage = std::make_unique<StorageBase>(modelName);
 	vector<vector<string>> data = storage->readData();
 	return data;
 }
 
-void Store::andWhere(const string& fieldName, auto value)
+void Store::execUpdateVal()
 {
-	Type type = static_cast<string>(val);
-	Field field(fieldName, type);
-	condAttrValues.push_back(field);
+	UpdateResult* res = nullptr;
+	std::unique_ptr<StorageBase> storage = std::make_unique<StorageBase>(model.name);
+	res = storage->updateData(conditionUpdate, pinnedValues);
+	if (res->isSuccess) {
+		cout << "updated count " << res->udpatedCount << endl;
+	}
+	else {
+		cout << "Error updating data";
+	}
 }
-
-void Store::updateVal(const string& modelName)
-{
-	action = Action::UPDATE_VAL;
-	model.name = modelName;
-	pinnedValues = {};
-	condAttrValues = {};
-}
-
-//void Store::execUpdateVal()
-//{
-//
-//}
