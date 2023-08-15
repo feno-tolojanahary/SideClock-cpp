@@ -101,23 +101,17 @@ void Store::execAddVal()
 {
 	// Call value storage on database
 	std::unique_ptr<StorageBase> storage = make_unique<StorageBase>(model.name);
-	vector<RowData> savingRowData{};
 
-	RowData oneRowData;	
-	for (const Value & pinnedVal : pinnedValues)
-	{
-		int indexStoreVal;
-		for (const Field & field : orderedColumns) {
+	RowData oneRowData;
+	for (const Field& field : orderedColumns) {
+		for (const Value& pinnedVal : pinnedValues) {
 			if (pinnedVal.fieldName.compare(field.name) == 0) {
 				oneRowData.data.push_back(pinnedVal);
 			}
-
 		}
-
-		savingRowData.toSaveValue(lineValue);
 	}
 
-	if (storage->saveData(savingRowData)) {
+	if (storage->saveData({ oneRowData })) {
 		cout << "saved with success." << endl;
 	}
 	else {
