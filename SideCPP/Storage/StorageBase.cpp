@@ -145,7 +145,7 @@ UpdateResult* StorageBase::updateData(vector<Condition> conditions, vector<Value
 		{
 			for (const Value& dataVal : curRowData.data)
 			{
-				if (cond.attr == dataVal.fieldName) {
+				if (cond.fieldName == dataVal.fieldName) {
 					if (cond.value != dataVal.value) {
 						isDetected = false;
 					}
