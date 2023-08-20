@@ -50,9 +50,6 @@
     <ClInclude Include="Helper.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="TermGui.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="ModelStorage.h">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -78,6 +75,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Storage\HelperStore.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Storage\BufferBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

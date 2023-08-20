@@ -158,11 +158,11 @@
     <ClInclude Include="ModelTermGui.h" />
     <ClInclude Include="Planning.h" />
     <ClInclude Include="ShiftManager.h" />
+    <ClInclude Include="Storage\BufferBase.h" />
     <ClInclude Include="Storage\Header.h" />
     <ClInclude Include="Storage\HelperStore.h" />
     <ClInclude Include="Storage\Store.h" />
     <ClInclude Include="Storage\StorageBase.h" />
-    <ClInclude Include="TermGui.h" />
     <ClInclude Include="TermGuiHyb.h" />
     <ClInclude Include="TimeClock.h" />
   </ItemGroup>

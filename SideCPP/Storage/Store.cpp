@@ -26,11 +26,12 @@ Store::Store()
 					lineIndex++;
 					if (lineIndex > 1) {
 						vector<string> fieldChains = Helper::splitChar(fieldInfo, CONF_FIELD_DELIMITER);
-						Field definedField;
-						definedField.range = lineIndex;
-						definedField.name = fieldChains[0];
-						definedField.type = getType(*(fieldChains[1].data()));
-						definedField.length = stoi(fieldChains[2]);
+						Field definedField {
+							.range = lineIndex,
+							.name = fieldChains[0],
+							.type = getType(*(fieldChains[1].data())),
+							.length = stoi(fieldChains[2])
+						};
 						orderedColumns.push_back(definedField);
 					}
 				}
