@@ -15,6 +15,7 @@ public:
 	vector<vector<string>> readData();
 	string parseQuery(std::shared_ptr<RowData> rowData);
 	UpdateResult* updateData(vector<Condition> conditions, vector<Value> update);
+	void deleteData(vector<Condition> conditions);
 
 private:
 	string filename;

@@ -206,3 +206,8 @@ string StorageBase::parseQuery(std::shared_ptr<RowData> rowData)
 	osstr << "\n";
 	return osstr.str();
 }
+
+void StorageBase::deleteData(vector<Condition> conditions) 
+{
+	
+}
