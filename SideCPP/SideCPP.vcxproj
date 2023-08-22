@@ -148,7 +148,6 @@
     <ClCompile Include="SideCPP.cpp" />
     <ClCompile Include="Storage\Store.cpp" />
     <ClCompile Include="Storage\StorageBase.cpp" />
-    <ClCompile Include="TermGuiHyb.cpp" />
     <ClCompile Include="Timeclock.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -161,9 +160,10 @@
     <ClInclude Include="Storage\BufferBase.h" />
     <ClInclude Include="Storage\Header.h" />
     <ClInclude Include="Storage\HelperStore.h" />
+    <ClInclude Include="Storage\ReadBuffer.h" />
     <ClInclude Include="Storage\Store.h" />
     <ClInclude Include="Storage\StorageBase.h" />
-    <ClInclude Include="TermGuiHyb.h" />
+    <ClInclude Include="Storage\WriteBuffer.h" />
     <ClInclude Include="TimeClock.h" />
   </ItemGroup>
   <ItemGroup>

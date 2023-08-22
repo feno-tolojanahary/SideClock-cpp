@@ -7,7 +7,6 @@ class BufferBase {
 public:
 
 	using Position = char*;
-
 	
 	struct Buffer {
 
@@ -15,11 +14,17 @@ public:
 
 		inline Position begin() { return begin_pos; };
 		inline Position end() { return end_pos; };
+		
+	private:
+		
 		Position begin_pos;
 		Position end_pos;
 	};
 
 protected:
 
+	size_t bytes = 0;
+
 	Position pos;
+	Buffer working_buffer;
 };

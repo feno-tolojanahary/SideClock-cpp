@@ -27,9 +27,6 @@
     <ClCompile Include="Planning.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TermGuiHyb.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GuiRender.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -56,9 +53,6 @@
     <ClInclude Include="Planning.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="TermGuiHyb.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="ModelTermGui.h">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -78,6 +72,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Storage\BufferBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Storage\ReadBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Storage\WriteBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
