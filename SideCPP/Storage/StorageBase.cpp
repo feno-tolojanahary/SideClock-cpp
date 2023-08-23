@@ -209,5 +209,38 @@ string StorageBase::parseQuery(std::shared_ptr<RowData> rowData)
 
 void StorageBase::deleteData(vector<Condition> conditions) 
 {
-	
+	fstream file(filename, fstream::in | fstream::binary);
+	fstream tempFile("tempfile", fstream::out | fstream::binary);
+
+	string line;
+	while (getline(file, line))
+	{
+		bool lineToDelete = false;
+		for(const Condition cond : conditions)
+		{
+			if (line.find(cond.value) != string::npos) {
+				vector<string> chainedValue = Helper::splitChar(line, DELIMITER);
+				vector<Value> values;
+
+				for (const Field& fieldInfo : currentColumnsInfo)
+				{
+					if (cond.fieldName.find(chainedValue[fieldInfo.range]) == string::npos) {
+						lineToDelete = true;
+					}
+				}
+
+			}
+		}
+		if (lineToDelete)
+		{
+			continue;
+		}
+
+		tempFile << line;
+	}
+
+	remove(filename.data());
+	rename("tempfile", filename.data());
+	file.close();
+	tempFile.close();
 }
