@@ -1,5 +1,5 @@
 #pragma once
-#include "Storage.h"
+#include "Storage/Storage.h"
 #include "TermGui.h"
 #include "TimeClock.h"
 #include "Planning.h"
@@ -11,9 +11,9 @@ public:
 	{
 		const char* fileTimeclock = "timeclock";
 		const char* filePlanning = "planning";
-		this->storageTimeclock = new Storage<TimeClock>(fileTimeclock);
-		this->storagePlanning = new Storage<Planning>(filePlanning);
-		this->termGui = new TermGui<TimeClock>();
+		storageTimeclock = std::make_shared<Storage<TimeClock>>(fileTimeclock);
+		storagePlanning = std::make_shared<Storage<Planning>>(filePlanning);
+		termGui = new TermGui<TimeClock>();
 	}
 
 	void startTime(const string& details);
@@ -26,13 +26,11 @@ public:
 	void deletePlannedHour(const string& startDate, const string& endDate);
 
 	~ShiftManager() {
-		delete storageTimeclock;
-		delete storagePlanning;
 		delete termGui;
 	}
 
 private:
-	Storage<TimeClock>* storageTimeclock;
-	Storage<Planning>* storagePlanning;
+	std::shared_ptr<Storage<TimeClock>> storageTimeclock;
+	std::shared_ptr<Storage<Planning>> storagePlanning;
 	TermGui<TimeClock>* termGui;
 };

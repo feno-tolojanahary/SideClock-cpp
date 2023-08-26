@@ -161,6 +161,7 @@
     <ClInclude Include="Storage\Header.h" />
     <ClInclude Include="Storage\HelperStore.h" />
     <ClInclude Include="Storage\ReadBuffer.h" />
+    <ClInclude Include="Storage\Storage.h" />
     <ClInclude Include="Storage\Store.h" />
     <ClInclude Include="Storage\StorageBase.h" />
     <ClInclude Include="Storage\WriteBuffer.h" />
